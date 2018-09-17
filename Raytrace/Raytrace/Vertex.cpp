@@ -17,3 +17,10 @@ void Vertex::Set(double Inx, double Iny, double Inz, double Inw)
 Vertex::~Vertex()
 {
 }
+
+std::ostream & operator<<(std::ostream & os, const Vertex & vt)
+{
+	// TODO: insert return statement here
+	os << '(' << vt.x << ',' << vt.y << ',' << vt.z <<',' <<vt.w << ')' << std::endl;
+	return os;
+}
