@@ -1,8 +1,8 @@
-#include <glm.hpp>
-#include "Vertex.h"
+#include "CreateWorld.h"
 
 
-void main()
+
+CreateWorld::CreateWorld()
 {
 	Vertex V1(0, 6, 5);
 	Vertex V2(10, 6, 5);
@@ -20,4 +20,9 @@ void main()
 	Vertex V14(10, 0, 5);
 	Vertex V15(0, 0, 5);
 	Vertex V16(10, 0, -5);
+}
+
+
+CreateWorld::~CreateWorld()
+{
 }
