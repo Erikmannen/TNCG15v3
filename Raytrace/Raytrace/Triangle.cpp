@@ -20,7 +20,10 @@ void Triangle::rayIntersection(Ray arg)
 	glm::vec3 newV1 = V1.getcoords();
 	glm::vec3 newV2 = V2.getcoords();*/
 	
-	
+	glm::vec3 u(0,0,0); // todo 
+	glm::vec3 v(0,0,0); // todo 
+
+
 	glm::vec3 T = arg.getstart().getcoords() -V0.getcoords();
 	glm::vec3 E1 = V1.getcoords() - V0.getcoords();
 	glm::vec3 E2 = V2.getcoords() - V0.getcoords();
@@ -28,8 +31,9 @@ void Triangle::rayIntersection(Ray arg)
 	glm::vec3 P = glm::cross(D, E2);
 	glm::vec3 Q = glm::cross(T, E1);
 	glm::vec3 t = (Q* E2) / (P* E1);
-	//glm::vec3 t = glm::dot(Q, E2) / glm::dot(P, E1);
-	
+	// intersection is (t,u,v)
+	glm::vec3 intesection = (t, u, v);
+
 
 		/*
 		Mark fö 6
