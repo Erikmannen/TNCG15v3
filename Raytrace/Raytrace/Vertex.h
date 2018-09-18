@@ -4,7 +4,7 @@
 class Vertex
 {
 public:
-	Vertex() : coords(0,0,0), w(0) {};
+	Vertex() : coords(0, 0, 0), w(0) {};
 	Vertex(double Inx, double Iny, double Inz)
 		:coords(Inx, Iny, Inz), w(0.0) {};
 	Vertex(double Inx, double Iny, double Inz,double Inw) 
@@ -13,6 +13,7 @@ public:
 	Vertex(const Vertex & V)
 		:coords(V.coords), w(V.w) {};
 	~Vertex();
+	glm::vec3 getcoords();
 	
 	friend std::ostream& operator<<(std::ostream& os, const Vertex& vt);
 

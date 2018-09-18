@@ -16,6 +16,11 @@ Vertex::~Vertex()
 {
 }
 
+glm::vec3 Vertex::getcoords()
+{
+	return coords;
+}
+
 std::ostream & operator<<(std::ostream & os, const Vertex & vt)
 {
 	// TODO: insert return statement here

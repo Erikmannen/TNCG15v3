@@ -11,7 +11,7 @@ Scene::~Scene()
 {
 }
 
-void Scene::rayIntersection(Ray arg)
+void Scene::rayIntersectionforlist(Ray arg)
 {
 	// for each tri in trianglelist 
 	// auto fixar typ matchning och * => itterator
