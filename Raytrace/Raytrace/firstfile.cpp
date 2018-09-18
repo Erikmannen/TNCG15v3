@@ -1,6 +1,6 @@
 #include <iostream> 
 #include <glm.hpp>
-#include "Ray.h";
+#include "Ray.h"
 
 using namespace std;
 
@@ -14,7 +14,7 @@ int main()
 	cout << Position.x << endl;
 	cout << myray << endl;
 	cout <<"break"  << endl;
-
+	cout << myray.getstart().getcoords()[1] << endl;
 	while (true)
 	{
 

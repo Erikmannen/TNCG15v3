@@ -5,12 +5,24 @@ Ray::Ray()
 	Vertex myvertex;
 	Startpoint = myvertex;
 	Endpoint = myvertex;
-	Points = { &Startpoint,&Endpoint };
+	//Points = { &Startpoint,&Endpoint };
+	//endtriangle = Triangle temp;
 }
 
 
 Ray::~Ray()
 {
+}
+
+Vertex Ray::getstart()
+{
+
+	return Startpoint;
+}
+
+Vertex Ray::getend()
+{
+	return Endpoint;
 }
 
 std::ostream & operator<<(std::ostream & os, const Ray & ray)

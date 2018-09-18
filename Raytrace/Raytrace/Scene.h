@@ -6,7 +6,7 @@ class Scene
 public:
 	Scene();
 	~Scene();
-	void rayIntersection(Ray arg); // todo , for each triangle
+	void rayIntersectionforlist(Ray arg); // todo , for each triangle
 private:
 	std::list<Triangle*> Trianglelist;
 };
