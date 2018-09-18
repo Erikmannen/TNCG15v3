@@ -4,17 +4,17 @@ class Direction
 {
 public:
 	Direction() :
-		x(0.0), y(0.0), z(0.0) {};
+		Dir(0.0, 0.0, 0.0) {};
 
 	Direction(double x1, double y1, double z1) :
-		x(x1), y(y1), z(z1) {};
+		Dir(x1, y1, z1) {};
 
 	Direction(Direction& D) :
-		x(D.x), y(D.y), z(D.z) {};
+		Dir(D.Dir) {};
 
 	~Direction();
 
 private:
-	double x, y, z;
+	glm::vec3 Dir;
 };
 
