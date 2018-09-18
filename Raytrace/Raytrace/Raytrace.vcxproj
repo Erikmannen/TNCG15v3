@@ -119,6 +119,7 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ColorDbl.cpp" />
+    <ClCompile Include="CreateRoom.cpp" />
     <ClCompile Include="Direction.cpp" />
     <ClCompile Include="firstfile.cpp" />
     <ClCompile Include="Pixel.cpp" />

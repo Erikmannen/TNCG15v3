@@ -8,6 +8,7 @@ class Triangle
 {
 public:
 	Triangle();
+	Triangle(Vertex V0new, Vertex V1new, Vertex V2new, Direction N, ColorDbl C) : V0(V0new), V1(V1new), V2(V2new), normal(N), trianglecolor(C) {};
 	~Triangle();
 	void rayIntersection(Ray arg); // todo
 

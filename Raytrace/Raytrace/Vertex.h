@@ -5,6 +5,8 @@ class Vertex
 {
 public:
 	Vertex() : coords(0,0,0), w(0) {};
+	Vertex(double Inx, double Iny, double Inz)
+		:coords(Inx, Iny, Inz), w(0.0) {};
 	Vertex(double Inx, double Iny, double Inz,double Inw) 
 		:coords(Inx,Iny,Inz),w(Inw) {};
 	void Set(double Inx, double Iny, double Inz, double Inw);
