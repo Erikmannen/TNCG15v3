@@ -2,7 +2,7 @@
 class ColorDbl
 {
 public:
-	ColorDbl() : ColorDbl(0, 0, 0) {};
+	ColorDbl() : Red(0), Green(0),Blue (0) {};
 	ColorDbl(double Redchannel, double Greenchannel, double Bluechannel)
 		:Red(Redchannel), Green(Greenchannel), Blue(Bluechannel) {};
 	ColorDbl(ColorDbl & CDbl)

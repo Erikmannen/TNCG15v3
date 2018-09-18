@@ -1,6 +1,6 @@
 #pragma once
-#include "Triangle.h";
-#include <list>;
+#include "Triangle.h"
+#include <list>
 class Scene
 {
 public:

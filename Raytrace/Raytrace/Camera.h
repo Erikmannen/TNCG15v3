@@ -1,6 +1,6 @@
 #pragma once
-#include "Vertex.h";
-#include "Pixel.h";
+#include "Vertex.h"
+#include "Pixel.h"
 
 class Camera
 {

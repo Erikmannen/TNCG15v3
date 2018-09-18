@@ -1,6 +1,7 @@
 #pragma once
-#include "Vertex.h";
-#include <list>;
+#include "Vertex.h"
+#include "Triangle.h"
+#include <list>
 class Ray
 {
 public:
@@ -13,5 +14,6 @@ public:
 private:
 	Vertex Startpoint, Endpoint;
 	std::list<Vertex*> Points;
+	Triangle& endtriangle;
 };
 

@@ -1,8 +1,9 @@
 #pragma once
-#include "Vertex.h";
-#include "ColorDbl.h";
-#include "Direction.h";
-#include "Ray.h"; 
+#include "Vertex.h"
+#include "ColorDbl.h"
+#include "Direction.h"
+#include <list>
+#include "Ray.h"
 class Triangle
 {
 public:
@@ -12,6 +13,7 @@ public:
 
 private: 
 	Vertex V0, V1, V2;
+
 	ColorDbl trianglecolor;
 	Direction normal;
 

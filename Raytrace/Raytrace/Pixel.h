@@ -1,7 +1,7 @@
 #pragma once
 #include "ColorDbl.h"
 #include "Ray.h"
-#include <list>;
+#include <list>
 class Pixel
 {
 public:

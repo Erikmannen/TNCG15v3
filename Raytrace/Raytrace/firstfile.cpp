@@ -15,5 +15,9 @@ int main()
 	cout << myray << endl;
 	cout <<"break"  << endl;
 
+	while (true)
+	{
+
+	}
 	return 0;
 }
