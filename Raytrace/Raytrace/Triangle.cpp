@@ -1,5 +1,5 @@
 #include "Triangle.h"
-#define EPSILON 0.00000000000000001
+#define MINVALUE 0.00000000000000001
 #define MAXVALUE 1000000000000000
 
 Triangle::Triangle()
@@ -42,7 +42,7 @@ double Triangle::rayIntersection(Ray arg)
 	
 	// use u and v to determine if intersection
 	// if determinant is near zero, ray lies in plane of triangle or ray is parallel to plane of triangle
-	if (std::abs(determinant) < EPSILON)
+	if (std::abs(determinant) < MINVALUE)
 		return 0; // no intersection
 	
 	// intersection lies outside of the triangle. less than 0 or greater than 1 (normalised)
@@ -55,7 +55,7 @@ double Triangle::rayIntersection(Ray arg)
 		return 0;
 
 	//behöver antagligen fixa med interaction
-	if (t > EPSILON && t < MAXVALUE)
+	if (t > MINVALUE && t < MAXVALUE)
 		return t;
 
 
