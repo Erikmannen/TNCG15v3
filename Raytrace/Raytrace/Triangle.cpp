@@ -14,9 +14,9 @@ Triangle::~Triangle()
 
 
 //intersection using Möller-Trumbore algo
-//return intersection point if got 1 else returns 0
-//returning t if found using u and v to determine if inbound
-double Triangle::rayIntersection(Ray arg)
+//return intersection point in var intersect 
+//returning true if intersecting or false if not
+bool Triangle::rayIntersection(Ray arg,glm::vec3& intersect)
 {
 
 	// distance of ray to vertex
@@ -31,36 +31,40 @@ double Triangle::rayIntersection(Ray arg)
 	//Edge normal
 	glm::vec3 P = glm::cross(D, E2);
 	//determinant
-	double determinant = glm::dot(E1, P);
+	float determinant = glm::dot(E1, P);
 	// used in tests
 	glm::vec3 Q = glm::cross(T, E1);
 	
 	// intersection is (t,u,v)
-	double t = glm::dot(Q, E2) / determinant;
-	double u = glm::dot(P , T) / determinant;
-	double v = glm::dot(Q , D) / determinant;
+	float t = glm::dot(Q, E2) / determinant;
+	float u = glm::dot(P , T) / determinant;
+	float v = glm::dot(Q , D) / determinant;
 	
 	// use u and v to determine if intersection
 	// if determinant is near zero, ray lies in plane of triangle or ray is parallel to plane of triangle
 	if (std::abs(determinant) < MINVALUE)
-		return 0; // no intersection
+		return false; // no intersection
 	
 	// intersection lies outside of the triangle. less than 0 or greater than 1 (normalised)
 
 	if (u < 0.f || u > 1.f)
-		return 0;
+		return false;
 
 	// The intersection lies outside of the triangle
 	if (v < 0.f ||u +v  > 1.f)
-		return 0;
+		return false;
 
 	//behöver antagligen fixa med interaction
 	if (t > MINVALUE && t < MAXVALUE)
-		return t;
+	{
+		intersect = arg.getstart().getcoords() + t *D;
+		return true;
+	}
+		
 
 
 	//else
-	return 0;
+	return false;
 
 
 	
