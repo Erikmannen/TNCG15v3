@@ -8,9 +8,11 @@ class Triangle
 {
 public:
 	Triangle();
+	// todo
+	//behöver lägga till normalisering av normalen i constructor
 	Triangle(Vertex V0new, Vertex V1new, Vertex V2new, Direction N, ColorDbl C) : V0(V0new), V1(V1new), V2(V2new), normal(N), trianglecolor(C) {};
 	~Triangle();
-	void rayIntersection(Ray arg); // todo
+	 double rayIntersection(Ray arg); // todo
 
 private: 
 	Vertex V0, V1, V2;

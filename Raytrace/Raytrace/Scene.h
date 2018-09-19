@@ -1,6 +1,6 @@
 #pragma once
 #include "Triangle.h"
-#include <list>
+#include <vector>
 class Scene
 {
 public:
@@ -8,6 +8,6 @@ public:
 	~Scene();
 	void rayIntersectionforlist(Ray arg); // todo , for each triangle
 private:
-	std::list<Triangle*> Trianglelist;
+	std::vector<Triangle*> Trianglelist;
 };
 

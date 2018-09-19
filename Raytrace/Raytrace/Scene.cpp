@@ -17,7 +17,8 @@ void Scene::rayIntersectionforlist(Ray arg)
 	// auto fixar typ matchning och * => itterator
 	// som en for each där varje triangle i listan kallar på func
 	for (auto* tri:Trianglelist){
-		tri->rayIntersection(arg);
+		double intersec = tri->rayIntersection(arg);
+
 	};
 
 
