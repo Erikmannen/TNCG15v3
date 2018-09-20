@@ -14,6 +14,7 @@ public:
 
 	~Direction();
 
+	glm::vec3 getDir() { return Dir; };
 private:
 	glm::vec3 Dir;
 };

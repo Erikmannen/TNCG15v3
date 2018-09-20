@@ -11,6 +11,7 @@ public:
 	Vertex getstart();
 	Vertex getend();
 
+
 	friend std::ostream& operator<<(std::ostream& os, const Ray& ray);
 private:
 	Vertex Startpoint, Endpoint;
