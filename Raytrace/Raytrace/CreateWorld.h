@@ -6,5 +6,8 @@ class CreateWorld
 public:
 	CreateWorld();
 	~CreateWorld();
+
+private:
+
 };
 
