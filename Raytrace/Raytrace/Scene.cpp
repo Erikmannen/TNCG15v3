@@ -35,6 +35,7 @@ std::vector<Intersectionobjects<Triangle>> Scene::rayIntersectionforlist(Ray arg
 		if (didintersect == true) {
 			Intersector.object = tri;
 			Intersector.point = intersect - tri.getnormal().getDir();
+
 			intersections.push_back(Intersector);
 		}
 	};
