@@ -21,7 +21,7 @@ std::vector<Intersectionobjects<Triangle>> Scene::rayIntersectionforlist(Ray arg
 	// som en for each där varje triangle i listan kallar på func
 	//endast för trianglar atm för allmän måste tri bytas mot template
 
-	for (auto tri:Trianglelist){
+	for (Triangle tri:Trianglelist){
 		Intersectionobjects<Triangle> Intersector; // tri or sphere (returntype for intersectionobjects)
 		glm::vec3 intersect; // to be passed into intersectionfuntion
 		bool didintersect = tri.rayIntersection(arg,intersect);
