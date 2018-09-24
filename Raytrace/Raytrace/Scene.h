@@ -19,6 +19,7 @@ public:
 	//returns vector  with all intersected objects of type intype
 	//template<typename objectintersector>
 	std::vector<Intersectionobjects<Triangle>> rayIntersectionforlist(Ray arg); // todo , for each triangle
+	void addTriangle(Triangle T);
 private:
 	std::vector<Triangle> Trianglelist;
 	

@@ -11,6 +11,11 @@ Scene::~Scene()
 {
 }
 
+void Scene::addTriangle(Triangle T)
+{
+	//Trianglelist.push_back(T);
+}
+
 std::vector<Intersectionobjects<Triangle>> Scene::rayIntersectionforlist(Ray arg)
 {
 	//return
