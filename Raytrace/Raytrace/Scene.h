@@ -20,8 +20,11 @@ public:
 	//template<typename objectintersector>
 	std::vector<Intersectionobjects<Triangle>> rayIntersectionforlist(Ray arg); // todo , for each triangle
 	void addTriangle(Triangle T);
+	
+	void CreateWorld();
 private:
 	std::vector<Triangle> Trianglelist;
+	
 	
 };
 

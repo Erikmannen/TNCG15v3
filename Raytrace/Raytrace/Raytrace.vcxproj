@@ -119,7 +119,6 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ColorDbl.cpp" />
-    <ClCompile Include="CreateWorld.cpp" />
     <ClCompile Include="Direction.cpp" />
     <ClCompile Include="firstfile.cpp" />
     <ClCompile Include="Pixel.cpp" />
@@ -131,7 +130,6 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ColorDbl.h" />
-    <ClInclude Include="CreateWorld.h" />
     <ClInclude Include="Direction.h" />
     <ClInclude Include="Pixel.h" />
     <ClInclude Include="Ray.h" />
