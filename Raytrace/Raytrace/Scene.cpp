@@ -125,18 +125,18 @@ Scene::~Scene()
 
 
 
-std::vector<Intersectionobjects<Triangle>> Scene::rayIntersectionforlist(Ray arg)
+std::vector<Intersectionobjects> Scene::rayIntersectionforlist(Ray arg)
 {
 	//return
-	std::vector<Intersectionobjects<Triangle>> intersections;
+	std::vector<Intersectionobjects> intersections;
 
 	// for each tri in trianglelist 
-	// auto fixar typ matchning och * => itterator
+	//  fixar typ matchning och * => itterator
 	// som en for each där varje triangle i listan kallar på func
 	//endast för trianglar atm för allmän måste tri bytas mot template
 
-	for (auto tri:Trianglelist){
-		Intersectionobjects<Triangle> Intersector; // tri or sphere (returntype for intersectionobjects)
+	for (Triangle tri:Trianglelist){
+		Intersectionobjects Intersector; // tri (returntype for intersectionobjects)
 		glm::vec3 intersect; // to be passed into intersectionfuntion
 		bool didintersect = tri.rayIntersection(arg,intersect);
 		//x(t) = ps +t(pe-ps) == intersect
@@ -144,7 +144,6 @@ std::vector<Intersectionobjects<Triangle>> Scene::rayIntersectionforlist(Ray arg
 		if (didintersect == true) {
 			Intersector.object = tri;
 			Intersector.point = intersect - tri.getnormal().getDir();
-
 			intersections.push_back(Intersector);
 		}
 	};

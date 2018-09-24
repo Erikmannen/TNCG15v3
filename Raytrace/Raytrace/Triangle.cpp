@@ -12,6 +12,14 @@ Triangle::~Triangle()
 {
 }
 
+Triangle::Triangle(const Triangle & tri)
+{
+	V0 = tri.V0;
+	V1 = tri.V1;
+	V2 = tri.V2;
+	trianglecolor = tri.trianglecolor;
+	normal = tri.normal;
+}
 
 //intersection using Möller-Trumbore algo
 //return intersection point in var intersect 
@@ -82,3 +90,4 @@ bool Triangle::rayIntersection(Ray arg,glm::vec3& intersect)
 
 	
 }
+

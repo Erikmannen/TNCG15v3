@@ -2,11 +2,12 @@
 #include "Triangle.h"
 #include <vector>
 // T kan vara triangle och senare sphere
-template <typename T>
+
 struct Intersectionobjects{
-	T object;
+	Triangle object;
 	//Triangle tri;
 	glm::vec3 point;
+
 };
 
 
@@ -18,7 +19,7 @@ public:
 	~Scene();
 	//returns vector  with all intersected objects of type intype
 	//template<typename objectintersector>
-	std::vector<Intersectionobjects<Triangle>> rayIntersectionforlist(Ray arg); // todo , for each triangle
+	std::vector<Intersectionobjects> rayIntersectionforlist(Ray arg); // todo , for each triangle
 	void addTriangle(Triangle T);
 	
 	void CreateWorld();

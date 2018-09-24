@@ -13,6 +13,7 @@ public:
 	Triangle(Vertex V0new, Vertex V1new, Vertex V2new, Direction N, ColorDbl C) : V0(V0new), V1(V1new), V2(V2new), normal(N), trianglecolor(C) {};
 	~Triangle();
 	 bool rayIntersection(Ray arg,glm::vec3& intersect); // todo
+	 Triangle(const Triangle& tri);
 	 Direction &getnormal() { return normal; };
 private: 
 	Vertex V0, V1, V2;
