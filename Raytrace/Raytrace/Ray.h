@@ -14,8 +14,8 @@ public:
 		:Startpoint(Start), Endpoint(End) {};// , Points({ Startpoint,Endpoint }
 	~Ray();
 	Ray(const Ray& myray): Startpoint(myray.Startpoint),Endpoint(myray.Endpoint),raycolor(myray.raycolor)  {};
-	Vertex getstart();
-	Vertex getend();
+	Vertex getstart() { return Startpoint; };
+	Vertex getend() { return Endpoint; };
 	
 
 

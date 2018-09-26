@@ -24,6 +24,6 @@ glm::vec3 Vertex::getcoords()
 std::ostream & operator<<(std::ostream & os, const Vertex & vt)
 {
 	// TODO: insert return statement here
-	os << '(' << vt.coords.x << ',' << vt.coords.y << ',' << vt.coords.z <<')' << ' w: '<<vt.w  << std::endl;
+	os << '(' << vt.coords.x << ',' << vt.coords.y << ',' << vt.coords.z <<')'   << std::endl;// << ' w: '<<vt.w
 	return os;
 }
