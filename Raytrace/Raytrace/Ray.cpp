@@ -5,6 +5,8 @@ Ray::Ray()
 	Vertex myvertex;
 	Startpoint = myvertex;
 	Endpoint = myvertex;
+	ColorDbl color;
+	raycolor = color;
 	//Points = { &Startpoint,&Endpoint };
 	//endtriangle = Triangle temp;
 }
