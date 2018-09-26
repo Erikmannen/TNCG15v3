@@ -1,14 +1,16 @@
 #pragma once
+#include <iostream> 
+
 class ColorDbl
 {
 public:
 	ColorDbl() : Red(0), Green(0),Blue (0) {};
 	ColorDbl(double Redchannel, double Greenchannel, double Bluechannel)
 		:Red(Redchannel), Green(Greenchannel), Blue(Bluechannel) {};
-	ColorDbl(ColorDbl & CDbl)
-		:Red(CDbl.Red), Green(CDbl.Green), Blue(CDbl.Blue) {};
+	//ColorDbl(ColorDbl& CDbl)
+		//:Red(CDbl.Red), Green(CDbl.Green), Blue(CDbl.Blue) {};
 	~ColorDbl();
-	ColorDbl(const ColorDbl& cDbl) :Red(cDbl.Red),Green(cDbl.Green), Blue(cDbl.Blue){};
+	ColorDbl(const ColorDbl& cDbl) :Red(cDbl.Red),Green(cDbl.Green), Blue(cDbl.Blue){ std::cout << "colorused"; };
 	// help functions
 	void Setchannels(double Redchannel, double Greenchannel, double Bluechannel);
 	// math stuffs

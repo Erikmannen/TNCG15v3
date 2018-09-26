@@ -11,12 +11,18 @@ Triangle::Triangle()
 }
 
 Triangle::Triangle(Vertex V0new, Vertex V1new, Vertex V2new)
-	: V0(V0new), V1(V1new), V2(V2new)
+	//: V0(V0new), V1(V1new), V2(V2new)
 {
+	V0 = V0new;
+	V1 = V1new;
+	V2 = V2new;
 	ColorDbl tempcolor;
 	trianglecolor = tempcolor;
 	normal.setDir(glm::normalize(glm::cross(V0.getcoords() - V2.getcoords(), V1.getcoords() - V2.getcoords())));
-
+	/*
+	
+	std::cout << "entered";
+	*/
 }
 
 
@@ -60,7 +66,7 @@ bool Triangle::rayIntersection(Ray arg, glm::vec3& intersect)
 	float t = glm::dot(Q, E2) / determinant;
 	float u = glm::dot(P, T) / determinant;
 	float v = glm::dot(Q, D) / determinant;
-
+#if false // set true om man vill ha display
 	std::cout << "before first if" << 
 		"\n"  <<"T:"<< "(" << T.x << "," << T.y << "," << T.z << ")" << 
 		"\n" << "E1:" << "(" << E1.x << "," << E1.y << "," << E1.z << ")" <<
@@ -68,24 +74,24 @@ bool Triangle::rayIntersection(Ray arg, glm::vec3& intersect)
 		"\n" << "D:" << "(" << D.x << "," << D.y << "," << D.z << ")" <<
 		"\n" << "P:" << "(" << P.x << "," << P.y << "," << P.z << ")" <<
 		"\n" << "determinant:" << determinant << std::endl;
-
+#endif
 
 	// use u and v to determine if intersection
 	// if determinant is near zero, ray lies in plane of triangle or ray is parallel to plane of triangle
 	if (determinant > -MINVALUE && determinant < MINVALUE)//if (std::abs(determinant) < MINVALUE)
 		return false; // no intersection
 
-	std::cout << "passed first" << std::endl;
+	//std::cout << "passed first" << std::endl;
 	// intersection lies outside of the triangle. less than 0 or greater than 1 (normalised)
 
 	if (u < 0.f || u > 1.f)
 		return false;
-	std::cout << "passed 1" << std::endl;
+	//std::cout << "passed 1" << std::endl;
 	// The intersection lies outside of the triangle
 	if (v < 0.f || u + v  > 1.f)
 		return false;
 
-	std::cout << "passed 2" << std::endl;
+	//std::cout << "passed 2" << std::endl;
 	//behöver antagligen fixa med interaction
 	if (t > MINVALUE && t < MAXVALUE)
 	{
@@ -93,7 +99,7 @@ bool Triangle::rayIntersection(Ray arg, glm::vec3& intersect)
 		return true;
 	}
 
-	std::cout << "passed 3" << std::endl;
+	//std::cout << "passed 3" << std::endl;
 
 
 	//else
