@@ -16,7 +16,7 @@ public:
 private:
 	//Eyepoint motsvarar Ep
 	Vertex Ep1, Ep2;
-	//800 x 800 array av pixels
+	//800 x 800 array av pixels 
 	Pixel Img[WIDTH][HEIGHT];
 
 

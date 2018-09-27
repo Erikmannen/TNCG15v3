@@ -13,7 +13,7 @@ public:
 		Dir(D.Dir) {};
 
 	~Direction();
-
+	void setDir(glm::vec3 newDir) { Dir = newDir; };
 	glm::vec3 getDir() { return Dir; };
 private:
 	glm::vec3 Dir;
