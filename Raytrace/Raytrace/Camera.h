@@ -1,6 +1,8 @@
 #pragma once
 #include "Vertex.h"
 #include "Pixel.h"
+#include <iostream>
+#include <string>
 
 const int WIDTH = 800;
 const int HEIGHT = 800;
@@ -11,7 +13,7 @@ public:
 	Camera();
 	~Camera();
 	void render();//todo
-	void createImage();
+	void createImageFile(const std::string name, const double &max);
 
 private:
 	//Eyepoint motsvarar Ep
