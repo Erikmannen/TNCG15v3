@@ -2,8 +2,11 @@
 #include "Vertex.h"
 #include "ColorDbl.h"
 #include <list>
+#include "Direction.h"
+#include <random>
+#include <gtx/rotate_vector.hpp>
 
-
+#define M_PI 3.14159265358979323846
 class Triangle;
 
 class Ray
@@ -16,7 +19,7 @@ public:
 	Ray(const Ray& myray): Startpoint(myray.Startpoint),Endpoint(myray.Endpoint),raycolor(myray.raycolor)  {};
 	Vertex getstart() { return Startpoint; };
 	Vertex getend() { return Endpoint; };
-	
+	Ray hemisphere(Vertex& Position, Direction& normaldirr);
 
 
 	friend std::ostream& operator<<(std::ostream& os, const Ray& ray);
