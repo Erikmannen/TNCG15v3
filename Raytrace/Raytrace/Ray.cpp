@@ -26,7 +26,11 @@ Ray Ray::hemisphere(Vertex& Position, Direction& normaldirr)
 	// se fö 11
 	double xi = distribution(generator); // xi 
 	double yj = distribution(generator); // yj
-
+	
+	//def v1 postion motsvarar directions 
+	auto v1 = glm::normalize(-Position.getcoords() - glm::dot(-Position.getcoords(), normaldirr.getDir())*normaldirr.getDir());
+	//v2 = normal 
+	auto v3 = -glm::cross(v1, normaldirr.getDir());
 	// 2pi*xi , asin(sqrt(yj)
 	float Inclinationangle = 2 * M_PI * xi;
 	float Azimuthangle = asin(sqrt(yj));
@@ -36,10 +40,12 @@ Ray Ray::hemisphere(Vertex& Position, Direction& normaldirr)
 	
 		// rotera runt normalen 
 		randdirr.setDir( glm::rotate(
-			randdirr.getDir(), Inclinationangle, normaldirr.getDir()
+			randdirr.getDir(), Inclinationangle, v3
 		));
 		//rotera runt tangenten ? 
-
+		randdirr.setDir(glm::rotate(
+			randdirr.getDir(), Inclinationangle, normaldirr.getDir()
+		));
 		Vertex endpos(randdirr.getDir().x, randdirr.getDir().y, randdirr.getDir().z);
 
 

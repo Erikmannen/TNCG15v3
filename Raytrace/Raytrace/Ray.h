@@ -4,6 +4,7 @@
 #include <list>
 #include "Direction.h"
 #include <random>
+#define GLM_ENABLE_EXPERIMENTAL
 #include <gtx/rotate_vector.hpp>
 
 #define M_PI 3.14159265358979323846
