@@ -21,7 +21,9 @@ public:
 	ColorDbl operator*(const float b);
 	ColorDbl operator/(const float b);
 
-private: 
+	friend std::ostream& operator<<(std::ostream& os, const ColorDbl& c);
+
+private:
 	double Red, Green, Blue;
 };
 
