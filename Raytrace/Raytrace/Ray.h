@@ -21,7 +21,7 @@ public:
 	Vertex getstart() { return Startpoint; };
 	Vertex getend() { return Endpoint; };
 	Ray hemisphere(Vertex& Position, Direction& normaldirr);
-
+	Ray reflection(Vertex& Postition, Direction& normaldirr);
 
 	friend std::ostream& operator<<(std::ostream& os, const Ray& ray);
 private:

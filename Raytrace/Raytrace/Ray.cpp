@@ -52,6 +52,13 @@ Ray Ray::hemisphere(Vertex& Position, Direction& normaldirr)
 	return Ray(Position, endpos);
 }
 
+Ray Ray::reflection(Vertex & Postition, Direction & normaldirr)
+{
+	glm::vec3 newend = glm::reflect(Postition.getcoords(), normaldirr.getDir());	
+	Ray r(Postition, Vertex(newend.x, newend.y, newend.z));
+	return r;
+}
+
 
 std::ostream & operator<<(std::ostream & os, const Ray & ray)
 {
