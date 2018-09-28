@@ -2,7 +2,8 @@
 #include <glm.hpp>
 #include "Ray.h"
 #include "Triangle.h"
-
+#include "Scene.h"
+#include "Camera.h"
 
 using namespace std;
 
@@ -52,6 +53,11 @@ int main()
 	dispintersection(mytri, r);
 	cout << "\n\n";
 	dispintersection(mytri, r1);
+
+	Scene scene;
+
+	Camera cam;
+	cam.render();
 	
 	while (true)
 	{

@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream> 
+#include <string>
 
 class ColorDbl
 {
@@ -21,9 +22,11 @@ public:
 	ColorDbl operator*(const float b);
 	ColorDbl operator/(const float b);
 
+	// get functions
+	double getColor(std::string S);
+
 	friend std::ostream& operator<<(std::ostream& os, const ColorDbl& c);
 
 private:
 	double Red, Green, Blue;
 };
-

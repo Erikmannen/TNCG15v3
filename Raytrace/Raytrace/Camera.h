@@ -4,8 +4,8 @@
 #include <iostream>
 #include <string>
 
-const int WIDTH = 800;
-const int HEIGHT = 800;
+const int WIDTH = 512;
+const int HEIGHT = 512;
 
 class Camera
 {
