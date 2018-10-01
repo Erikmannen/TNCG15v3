@@ -16,30 +16,32 @@ void Camera::render()
 	for (int h = 0; h < HEIGHT; ++h)
 		for (int w = 0; w < WIDTH; ++w)
 		{
-			ColorDbl def(0.5);
+			ColorDbl def(200);
 			Pixel myPixel(def);
 
 			Img[h][w] = def;
 			// Läsa subpixlar för att få fram den hela pixeln
 		}
 
-	createImageFile("img.bmp", 1.0);
+	createImageFile("img.ppm", 200);
 }
 
 void Camera::createImageFile(const std::string name, const double &max)
 {
 	//std:cout << "Creating image..." << std::endl;
 	FILE *fp = fopen(name.c_str(), "wb");
-	(void)fprintf(fp, "P3\n%d %dn255n", WIDTH, HEIGHT);
+	(void)fprintf(fp, "P3\n%d %dn255n", WIDTH, HEIGHT, "255");
 	for (auto &row : Img) 
 	{
 		for (Pixel &pixel : row)
 		{
 			ColorDbl color = pixel.getRayColor();
+			std::cout << color << std::endl;
+
 			(void)fprintf(fp, "%d %d %d ",
-				(int)(255 * (color.Red / max)),
-				(int)(255 * (color.Green / max)),
-				(int)(255 * (color.Blue / max)));
+				(int)(color.Red),
+				(int)(color.Green),
+				(int)(color.Blue));
 
 		}
 	}
