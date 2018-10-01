@@ -89,6 +89,14 @@
       <AdditionalIncludeDirectories>glm</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
     </ClCompile>
+    <Link>
+      <StackReserveSize>
+      </StackReserveSize>
+    </Link>
+    <Link>
+      <StackCommitSize>
+      </StackCommitSize>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
