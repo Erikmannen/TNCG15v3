@@ -2,6 +2,7 @@
 #include "Pixel.h"
 #include <iostream>
 #include <string>
+#include <array>
 
 const int WIDTH = 800;
 const int HEIGHT = 800;
