@@ -57,7 +57,7 @@ int main()
 	Scene scene;
 
 	Camera cam;
-	cam.render();
+	//cam.render();
 	
 	while (true)
 	{
@@ -65,11 +65,6 @@ int main()
 	}
 	return 0;
 }
-
-#include <iostream> 
-#include <glm.hpp>
-#include "Ray.h"
-#include "Triangle.h"
 
 
 using namespace std;
