@@ -16,7 +16,7 @@ void Camera::render()
 	for (int h = 0; h < HEIGHT; ++h)
 		for (int w = 0; w < WIDTH; ++w)
 		{
-			ColorDbl def(0.5);
+			ColorDbl def(100);
 			Pixel myPixel(def);
 
 			Img[h][w] = def;
