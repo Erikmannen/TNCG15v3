@@ -2,8 +2,8 @@
 
 Camera::Camera()
 {
-	Ep1.Set(-2, 0, 0,0);
-	Ep2.Set(-1, 0, 0,0);
+	//Ep1.Set(-2, 0, 0,0);
+	//Ep2.Set(-1, 0, 0,0);
 }
 
 
@@ -16,14 +16,14 @@ void Camera::render()
 	for (int h = 0; h < HEIGHT; ++h)
 		for (int w = 0; w < WIDTH; ++w)
 		{
-			ColorDbl def(100);
+			ColorDbl def(0.5);
 			Pixel myPixel(def);
 
 			Img[h][w] = def;
 			// Läsa subpixlar för att få fram den hela pixeln
 		}
 
-	createImageFile("img.png", 1.0);
+	createImageFile("img.bmp", 1.0);
 }
 
 void Camera::createImageFile(const std::string name, const double &max)
@@ -36,7 +36,10 @@ void Camera::createImageFile(const std::string name, const double &max)
 		for (Pixel &pixel : row)
 		{
 			ColorDbl color = pixel.getRayColor();
-			std::cout << color << std::endl;
+			(void)fprintf(fp, "%d %d %d ",
+				(int)(255 * (color.Red / max)),
+				(int)(255 * (color.Green / max)),
+				(int)(255 * (color.Blue / max)));
 
 		}
 	}

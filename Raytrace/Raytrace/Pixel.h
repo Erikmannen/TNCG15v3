@@ -5,7 +5,8 @@
 class Pixel
 {
 public:
-	Pixel();
+	Pixel()
+		:pixelcolor(0.0) {};
 	Pixel(ColorDbl incolor)
 		:pixelcolor(incolor) {};
 	Pixel(ColorDbl incolor,std::vector<Ray> inrays)
