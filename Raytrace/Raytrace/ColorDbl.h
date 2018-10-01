@@ -13,7 +13,7 @@ public:
 	//ColorDbl(ColorDbl& CDbl)
 		//:Red(CDbl.Red), Green(CDbl.Green), Blue(CDbl.Blue) {};
 	~ColorDbl();
-	ColorDbl(const ColorDbl& cDbl) :Red(cDbl.Red),Green(cDbl.Green), Blue(cDbl.Blue){ std::cout << "colorused"; };
+	ColorDbl(const ColorDbl& cDbl) :Red(cDbl.Red),Green(cDbl.Green), Blue(cDbl.Blue){};
 	// help functions
 	void Setchannels(double Redchannel, double Greenchannel, double Bluechannel);
 	// math stuffs

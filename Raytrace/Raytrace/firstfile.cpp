@@ -56,8 +56,8 @@ int main()
 
 	Scene scene;
 
-//	Camera cam;
-//	cam.render();
+	Camera cam;
+	cam.render();
 
 	while (true)
 	{
