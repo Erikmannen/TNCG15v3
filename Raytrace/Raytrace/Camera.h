@@ -3,9 +3,10 @@
 #include <iostream>
 #include <string>
 #include <array>
-
-const int WIDTH = 800;
-const int HEIGHT = 800;
+#include <stdlib.h>
+#include <stdio.h>
+static const int WIDTH = 2;
+static const int HEIGHT = 2;
 
 class Camera
 {
@@ -19,6 +20,7 @@ private:
 	//Eyepoint motsvarar Ep
 	Vertex Ep1, Ep2;
 	//800 x 800 array av pixels 
+	//int img[800][800];//[WIDTH][HEIGHT];
 	std::array<std::array<Pixel, WIDTH>, HEIGHT> Img;
 	
 };
