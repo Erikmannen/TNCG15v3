@@ -14,6 +14,7 @@ public:
 	~Pixel();
 	void setRayColor(ColorDbl newcolor) { pixelcolor = newcolor; };
 	ColorDbl getRayColor();
+	void addray(Ray& newray) { Raylist.push_back(newray); };
 	void addraytopixel(Ray& newray) { Raylist.push_back(newray); };
 	Ray getfirstray() { return Raylist[0]; }//kanske beböver if(raylist[0]
 	std::vector<Ray> &getraylist() { return Raylist; }; // retunera referens
