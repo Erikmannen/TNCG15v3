@@ -5,6 +5,7 @@
 #include "Scene.h"
 #include "Camera.h"
 
+
 using namespace std;
 
 void dispintersection(Triangle & tri, Ray& ray)
@@ -17,7 +18,6 @@ void dispintersection(Triangle & tri, Ray& ray)
 		cout << "did not interesect" << endl;
 	cout << "(" << t.x << "," << t.y << "," << t.z << ")" << endl;
 }
-Ray createray(Vertex v1,Vertex v2);
 
 
 int main()
@@ -30,8 +30,8 @@ int main()
 	cout << myray << endl;
 	cout << "break" << endl;
 	cout << myray.getstart().getcoords()[1] << endl;
-	Ray ri = createray(Vertex(0.0f, 0.0f, 0.0f), Vertex(0.0f, 1.0f, 0.0f));
-	Ray rj = createray(Vertex(0.0f, 0.0f, 0.0f), Vertex(0.0f, 1.0f, 0.0f));
+	Ray ri = Ray(Vertex(0.0f, 0.0f, 0.0f), Vertex(0.0f, 1.0f, 0.0f));
+	Ray rj = Ray(Vertex(0.0f, 0.0f, 0.0f), Vertex(0.0f, 1.0f, 0.0f));
 	
 	
 	Ray r(Vertex(0.0f, 0.0f, 0.0f),Vertex(0.0f, 1.0f, 0.0f));
@@ -56,27 +56,14 @@ int main()
 
 	Scene scene;
 
-	Camera cam;
-	cam.render();
-	
+//	Camera cam;
+//	cam.render();
+
 	while (true)
 	{
 
 	}
+
 	return 0;
 }
-
-#include <iostream> 
-#include <glm.hpp>
-#include "Ray.h"
-#include "Triangle.h"
-
-
-using namespace std;
-Ray createray(Vertex v1, Vertex v2)
-{
-	Ray r(v1, v2);
-	return r;
-}
-
 
