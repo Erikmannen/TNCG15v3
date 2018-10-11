@@ -4,7 +4,6 @@
 #include "Triangle.h"
 #include "Scene.h"
 #include "Camera.h"
-#include <stdio.h>
 
 
 using namespace std;
@@ -19,7 +18,101 @@ void dispintersection(Triangle & tri, Ray& ray)
 		cout << "did not interesect" << endl;
 	cout << "(" << t.x << "," << t.y << "," << t.z << ")" << endl;
 }
+void testtri()
+{
+	Triangle t(
+		Vertex(-1.0f, 0.5f, 0.0f),
+		Vertex(-1.0f, 0.0f, 1.0f),
+		Vertex(-1.0f, -0.5f, 0.0f));
 
+	Ray r(
+		Vertex(0.0f, 0.0f, 0.0f),
+		Vertex(-2.0f, 0.0f, 0.0f));
+
+	cout << endl << "test 1 - Hit expected" << endl;
+	glm::vec3  tOut(0,0,0);
+	bool intersected = false;
+	intersected = t.rayIntersection(r, tOut);
+	if (intersected == true)
+		cout << "hit1" << endl;
+	else
+		cout << "miss1" << endl;
+	
+	cout << endl << "test 2 - Hit not expected " << endl;
+	Ray r2(
+		Vertex(0.0f, 0.0f, 0.0f),
+		Vertex(-1.0f, 0.49f, 0.0f));
+
+	tOut = glm::vec3(0,0,0);
+	intersected = false;
+	intersected = t.rayIntersection(r2, tOut);
+	if (intersected == true)
+		cout << "hit2" << endl;
+	else
+		cout << "miss2" << endl;
+
+	Ray r3(
+		Vertex(0.0f, 0.0f, 0.0f),
+		Vertex(1.0f, 0.49f, 0.0f));
+	cout<< endl << "test 3  - Hit not expected" <<endl;
+
+	tOut = glm::vec3(0, 0, 0);
+	intersected = false;
+	intersected = t.rayIntersection(r3, tOut);
+	if (intersected == true)
+		cout << "hit3 " << endl;
+	else
+		cout << "miss3" << endl;
+
+}
+
+void testsph()
+{
+	// pos radius surface
+	Vertex pos1(-5, 0, 0);
+	Vertex pos2(-5, 0, 0);
+	float radius1 = 1;
+	float radius2 = 2;
+
+	Sphere s1(pos1, radius1);
+	Sphere s2(pos1, radius2);
+
+	//Sphere s(1.0f, glm::vec3(-5.0f, 0.0f, 0.0f), new Surface(ColorDbl(0.0)));
+//	Sphere s2(2.0f, glm::vec3(-5.0f, 0.0f, 0.0f), new Surface(ColorDbl(0.0));
+	
+	Vertex v; 
+	Vertex u(1, 0, 0);
+	Ray r(u,v);
+
+	//float tOut = 0;
+	bool intersected = false;
+	glm::vec3 tout(0, 0, 0);
+	intersected = s1.SphereIntersection(r, tout);
+
+	std::cout << endl<< "test sph1- should be 4" << endl;
+	if (intersected == true)
+		std::cout << "hit sph" << endl;
+	else
+		std::cout << " miss sph" << endl;
+	cout << "(" << tout.x << "," << tout.y << "," << tout.z << ")" << endl;
+
+	//EXPECT_TRUE(intersected) << "Intersection with sphere expected";
+	//EXPECT_FLOAT_EQ(tOut, 4.0f) << "distance to sphere should be 4";
+
+	std::cout << endl << "test sph1- should be ?" << endl;
+	
+	tout = glm::vec3(0,0,0);
+	intersected = false;
+	intersected = s2.SphereIntersection(r, tout);
+	if (intersected == true)
+		std::cout << "hit sph2" << endl;
+	else
+		std::cout << " miss sph2" << endl;
+	cout << "(" << tout.x << "," << tout.y << "," << tout.z << ")" << endl;
+
+	
+	
+}
 
 int main()
 {
@@ -55,10 +148,27 @@ int main()
 	cout << "\n\n";
 	dispintersection(mytri, r1);
 
+	testtri();
+	testsph();
 	Scene scene;
+	std::cout << scene.trilistsize() << endl;
+	Vertex pos1(-5, 0, 0);
+	Vertex pos2(-5, 0, 0);
+	double radius1 = 1;
+	double radius2 = 2;
 
+	Sphere s1(pos1, radius1);
+	Sphere s2(pos1, radius2);
+
+	scene.addsph(s1);
+	scene.addsph(s2);
+	auto list = scene.gettrilist();
+	for (Triangle& i : list)
+	{
+		std::cout << i.getsurf().getsurfcolor() << ' ';
+	}	
 	Camera cam;
-	cam.render();
+	cam.render(scene);
 	
 	while (true)
 	{

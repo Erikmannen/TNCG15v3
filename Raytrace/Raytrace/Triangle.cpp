@@ -4,9 +4,8 @@
 Triangle::Triangle()
 {
 	Vertex tempvertex;
-	ColorDbl tempcolor;
 	V0 = V1 = V2 = tempvertex;
-	trianglecolor = tempcolor;
+	trisurf = Surface();
 	normal.setDir(glm::normalize(glm::cross(V0.getcoords() - V2.getcoords(), V1.getcoords() - V2.getcoords())));
 }
 
@@ -16,8 +15,8 @@ Triangle::Triangle(Vertex V0new, Vertex V1new, Vertex V2new)
 	V0 = V0new;
 	V1 = V1new;
 	V2 = V2new;
-	ColorDbl tempcolor;
-	trianglecolor = tempcolor;
+	
+	trisurf = Surface();
 	normal.setDir(glm::normalize(glm::cross(V0.getcoords() - V2.getcoords(), V1.getcoords() - V2.getcoords())));
 	/*
 	
@@ -35,7 +34,7 @@ Triangle::Triangle(const Triangle & tri)
 	V0 = tri.V0;
 	V1 = tri.V1;
 	V2 = tri.V2;
-	trianglecolor = tri.trianglecolor;
+	trisurf = tri.trisurf;
 	normal = tri.normal;
 }
 

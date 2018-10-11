@@ -21,11 +21,11 @@ Ray Ray::hemisphere(Vertex& Position, Direction& normaldirr)
 	// randnrgenerator
 	std::default_random_engine generator;
 	// uniform brdf 
-	std::uniform_real_distribution<double> distribution(0.0, 1.0);
+	std::uniform_real_distribution<float> distribution(0.0, 1.0);
 
 	// se fö 11
-	double xi = distribution(generator); // xi 
-	double yj = distribution(generator); // yj
+	float xi = distribution(generator); // xi 
+	float yj = distribution(generator); // yj
 	
 	//def v1 postion motsvarar directions 
 	auto v1 = glm::normalize(-Position.getcoords() - glm::dot(-Position.getcoords(), normaldirr.getDir())*normaldirr.getDir());
@@ -54,7 +54,7 @@ Ray Ray::hemisphere(Vertex& Position, Direction& normaldirr)
 
 Ray Ray::reflection(Vertex & Postition, Direction & normaldirr)
 {
-	glm::vec3 newend = glm::reflect(Postition.getcoords(), normaldirr.getDir());	
+	glm::vec3 newend = glm::reflect(Endpoint.getcoords(), normaldirr.getDir());	
 	Ray r(Postition, Vertex(newend.x, newend.y, newend.z));
 	return r;
 }

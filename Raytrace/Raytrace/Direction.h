@@ -9,8 +9,10 @@ public:
 	Direction(double x1, double y1, double z1) :
 		Dir(x1, y1, z1) {};
 
-	Direction(Direction& D) :
+	/*Direction(Direction& D) :
 		Dir(D.Dir) {};
+	*/
+	Direction(const Direction & dir) :Dir(dir.Dir){};
 
 	~Direction();
 	void setDir(glm::vec3 newDir) { Dir = newDir; };

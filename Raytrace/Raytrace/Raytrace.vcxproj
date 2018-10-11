@@ -90,12 +90,14 @@
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <StackReserveSize>
-      </StackReserveSize>
+      <StackReserveSize>200000000</StackReserveSize>
     </Link>
     <Link>
-      <StackCommitSize>
-      </StackCommitSize>
+      <StackCommitSize>200000000</StackCommitSize>
+      <HeapReserveSize>
+      </HeapReserveSize>
+      <HeapCommitSize>
+      </HeapCommitSize>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -128,9 +130,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Camera2.cpp" />
     <ClCompile Include="ColorDbl.cpp" />
     <ClCompile Include="Direction.cpp" />
     <ClCompile Include="firstfile.cpp" />
+    <ClCompile Include="Lightsource.cpp" />
     <ClCompile Include="Pixel.cpp" />
     <ClCompile Include="Ray.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -141,8 +145,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Camera2.h" />
     <ClInclude Include="ColorDbl.h" />
     <ClInclude Include="Direction.h" />
+    <ClInclude Include="Lightsource.h" />
     <ClInclude Include="Pixel.h" />
     <ClInclude Include="Ray.h" />
     <ClInclude Include="Scene.h" />
