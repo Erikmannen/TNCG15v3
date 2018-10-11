@@ -4,6 +4,7 @@
 #include "Triangle.h"
 #include "Scene.h"
 #include "Camera.h"
+#include <stdio.h>
 
 
 using namespace std;
@@ -58,7 +59,7 @@ int main()
 
 	Camera cam;
 	cam.render();
-
+	
 	while (true)
 	{
 
