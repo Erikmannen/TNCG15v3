@@ -2,10 +2,6 @@
 
 
 
-Surface::Surface()
-{
-}
-
 
 Surface::~Surface()
 {
@@ -46,11 +42,11 @@ ColorDbl Surface::lamreflec()
 {
 	// for perfect reflection all is conserved
 	// coeff [0,1]
-	return emission * coeff / M_PI;
+	return surfacecolor * coeff / M_PI;
 }
 ColorDbl Surface::Perfectreflec()
 {
 	// for perfect reflection all is conserved
 	// coeff [0,1]
-	return emission;
+	return surfacecolor;
 }

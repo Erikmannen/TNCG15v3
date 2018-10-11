@@ -12,7 +12,7 @@ public:
 	Pixel(ColorDbl incolor,std::vector<Ray> inrays)
 		:pixelcolor(incolor),Raylist(inrays) {};
 	~Pixel();
-	void setRayColor(ColorDbl newcolor) { pixelcolor = newcolor; };
+	void setPixelColor(ColorDbl newcolor) { pixelcolor = newcolor; };
 	ColorDbl getRayColor();
 	void addray(Ray& newray) { Raylist.push_back(newray); };
 	void addraytopixel(Ray& newray) { Raylist.push_back(newray); };

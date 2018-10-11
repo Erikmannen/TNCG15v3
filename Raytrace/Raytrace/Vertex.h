@@ -14,6 +14,7 @@ public:
 		:coords(V.coords), w(V.w) {};
 	~Vertex();
 	glm::vec3 getcoords();
+	double getw() {	return w;};
 	
 	friend std::ostream& operator<<(std::ostream& os, const Vertex& vt);
 
