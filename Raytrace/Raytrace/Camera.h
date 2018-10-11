@@ -14,15 +14,17 @@
 const int WIDTH = 20;
 const int HEIGHT = 20;
 #define MAXVALUE 1e5f
-const int  MAXDEPTH =  0; // will create artefacts  
+const int  MAXDEPTH =  5; // hur många gånger ska de reflekterats
 
 class Camera
 {
 public:
 	Camera();
 	~Camera();
-	void render(Scene& myscene);//todo
+
+	void render(Scene& myscene);
 	void createImageFile(const std::string name, const double &max);
+
 	Vertex getcamerapos() { return Ep1; };
 	Ray* pixeltoray( int w,  int h);
 	

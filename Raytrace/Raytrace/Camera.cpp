@@ -2,6 +2,7 @@
 
 Camera::Camera()
 {
+	//erik? 
 	Ep1 = Vertex(-2, 0, 0,0);
 	Ep2 = Vertex(-1, 0, 0,0);
 }
@@ -70,7 +71,7 @@ void Camera::createImageFile(const std::string name, const double &max)
 	{
 		for (Pixel &pixel : row)
 		{
-			ColorDbl color = pixel.getRayColor();
+			ColorDbl color = pixel.getPixelColor();
 	//		std::cout << color << std::endl;
 
 			(void)fprintf(fp, "%d %d %d ",

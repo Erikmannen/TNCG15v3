@@ -3,7 +3,3 @@ Pixel::~Pixel()
 {
 }
 
-ColorDbl Pixel::getRayColor()
-{
-	return pixelcolor;
-}
