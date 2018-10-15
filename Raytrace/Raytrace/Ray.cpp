@@ -39,13 +39,13 @@ Ray Ray::hemisphere(Vertex& Position, Direction& normaldirr)
 	//rotera först runt infallsvinkel 
 	
 		// rotera runt normalen 
-		randdirr.setDir( glm::rotate(
+		randdirr.setDir( glm::normalize(glm::rotate(
 			randdirr.getDir(), Inclinationangle, v3
-		));
+		)));
 		//rotera runt tangenten ? 
-		randdirr.setDir(glm::rotate(
+		randdirr.setDir(glm::normalize(glm::rotate(
 			randdirr.getDir(), Inclinationangle, normaldirr.getDir()
-		));
+		)));
 		Vertex endpos(randdirr.getDir().x, randdirr.getDir().y, randdirr.getDir().z);
 
 

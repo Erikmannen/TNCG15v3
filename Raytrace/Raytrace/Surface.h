@@ -4,9 +4,8 @@
 #include "ColorDbl.h"
 const int Lambertian = 0;
 const int Perfect = 1;
-const int reflextioncoff = 2;
-const int Lightsource = 3; 
-//const int Perfect = 1;
+const int Lightsource = 2; 
+
 class Surface
 {
 public:
@@ -18,13 +17,17 @@ public:
 		}
 	};
 	~Surface();
-	ColorDbl getsurfcolor() { return surfacecolor; };
+	
 	ColorDbl Surfacereflect(Ray& rayin,Ray& rayout,Direction& normal);
 	Ray rayreflection(Ray& rayin,Vertex& Position, Direction& normal);
+
 	ColorDbl lamreflec();
 	ColorDbl Perfectreflec();
+
 	bool modelcheck(const int in) { return in == reflectionmodel; };
+	
 	double getcoeff() { return coeff; };
+	ColorDbl getsurfcolor() { return surfacecolor; };
 
 private:
 	ColorDbl surfacecolor;

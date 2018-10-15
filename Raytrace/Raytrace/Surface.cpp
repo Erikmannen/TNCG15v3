@@ -25,7 +25,6 @@ ColorDbl Surface::Surfacereflect(Ray& rayin, Ray & rayout, Direction & normal)
 Ray Surface::rayreflection(Ray& rayin, Vertex & Position, Direction & normal)
 {
 	if (reflectionmodel == Lambertian)
-		
 	{
 		return rayin.hemisphere(Position,normal);
 	}

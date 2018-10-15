@@ -158,7 +158,7 @@ std::vector<triangleintersection> Scene::rayIntersectionfortri(Ray arg)
 				intersections.push_back(Intersector);
 			}
 		}
-	
+		
 		return intersections;
 }
 

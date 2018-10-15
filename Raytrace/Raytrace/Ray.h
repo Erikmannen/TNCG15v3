@@ -15,20 +15,22 @@ class Ray
 public:
 	Ray();
 	Ray(Vertex Start, Vertex End)
-		:Startpoint(Start), Endpoint(End) {};// , Points({ Startpoint,Endpoint }
+		:Startpoint(Start), Endpoint(End) {
+		raycolor = ColorDbl();};
 	Ray(Vertex Start, Vertex End,ColorDbl rayco)
 		:Startpoint(Start), Endpoint(End),raycolor(rayco) {};// , Points({ Startpoint,Endpoint }
 	~Ray();
-	Ray(const Ray& myray): Startpoint(myray.Startpoint),Endpoint(myray.Endpoint),raycolor(myray.raycolor)  {};
+	//Ray(const Ray& myray): Startpoint(myray.Startpoint),Endpoint(myray.Endpoint),raycolor(myray.raycolor)  {};
 	Vertex getstart() { return Startpoint; };
 	Vertex getend() { return Endpoint; };
+	void setend(Vertex v) { Endpoint = v; };
 	Ray hemisphere(Vertex& Position, Direction& normaldirr);
 	Ray reflection(Vertex& Postition, Direction& normaldirr);
 	void setraycolor(ColorDbl incolor) { raycolor= incolor; };
 	friend std::ostream& operator<<(std::ostream& os, const Ray& ray);
 private:
 	Vertex Startpoint, Endpoint;
-	ColorDbl raycolor;
+	ColorDbl raycolor = ColorDbl();
 	
 	//Triangle* endpointtriangle;
 	//std::list<Vertex> Points;
