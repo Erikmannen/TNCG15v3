@@ -14,22 +14,21 @@
 const int WIDTH = 20;
 const int HEIGHT = 20;
 #define MAXVALUE 1e5f
-const int  MAXDEPTH =  5; // hur många gånger ska de reflekterats
+const int  MAXDEPTH =  5; // will create artefacts  
 
 class Camera
 {
 public:
 	Camera();
 	~Camera();
-
-	void render(Scene& myscene);
+	void render(Scene& myscene);//todo
 	void createImageFile(const std::string name, const double &max);
-
 	Vertex getcamerapos() { return Ep1; };
 	Ray* pixeltoray( int w,  int h);
+	Ray* pixeltoray2( int w,  int h);
 	
 	
-	ColorDbl Castray(Ray& myray, Scene myscene,int depth);
+	ColorDbl Castray(Ray& myray, Scene myscene,int depth  = 0);
 private:
 	//Eyepoint motsvarar Ep
 	Vertex Ep1, Ep2;
@@ -38,5 +37,6 @@ private:
 	int Subpixels = 1; // no divided yet
 	//fov for camera
 	float fov = ((float)M_PI) / 1.5f;
+	
 };
 

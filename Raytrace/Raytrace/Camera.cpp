@@ -2,7 +2,6 @@
 
 Camera::Camera()
 {
-	//erik? 
 	Ep1 = Vertex(-2, 0, 0,0);
 	Ep2 = Vertex(-1, 0, 0,0);
 }
@@ -28,14 +27,16 @@ void Camera::render(Scene& myscene)
 			//std::cout << tempray->getstart() << " -> " << tempray->getend() << std::endl;
 			p.addray(*tempray);
 			// borde göras i en egen loop så man kan dela upp den // todo
-			int depth = 0; // depth motsvarar reflektioner
+			//int depth = 0; // depth motsvarar reflektioner
 			ColorDbl tempcolor(0.0);
 			std::vector<Ray> rays = p.getraylist();
+			int count = 0;
 			for (Ray r : rays)
 			{
-				tempcolor = tempcolor + Castray(r, myscene, depth);
+			
+				tempcolor = tempcolor + Castray(r, myscene);
 			}
-			std::cout <<"tempcolor is : "<< tempcolor << std::endl;
+			//std::cout <<"tempcolor is : "<< tempcolor << std::endl;
 			p.setPixelColor(tempcolor);
 			Img[w][h] = p;
 			maximage = glm::max(maximage, glm::max(tempcolor.Red, glm::max(tempcolor.Green, tempcolor.Blue)));
@@ -52,11 +53,7 @@ void Camera::render(Scene& myscene)
 		}
 		
 	}
-	ColorDbl testcolordouble(0);
-	ColorDbl testcolr2(0.5);
-	testcolordouble = testcolordouble + testcolr2;
-	std::cout << "mytestcolor : " << testcolordouble << std::endl;
-
+	
 	createImageFile("img.ppm", maximage);
 }
 
@@ -72,19 +69,33 @@ void Camera::createImageFile(const std::string name, const double &max)
 		for (Pixel &pixel : row)
 		{
 			ColorDbl color = pixel.getPixelColor();
-	//		std::cout << color << std::endl;
+		std::cout << color << std::endl;
 
 			(void)fprintf(fp, "%d %d %d ",
-				(int)(color.Red),
-				(int)(color.Green),
-				(int)(color.Blue));
+				(int)(color.Red*255/max),
+				(int)(color.Green*255/max),
+				(int)(color.Blue)*255/max);
 
 		}
 	}
 	(void)fclose(fp);
 
 }
-
+/*
+Ray* Camera::pixeltoray2(int w, int h) {
+	Vertex c(0,2.5,2.5);
+	double aspectRatio = (double)HEIGHT / (double)WIDTH;
+	double pw = w / WIDTH, ph = h / HEIGHT;
+	double fovH = fov * aspectRatio;
+	double radW = pw * fov - fov / 2, radH = ph * fovH - fovH / 2;
+	double diffW = -sin(radW), diffH = -sin(radH);
+	glm::vec3 diff(diffW, diffH, 0.0f);
+	glm::vec3 lookAt = glm::normalize(glm::vec3(-0.3,-0.3,0.3) + diff);
+	Vertex lookattemp(lookAt.x, lookAt.y, lookAt.z);
+	Ray* ray = new Ray(c, lookattemp);
+	return ray;
+}
+*/
 Ray* Camera::pixeltoray(int w, int h)
 {
 	//std::cout << w << " , " << h << std::endl; 
@@ -108,7 +119,7 @@ Ray* Camera::pixeltoray(int w, int h)
 	Vertex px = Vertex(0.0f, -1.0f + (0.5f + w)*deltax, -1.0f + (0.5f + h)*deltay);
 	//std::cout << "("<< px.y <<"," <<px.z << ") in camera plane ";
 	//std::cout << std::endl << px.getcoords().y << ", "<<px.getcoords().z << std::endl;
-	Vertex ps(-1.0,0,0); //user chooses wich eye to use with variable eye
+	Vertex ps(-1,0,0); //user chooses wich eye to use with variable eye
 
 	glm::vec3 D = glm::normalize(px.getcoords() - ps.getcoords()) * 1000.0f; //a vector D with length 30, intersecting pixel on its way to the eye
    // std::cout << "D: " << D.x << D.y << D.z << " ";
@@ -120,12 +131,8 @@ Ray* Camera::pixeltoray(int w, int h)
 	return ray;
 }
 
-
 ColorDbl Camera::Castray(Ray & myray, Scene myscene, int depth)
 {
-	
-
-	// for each type of intersection  
 	
 	std::vector<triangleintersection> triintersections = myscene.rayIntersectionfortri(myray);
 	std::vector<sphereintersection> sphintersections = myscene.rayIntersectionforsph(myray);
@@ -156,7 +163,7 @@ ColorDbl Camera::Castray(Ray & myray, Scene myscene, int depth)
 		for (triangleintersection &intersection : triintersections) {
 			Triangle t = intersection.object;
 			Surface surface = t.getsurf();
-			std::cout<<std::endl << "surfcolor : " << surface.getsurfcolor();
+			//std::cout<<std::endl << "surfcolor : " << surface.getsurfcolor();
 
 			//terminate if hit a lightsource
 			if (surface.modelcheck(Lightsource))
@@ -170,22 +177,21 @@ ColorDbl Camera::Castray(Ray & myray, Scene myscene, int depth)
 
 			Ray out = surface.rayreflection(myray, temppoint, normal);
 			double angle = glm::angle(out.getend().getcoords() - out.getstart().getcoords(), normal.getDir());
-
+			
 			// se fö? 
 			ColorDbl emittance = surface.Surfacereflect(myray,out,normal)* cos(angle);
-			std::cout << std::endl << "emittance : " << emittance;
+			//std::cout << std::endl << "emittance : " << emittance;
 
 			returncolor = returncolor + emittance;
 			
-			// scene contributioon?
-
+			
 			// terminate using russian roulett
 			// randnrgenerator
 			// uniform brdf 
 			std::default_random_engine generator;
-			std::uniform_real_distribution<float> distribution(0.0, 1.0);
+			std::uniform_real_distribution<float> distribution(0.0, 255);
 			float uniformrand = distribution(generator);
-			double rrTop = glm::max(glm::max(emittance.Red, emittance.Green), emittance.Blue);
+			float rrTop = glm::max(glm::max(emittance.Red, emittance.Green), emittance.Blue);
 			
 			if (depth < MAXDEPTH || uniformrand < rrTop) {
 				//perfect specular = perfect
