@@ -101,10 +101,20 @@ Ray* Camera::pixeltoray(int w, int h)
 	//std::cout << w << " , " << h << std::endl; 
 	//send out one ray for each pixel into the scene
 	// need to convert to float othervise all deltas are 0
-	float deltax = 1 / (float)WIDTH;
-	float deltay = 1 / (float)HEIGHT;
+	float deltax = w / (float)WIDTH;
+	float deltay = h / (float)HEIGHT;
 	//camera plane goes between (0,-1, -1) and (0,1,1) which gives
 	// point of intersection through the center of pixels[r][c]
+
+	double aspect = (double)WIDTH / (double)HEIGHT;
+	double fovH = fov * aspect;
+	double radW = deltax * fov - fov / 2, radH = deltay * fovH - fovH / 2;
+	double diffW = -sin(radW), diffH = -sin(radH);
+
+	glm::vec3 diff(diffW, diffH, 0.0f);
+	glm::vec3 lookAt = glm::normalize(Ep2.getcoords() + diff);
+
+	Vertex End(lookAt.x, lookAt.y, lookAt.z);
 
 	Vertex px = Vertex(0.0f, -1.0f + (0.5f + w)*deltax, -1.0f + (0.5f + h)*deltay);
 	//std::cout << "("<< px.y <<"," <<px.z << ") in camera plane ";
@@ -117,7 +127,7 @@ Ray* Camera::pixeltoray(int w, int h)
 	Vertex pe (ps.getcoords().x+ D.x, ps.getcoords().y + D.y, ps.getcoords().z + D.z); //endpoint   //Vertex(pe.x-*D.x, pe.y-*D.y, pe.z-*D.z, 0);
 	//std::cout << "ps: " << ps.x << "," << ps.y << ","<< ps.z << " \n";
 	//We create a white ray with end point somewhere far in the direction D from eye point
-	Ray * ray = new Ray(ps, pe, ColorDbl(1, 1, 1)); //NOTE: ray could be deallocated after function render is done
+	Ray * ray = new Ray(ps, End, ColorDbl(1, 1, 1)); //NOTE: ray could be deallocated after function render is done
 	return ray;
 }
 
