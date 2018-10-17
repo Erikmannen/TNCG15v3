@@ -41,7 +41,7 @@ Triangle::Triangle(const Triangle & tri)
 //intersection using Möller-Trumbore algo
 //return intersection point in var intersect 
 //returning true if intersecting or false if not
-bool Triangle::rayIntersection(Ray arg, glm::vec3& intersect)
+bool Triangle::rayIntersection(Ray arg, glm::vec4& intersect)
 {
 
 	// distance of ray to vertex
@@ -75,6 +75,7 @@ bool Triangle::rayIntersection(Ray arg, glm::vec3& intersect)
 		"\n" << "determinant:" << determinant << std::endl;
 #endif
 
+	intersect = glm::vec4(0, 0, 0, -1);
 	// use u and v to determine if intersection
 	// if determinant is near zero, ray lies in plane of triangle or ray is parallel to plane of triangle
 	if (determinant > -MINVALUE && determinant < MINVALUE)//if (std::abs(determinant) < MINVALUE)
@@ -94,7 +95,8 @@ bool Triangle::rayIntersection(Ray arg, glm::vec3& intersect)
 	//behöver antagligen fixa med interaction
 	if (t > MINVALUE && t < MAXVALUE)
 	{
-		intersect = arg.getstart().getcoords() + t * D;
+		glm::vec3 xyz = (arg.getstart().getcoords() + t * D);
+		intersect = glm::vec4(xyz.x,xyz.y,xyz.z,1);
 		return true;
 	}
 

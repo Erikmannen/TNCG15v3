@@ -23,10 +23,17 @@ public:
 	//Ray(const Ray& myray): Startpoint(myray.Startpoint),Endpoint(myray.Endpoint),raycolor(myray.raycolor)  {};
 	Vertex getstart() { return Startpoint; };
 	Vertex getend() { return Endpoint; };
+	Direction getdirection() {
+		glm::vec3 temp(Startpoint.getcoords() -Endpoint.getcoords());
+							return Direction(temp.x,temp.y,temp.z);};
+
 	void setend(Vertex v) { Endpoint = v; };
+	void setraycolor(ColorDbl incolor) { raycolor = incolor; };
+
+
 	Ray hemisphere(Vertex& Position, Direction& normaldirr);
 	Ray reflection(Vertex& Postition, Direction& normaldirr);
-	void setraycolor(ColorDbl incolor) { raycolor= incolor; };
+	
 	friend std::ostream& operator<<(std::ostream& os, const Ray& ray);
 private:
 	Vertex Startpoint, Endpoint;

@@ -2,8 +2,8 @@
 
 Camera::Camera()
 {
-	Ep1 = Vertex(-2, 0, 0,0);
-	Ep2 = Vertex(-1, 0, 0,0);
+	Ep1 = Vertex(-2, 0, 0,1);
+	Ep2 = Vertex(-1, 0, 0,1);
 }
 
 
@@ -132,12 +132,12 @@ ColorDbl Camera::Castray(Ray & myray, Scene myscene, int depth)
 
 	// check if empty
 	if (triintersections.size()) {
-		disttotri = glm::distance(triintersections.front().point, myray.getstart().getcoords());
+		disttotri = glm::distance(triintersections.front().point.getcoords(), myray.getstart().getcoords());
 		std::cout << std::endl << "disttotri : " << disttotri << std::endl;
 
 	}
 	if (sphintersections.size()) {
-		disttosph = glm::distance(sphintersections.front().point, myray.getstart().getcoords());
+		disttosph = glm::distance(sphintersections.front().point.getcoords(), myray.getstart().getcoords());
 		std::cout << std::endl << "disttosph : " << disttosph << std::endl;
 		
 
@@ -163,7 +163,7 @@ ColorDbl Camera::Castray(Ray & myray, Scene myscene, int depth)
 			}
 
 			Direction normal = t.getnormal();
-			Vertex temppoint(intersection.point.x, intersection.point.x, intersection.point.x);
+			Vertex temppoint(intersection.point.getcoords().x, intersection.point.getcoords().y, intersection.point.getcoords().z);
 
 			Ray out = surface.rayreflection(myray, temppoint, normal);
 			double angle = glm::angle(out.getend().getcoords() - out.getstart().getcoords(), normal.getDir());
@@ -198,7 +198,7 @@ ColorDbl Camera::Castray(Ray & myray, Scene myscene, int depth)
 		for (sphereintersection &sphereIntersection : sphintersections) {
 			Sphere s = sphereIntersection.object;
 			Surface surface = s.getsurf();
-			Vertex temppoint(sphereIntersection.point.x, sphereIntersection.point.y, sphereIntersection.point.z);
+			Vertex temppoint(sphereIntersection.point.getcoords().x, sphereIntersection.point.getcoords().y, sphereIntersection.point.getcoords().z);
 			Direction normal = s.getnormal(temppoint);
 
 

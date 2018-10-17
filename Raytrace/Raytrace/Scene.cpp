@@ -148,13 +148,14 @@ std::vector<triangleintersection> Scene::rayIntersectionfortri(Ray arg)
 	// for each tri in trianglelist
 		for (Triangle tri : Trianglelist) {
 			triangleintersection Intersector; // tri (returntype for intersectionobjects)
-			glm::vec3 intersect; // to be passed into intersectionfuntion
+			glm::vec4 intersect; // to be passed into intersectionfuntion
 			bool didintersect = tri.rayIntersection(arg, intersect);
 			//x(t) = ps +t(pe-ps) == intersect
 
 			if (didintersect == true) {
 				Intersector.object = tri;
-				Intersector.point = intersect - 0.001f*tri.getnormal().getDir();
+				glm::vec4 temp = glm::vec4(intersect - glm::vec4(0.001f*tri.getnormal().getDir(), 0));
+				Intersector.point = Vertex(temp.x,temp.y,temp.z,temp.w);
 				intersections.push_back(Intersector);
 			}
 		}
@@ -176,7 +177,8 @@ std::vector<sphereintersection> Scene::rayIntersectionforsph(Ray arg)
 
 				if (didintersect == true) {
 					Intersector.object = sph;
-					Intersector.point = intersect + 0.001f*sph.getnormal(Vertex(intersect.x,intersect.y,intersect.z)).getDir();
+					glm::vec4 temp = glm::vec4(intersect + 0.001f*sph.getnormal(Vertex(intersect.x, intersect.y, intersect.z)).getDir(), 0);
+					Intersector.point = Vertex(temp.x, temp.y, temp.z, temp.w);
 					intersections.push_back(Intersector);
 				}
 			}

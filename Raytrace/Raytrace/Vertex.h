@@ -4,22 +4,23 @@
 class Vertex
 {
 public:
-	Vertex() : coords(0, 0, 0), w(0) {};
-	Vertex(double Inx, double Iny, double Inz)
-		:coords(Inx, Iny, Inz), w(0.0) {};
-	Vertex(double Inx, double Iny, double Inz,double Inw) 
-		:coords(Inx,Iny,Inz),w(Inw) {};
-	void Set(double Inx, double Iny, double Inz, double Inw);
+	
+	Vertex(float Inx = 0, float Iny = 0, float Inz = 0, float inw = 0)
+		:coords(Inx, Iny, Inz,inw) {};
+	void Set(float Inx, float Iny, float Inz, float Inw) { coords.x = Inx;
+	coords.y = Iny;
+	coords.z = Inz;
+	coords.w = Inw;
+	};
 	Vertex(const Vertex & V)
-		:coords(V.coords), w(V.w) {};
+		:coords(V.coords) {};
 	~Vertex();
-	glm::vec3 getcoords();
-	double getw() {	return w;};
+	glm::vec3 getcoords() { return glm::vec3(coords.x, coords.y, coords.z);};
+	double getw() {	return coords.w;};
 	
 	friend std::ostream& operator<<(std::ostream& os, const Vertex& vt);
 
 private: 
-	glm::vec3 coords; 
-	double w;
-};
+	glm::vec4 coords; 
+	};
 

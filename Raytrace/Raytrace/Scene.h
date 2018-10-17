@@ -9,12 +9,12 @@
 
 struct triangleintersection{
 	Triangle object;
-	glm::vec3 point;
+	Vertex point;
 };
 
 struct sphereintersection {
 	Sphere object;
-	glm::vec3 point;
+	Vertex point;
 
 };
 
