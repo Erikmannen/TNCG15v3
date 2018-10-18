@@ -2,7 +2,7 @@
 #include "Triangle.h"
 #include "Sphere.h"
 #include <vector>
-
+#include <list>
 #include "Surface.h"
 
 // T kan vara triangle och senare sphere
@@ -26,7 +26,7 @@ public:
 	Scene();
 	~Scene();
 	//returns vector  with all intersected objects of type 
-	std::vector<triangleintersection> rayIntersectionfortri(Ray arg); 
+	std::list<triangleintersection> rayIntersectionfortri(Ray arg); 
 	std::vector<sphereintersection> rayIntersectionforsph(Ray arg); 
 
 	size_t trilistsize() { return Trianglelist.size(); };
@@ -36,9 +36,9 @@ public:
 	ColorDbl lightcontribution(Vertex v, Direction norm); // todo
 
 	void addsph(Sphere newsph) { Spherelist.push_back(newsph); };
-	std::vector<Triangle> gettrilist() { return Trianglelist; };
+	std::list<Triangle> gettrilist() { return Trianglelist; };
 private:
-	std::vector<Triangle> Trianglelist;
+	std::list<Triangle> Trianglelist;
 	std::vector<Sphere> Spherelist;
 	
 	

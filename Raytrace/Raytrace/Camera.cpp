@@ -2,8 +2,20 @@
 
 Camera::Camera()
 {
-	Ep1 = Vertex(-2, 0, 0,1);
-	Ep2 = Vertex(-1, 0, 0,1);
+	Ep1 = Vertex(-1, 0, 0,1);
+	Ep2 = Vertex(-2, 0, 0,1);
+
+	pixelplane[0] = glm::vec4(0.0f, 1.0f, 1.0f, 1.0f);
+	pixelplane[1] = glm::vec4(0.0f, -1.0f, 1.0f, 1.0f);
+	pixelplane[2] = glm::vec4(0.0f, 1.0f, -1.0f, 1.0f);
+	pixelplane[3] = glm::vec4(0.0f, -1.0f, -1.0f, 1.0f);
+	planeWidthAxis = (pixelplane[1] - pixelplane[0]);
+	planeHeigthAxis = (pixelplane[2] - pixelplane[0]);
+
+	pixelStep = glm::length(planeHeigthAxis) / HEIGHT;
+
+	planeWidthAxis = glm::normalize(planeWidthAxis);
+	planeHeigthAxis = glm::normalize(planeHeigthAxis);
 }
 
 
@@ -31,10 +43,11 @@ void Camera::setuppixels() {
 	for (int h = 0; h < HEIGHT; ++h) {
 		for (int w = 0; w < WIDTH; ++w)
 		{
-			Img[w][h].setPixelColor(ColorDbl());
-			Ray* tempray = pixeltoray(w, h);
+
+			Img[h][w].setPixelColor(ColorDbl());
+			Ray* tempray = pixeltoray2(w, h);
 			//std::cout << tempray->getstart() << " -> " << tempray->getend() << std::endl;
-			Img[w][h].addray(*tempray);
+			Img[h][w].addray(*tempray);
 		
 		}
 	}
@@ -48,12 +61,12 @@ double Camera::rays(Scene& myscene) {
 		{
 	
 			ColorDbl tempcolor(0.0);
-			std::vector<Ray> rays = Img[w][h].getraylist();
+			std::vector<Ray> rays = Img[h][w].getraylist();
 			for (Ray r : rays)
 			{
 				tempcolor = tempcolor + Castray(r, myscene);
 			}
-			Img[w][h].setPixelColor(tempcolor);
+			Img[h][w].setPixelColor(tempcolor);
 			maximage = glm::max(maximage, glm::max(tempcolor.Red, glm::max(tempcolor.Green, tempcolor.Blue)));
 
 		}
@@ -75,17 +88,37 @@ void Camera::createImageFile(const std::string name, const double &max)
 		std::cout << color << std::endl;
 
 			(void)fprintf(fp, "%d %d %d ",
+				(int)(color.Red),
+				(int)(color.Green),
+				(int)(color.Blue));
+			/*
+			(void)fprintf(fp, "%d %d %d ",
 				(int)(color.Red*255/max),
 				(int)(color.Green*255/max),
 				(int)(color.Blue)*255/max);
-
+				*/
 		}
 	}
+	
 	(void)fclose(fp);
 
 }
-/*
+
 Ray* Camera::pixeltoray2(int w, int h) {
+	
+	std::random_device rd;  //Will be used to obtain a seed for the random number engine
+	std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
+	std::uniform_real_distribution<> dis(0.0, pixelStep);
+
+	
+	std::mt19937 gen1(rd());
+	auto samplePos = static_cast<float>(dis(rd));
+	glm::vec4 pixelPos = pixelplane[0] + (planeWidthAxis * ((w+1) * pixelStep - samplePos));
+	pixelPos += planeHeigthAxis * ((h+1) * pixelStep - samplePos);
+
+	Ray* r = new Ray(Ep1,Vertex(pixelPos.x, pixelPos.y, pixelPos.z, pixelPos.w),ColorDbl(1,1,1));
+	return r;
+	/*
 	Vertex c(0,2.5,2.5);
 	double aspectRatio = (double)HEIGHT / (double)WIDTH;
 	double pw = w / WIDTH, ph = h / HEIGHT;
@@ -97,8 +130,9 @@ Ray* Camera::pixeltoray2(int w, int h) {
 	Vertex lookattemp(lookAt.x, lookAt.y, lookAt.z);
 	Ray* ray = new Ray(c, lookattemp);
 	return ray;
+	*/
 }
-*/
+
 Ray* Camera::pixeltoray(int w, int h)
 {
 	//std::cout << w << " , " << h << std::endl; 
@@ -122,7 +156,7 @@ Ray* Camera::pixeltoray(int w, int h)
 	Vertex px = Vertex(0.0f, -1.0f + (0.5f + w)*deltax, -1.0f + (0.5f + h)*deltay);
 	//std::cout << "("<< px.y <<"," <<px.z << ") in camera plane ";
 	//std::cout << std::endl << px.getcoords().y << ", "<<px.getcoords().z << std::endl;
-	Vertex ps(-1,0,0); //user chooses wich eye to use with variable eye
+	Vertex ps(-2,0,0); //user chooses wich eye to use with variable eye
 
 	glm::vec3 D = glm::normalize(px.getcoords() - ps.getcoords()) * 1000.0f; //a vector D with length 30, intersecting pixel on its way to the eye
    // std::cout << "D: " << D.x << D.y << D.z << " ";
@@ -137,7 +171,7 @@ Ray* Camera::pixeltoray(int w, int h)
 ColorDbl Camera::Castray(Ray & myray, Scene myscene, int depth)
 {
 	
-	std::vector<triangleintersection> triintersections = myscene.rayIntersectionfortri(myray);
+	std::list<triangleintersection> triintersections = myscene.rayIntersectionfortri(myray);
 	std::vector<sphereintersection> sphintersections = myscene.rayIntersectionforsph(myray);
 	ColorDbl returncolor(0);
 	float disttotri = MAXVALUE;
@@ -146,7 +180,7 @@ ColorDbl Camera::Castray(Ray & myray, Scene myscene, int depth)
 	// check if empty
 	if (triintersections.size()) {
 		disttotri = glm::distance(triintersections.front().point.getcoords(), myray.getstart().getcoords()); // todo sortera
-		std::cout << std::endl << "disttotri : " << disttotri << std::endl;
+		//std::cout << std::endl << "disttotri : " << disttotri << std::endl;
 
 	}
 	if (sphintersections.size()) {
@@ -157,8 +191,8 @@ ColorDbl Camera::Castray(Ray & myray, Scene myscene, int depth)
 	}
 	else if (!triintersections.size() && !sphintersections.size())
 	{
-		std::cout << "miss Ray origin : " << myray.getstart()
-			<< "Ray end: " << myray.getend() << std::endl;
+	//	std::cout << "miss Ray origin : " << myray.getstart()
+		//	<< "Ray end: " << myray.getend() << std::endl;
 
 	}
 		
@@ -244,4 +278,50 @@ ColorDbl Camera::Castray(Ray & myray, Scene myscene, int depth)
 	
 	return returncolor;
 
+}
+ColorDbl Camera::Castray2(Ray& myray, Scene myscene, int depth ){
+	
+	ColorDbl returncolor(0);
+	float disttotri = MAXVALUE;
+	std::list<triangleintersection> triintersections = myscene.rayIntersectionfortri(myray);
+	// check if empty
+	
+	for (triangleintersection &intersection : triintersections) {
+		Triangle t = intersection.object;
+		Surface surface = t.getsurf();
+		returncolor = surface.getsurfcolor();
+/*
+		Direction normal = t.getnormal();
+
+		Ray out = surface.rayreflection(myray, intersection.point, normal);
+		double angle = glm::angle(out.getend().getcoords() - out.getstart().getcoords(), normal.getDir());
+
+		// se fö? 
+		ColorDbl emittance = surface.Surfacereflect(myray, out, normal)* cos(angle);
+		//std::cout << std::endl << "emittance : " << emittance;
+
+		returncolor = returncolor + emittance;
+*/
+
+
+		// terminate using russian roulett
+		// randnrgenerator
+		// uniform brdf 
+		/*
+		std::default_random_engine generator;
+		std::uniform_real_distribution<float> distribution(0.0, 255);
+		float uniformrand = distribution(generator);
+		float rrTop = glm::max(glm::max(emittance.Red, emittance.Green), emittance.Blue);
+		if (depth < MAXDEPTH || uniformrand < rrTop) {
+			//perfect specular = perfect
+			int nextDepth = surface.modelcheck(Perfect) ? depth : depth + 1;
+			// affect probabillity
+			returncolor = returncolor + (Castray(out, myscene, nextDepth) * surface.getcoeff());
+			returncolor = surface.getsurfcolor(); // todo remove once fov fixed
+		}
+		*/
+
+		//break;
+	}
+	return returncolor;
 }

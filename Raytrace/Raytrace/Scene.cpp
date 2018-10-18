@@ -140,10 +140,10 @@ ColorDbl Scene::lightcontribution(Vertex v, Direction norm)
 
 
 
-std::vector<triangleintersection> Scene::rayIntersectionfortri(Ray arg)
+std::list<triangleintersection> Scene::rayIntersectionfortri(Ray arg)
 {
 	//return
-	std::vector<triangleintersection> intersections;
+	std::list<triangleintersection> intersections;
 
 	// for each tri in trianglelist
 		for (Triangle tri : Trianglelist) {
@@ -159,7 +159,11 @@ std::vector<triangleintersection> Scene::rayIntersectionfortri(Ray arg)
 				intersections.push_back(Intersector);
 			}
 		}
-		
+		glm::vec3 rayStart = arg.getstart().getcoords();
+		intersections.sort([&rayStart]( triangleintersection &a,  triangleintersection &b) {
+			
+			return glm::length(a.point.getcoords() - rayStart) < glm::length(b.point.getcoords() - rayStart);
+		});
 		return intersections;
 }
 
