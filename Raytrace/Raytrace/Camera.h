@@ -23,13 +23,18 @@ public:
 	~Camera();
 	void render(Scene& myscene);//todo
 	void createImageFile(const std::string name, const double &max);
-	Vertex getcamerapos() { return Ep1; };
-	Ray* pixeltoray( int w,  int h);
-	Ray* pixeltoray2( int w,  int h);
 	
+	Vertex getcamerapos() { return Ep1; };
+	
+	Ray* pixeltoray( int w,  int h);
+	//Ray* pixeltoray2( int w,  int h);
+	void setuppixels();
+	double rays(Scene& myscene);
 	
 	ColorDbl Castray(Ray& myray, Scene myscene,int depth  = 0);
 private:
+	
+	
 	//Eyepoint motsvarar Ep
 	Vertex Ep1, Ep2;
 	//800 x 800 array av pixels 

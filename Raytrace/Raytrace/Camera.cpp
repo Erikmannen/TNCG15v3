@@ -17,46 +17,47 @@ void Camera::render(Scene& myscene)
 	std::cout << std::endl << " nr of sph in cam : " << myscene.sphlistsize() << std::endl;
 
 	double maximage = 0.0;
+	setuppixels();
+	maximage = rays(myscene);		
+
+	createImageFile("img.ppm", maximage);
+}
+
+
+void Camera::setuppixels() {
+	
 	// we want to cast 1 ray  per pixel 
 	// for each pixel we need to add a ray as reference 
 	for (int h = 0; h < HEIGHT; ++h) {
 		for (int w = 0; w < WIDTH; ++w)
 		{
-			Pixel p(0.0);
+			Img[w][h].setPixelColor(ColorDbl());
 			Ray* tempray = pixeltoray(w, h);
 			//std::cout << tempray->getstart() << " -> " << tempray->getend() << std::endl;
-			p.addray(*tempray);
-			// borde göras i en egen loop så man kan dela upp den // todo
-			//int depth = 0; // depth motsvarar reflektioner
-			ColorDbl tempcolor(0.0);
-			std::vector<Ray> rays = p.getraylist();
-			int count = 0;
-			for (Ray r : rays)
-			{
-			
-				tempcolor = tempcolor + Castray(r, myscene);
-			}
-			//std::cout <<"tempcolor is : "<< tempcolor << std::endl;
-			p.setPixelColor(tempcolor);
-			Img[w][h] = p;
-			maximage = glm::max(maximage, glm::max(tempcolor.Red, glm::max(tempcolor.Green, tempcolor.Blue)));
-
-
-			/*
-			Img[w][h].addray(*ray);
-
-			ColorDbl def(200);
-			Pixel myPixel(def);
-
-			Img[h][w] = def;
-			*/
-		}
+			Img[w][h].addray(*tempray);
 		
+		}
 	}
-	
-	createImageFile("img.ppm", maximage);
 }
 
+double Camera::rays(Scene& myscene) {
+	double maximage = 0.0; // to check max intensity
+	
+	for (int h = 0; h < HEIGHT; ++h) {
+		for (int w = 0; w < WIDTH; ++w)
+		{
+			ColorDbl tempcolor(0.0);
+			std::vector<Ray> rays = Img[w][h].getraylist();
+			for (Ray r : rays)
+			{
+				tempcolor = tempcolor + Castray(r, myscene);
+			}
+			Img[w][h].setPixelColor(tempcolor);
+			maximage = glm::max(maximage, glm::max(tempcolor.Red, glm::max(tempcolor.Green, tempcolor.Blue)));
+		}
+	}
+	return maximage;
+}
 
 
 void Camera::createImageFile(const std::string name, const double &max)
