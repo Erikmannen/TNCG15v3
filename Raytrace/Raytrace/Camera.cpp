@@ -46,6 +46,7 @@ double Camera::rays(Scene& myscene) {
 	for (int h = 0; h < HEIGHT; ++h) {
 		for (int w = 0; w < WIDTH; ++w)
 		{
+	
 			ColorDbl tempcolor(0.0);
 			std::vector<Ray> rays = Img[w][h].getraylist();
 			for (Ray r : rays)
@@ -54,6 +55,7 @@ double Camera::rays(Scene& myscene) {
 			}
 			Img[w][h].setPixelColor(tempcolor);
 			maximage = glm::max(maximage, glm::max(tempcolor.Red, glm::max(tempcolor.Green, tempcolor.Blue)));
+
 		}
 	}
 	return maximage;
@@ -143,12 +145,12 @@ ColorDbl Camera::Castray(Ray & myray, Scene myscene, int depth)
 
 	// check if empty
 	if (triintersections.size()) {
-		disttotri = glm::distance(triintersections.front().point.getcoords(), myray.getstart().getcoords());
+		disttotri = glm::distance(triintersections.front().point.getcoords(), myray.getstart().getcoords()); // todo sortera
 		std::cout << std::endl << "disttotri : " << disttotri << std::endl;
 
 	}
 	if (sphintersections.size()) {
-		disttosph = glm::distance(sphintersections.front().point.getcoords(), myray.getstart().getcoords());
+		disttosph = glm::distance(sphintersections.front().point.getcoords(), myray.getstart().getcoords()); // todo sortera
 		std::cout << std::endl << "disttosph : " << disttosph << std::endl;
 		
 
@@ -164,7 +166,6 @@ ColorDbl Camera::Castray(Ray & myray, Scene myscene, int depth)
 		for (triangleintersection &intersection : triintersections) {
 			Triangle t = intersection.object;
 			Surface surface = t.getsurf();
-			//std::cout<<std::endl << "surfcolor : " << surface.getsurfcolor();
 
 			//terminate if hit a lightsource
 			if (surface.modelcheck(Lightsource))
@@ -174,9 +175,8 @@ ColorDbl Camera::Castray(Ray & myray, Scene myscene, int depth)
 			}
 
 			Direction normal = t.getnormal();
-			Vertex temppoint(intersection.point.getcoords().x, intersection.point.getcoords().y, intersection.point.getcoords().z);
-
-			Ray out = surface.rayreflection(myray, temppoint, normal);
+			
+			Ray out = surface.rayreflection(myray, intersection.point, normal);
 			double angle = glm::angle(out.getend().getcoords() - out.getstart().getcoords(), normal.getDir());
 			
 			// se fö? 
@@ -199,7 +199,7 @@ ColorDbl Camera::Castray(Ray & myray, Scene myscene, int depth)
 				int nextDepth = surface.modelcheck(Perfect) ? depth : depth + 1;
 				// affect probabillity
 				returncolor =returncolor+(Castray(out, myscene, nextDepth) * surface.getcoeff());
-				returncolor = surface.getsurfcolor();
+				returncolor = surface.getsurfcolor(); // todo remove once fov fixed
 			}
 			
 			break;
@@ -226,7 +226,7 @@ ColorDbl Camera::Castray(Ray & myray, Scene myscene, int depth)
 			// randnrgenerator
 			// uniform brdf 
 			std::default_random_engine generator;
-			std::uniform_real_distribution<float> distribution(0.0, 1.0);
+			std::uniform_real_distribution<float> distribution(0.0, 255);
 			float uniformrand = distribution(generator);
 			double rrTop = glm::max(glm::max(emittance.Red, emittance.Green), emittance.Blue);
 			
