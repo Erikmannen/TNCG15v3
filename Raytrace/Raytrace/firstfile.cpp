@@ -5,6 +5,7 @@
 #include "Scene.h"
 #include "Camera.h"
 
+//lodepng för att spara bilder på dirren
 
 using namespace std;
 
@@ -167,8 +168,11 @@ int main()
 	{
 		std::cout << i.getsurf().getsurfcolor() << ' ';
 	}	
+
+	Scene scene2;
+
 	Camera cam;
-	cam.render(scene);
+	cam.render(scene2);
 	
 	while (true)
 	{

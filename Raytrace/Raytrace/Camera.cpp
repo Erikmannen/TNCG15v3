@@ -69,12 +69,12 @@ void Camera::createImageFile(const std::string name, const double &max)
 		for (Pixel &pixel : row)
 		{
 			ColorDbl color = pixel.getPixelColor();
-		std::cout << color << std::endl;
-
+		
 			(void)fprintf(fp, "%d %d %d ",
-				(int)(color.Red*255/max),
-				(int)(color.Green*255/max),
-				(int)(color.Blue)*255/max);
+				(int)(color.Red),
+				(int)(color.Green),
+				(int)(color.Blue));
+std::cout << color << std::endl;
 
 		}
 	}
@@ -111,8 +111,8 @@ Ray* Camera::pixeltoray(int w, int h)
 	double radW = deltax * fov - fov / 2, radH = deltay * fovH - fovH / 2;
 	double diffW = -sin(radW), diffH = -sin(radH);
 
-	glm::vec3 diff(diffW, diffH, 0.0f);
-	glm::vec3 lookAt = glm::normalize(Ep2.getcoords() + diff);
+	glm::vec3 diff(diffW, diffH, -1.0f);
+	glm::vec3 lookAt = glm::normalize(glm::vec3(0,0,0) + diff);
 
 	Vertex End(lookAt.x, lookAt.y, lookAt.z);
 
@@ -120,14 +120,14 @@ Ray* Camera::pixeltoray(int w, int h)
 	//std::cout << "("<< px.y <<"," <<px.z << ") in camera plane ";
 	//std::cout << std::endl << px.getcoords().y << ", "<<px.getcoords().z << std::endl;
 	Vertex ps(-1,0,0); //user chooses wich eye to use with variable eye
-
+	Vertex origo(0, 0, 0);
 	glm::vec3 D = glm::normalize(px.getcoords() - ps.getcoords()) * 1000.0f; //a vector D with length 30, intersecting pixel on its way to the eye
    // std::cout << "D: " << D.x << D.y << D.z << " ";
 
 	Vertex pe (ps.getcoords().x+ D.x, ps.getcoords().y + D.y, ps.getcoords().z + D.z); //endpoint   //Vertex(pe.x-*D.x, pe.y-*D.y, pe.z-*D.z, 0);
 	//std::cout << "ps: " << ps.x << "," << ps.y << ","<< ps.z << " \n";
 	//We create a white ray with end point somewhere far in the direction D from eye point
-	Ray * ray = new Ray(ps, End, ColorDbl(1, 1, 1)); //NOTE: ray could be deallocated after function render is done
+	Ray * ray = new Ray(origo, End, ColorDbl(1, 1, 1)); //NOTE: ray could be deallocated after function render is done
 	return ray;
 }
 
