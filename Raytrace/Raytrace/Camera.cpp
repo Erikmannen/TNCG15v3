@@ -241,7 +241,7 @@ ColorDbl Camera::Castray(Ray & myray, Scene myscene, int depth)
 				int nextDepth = surface.modelcheck(Perfect) ? depth : depth + 1;
 				// affect probabillity
 				returncolor =returncolor+(Castray(out, myscene, nextDepth) * surface.getcoeff());
-				returncolor = surface.getsurfcolor(); // todo remove once fov fixed
+				//returncolor = surface.getsurfcolor(); // todo remove once fov fixed
 			}
 			
 			break;

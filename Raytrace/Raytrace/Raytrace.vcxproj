@@ -78,7 +78,11 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>glm</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <AdditionalOptions>/F 8000000000 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
+    <Link>
+      <StackReserveSize>8000000</StackReserveSize>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
