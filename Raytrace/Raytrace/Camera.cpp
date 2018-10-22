@@ -74,6 +74,25 @@ double Camera::rays(Scene& myscene) {
 	return maximage;
 }
 
+ColorDbl Camera::shadowrays(Vertex intersection, Direction norm, Scene myscene)
+{
+	double area = 0; 
+	ColorDbl returncolor(0,0,0);
+	for (Triangle& light : myscene.getlights())
+	{
+		std::vector<Vertex> edges = light.getvertex();
+		area = area + 0.5 * glm::length(glm::cross(edges[0].getcoords(), edges[1].getcoords()));
+		for (int i = 0; i < SHADOWRAYS; i++)
+		{
+
+
+		}
+
+	}
+
+	return returncolor;
+}
+
 
 void Camera::createImageFile(const std::string name, const double &max)
 {
@@ -118,19 +137,7 @@ Ray* Camera::pixeltoray2(int w, int h) {
 
 	Ray* r = new Ray(Ep1,Vertex(pixelPos.x, pixelPos.y, pixelPos.z, pixelPos.w),ColorDbl(1,1,1));
 	return r;
-	/*
-	Vertex c(0,2.5,2.5);
-	double aspectRatio = (double)HEIGHT / (double)WIDTH;
-	double pw = w / WIDTH, ph = h / HEIGHT;
-	double fovH = fov * aspectRatio;
-	double radW = pw * fov - fov / 2, radH = ph * fovH - fovH / 2;
-	double diffW = -sin(radW), diffH = -sin(radH);
-	glm::vec3 diff(diffW, diffH, 0.0f);
-	glm::vec3 lookAt = glm::normalize(glm::vec3(-0.3,-0.3,0.3) + diff);
-	Vertex lookattemp(lookAt.x, lookAt.y, lookAt.z);
-	Ray* ray = new Ray(c, lookattemp);
-	return ray;
-	*/
+
 }
 
 Ray* Camera::pixeltoray(int w, int h)
@@ -205,6 +212,7 @@ ColorDbl Camera::Castray(Ray & myray, Scene myscene, int depth)
 			if (surface.modelcheck(Lightsource))
 			{
 				returncolor = surface.getsurfcolor();
+				//std::cout << "counter : " << "\n";
 				break; // no nned to continue for loop 
 			}
 
@@ -278,50 +286,4 @@ ColorDbl Camera::Castray(Ray & myray, Scene myscene, int depth)
 	
 	return returncolor;
 
-}
-ColorDbl Camera::Castray2(Ray& myray, Scene myscene, int depth ){
-	
-	ColorDbl returncolor(0);
-	float disttotri = MAXVALUE;
-	std::list<triangleintersection> triintersections = myscene.rayIntersectionfortri(myray);
-	// check if empty
-	
-	for (triangleintersection &intersection : triintersections) {
-		Triangle t = intersection.object;
-		Surface surface = t.getsurf();
-		returncolor = surface.getsurfcolor();
-/*
-		Direction normal = t.getnormal();
-
-		Ray out = surface.rayreflection(myray, intersection.point, normal);
-		double angle = glm::angle(out.getend().getcoords() - out.getstart().getcoords(), normal.getDir());
-
-		// se fö? 
-		ColorDbl emittance = surface.Surfacereflect(myray, out, normal)* cos(angle);
-		//std::cout << std::endl << "emittance : " << emittance;
-
-		returncolor = returncolor + emittance;
-*/
-
-
-		// terminate using russian roulett
-		// randnrgenerator
-		// uniform brdf 
-		/*
-		std::default_random_engine generator;
-		std::uniform_real_distribution<float> distribution(0.0, 255);
-		float uniformrand = distribution(generator);
-		float rrTop = glm::max(glm::max(emittance.Red, emittance.Green), emittance.Blue);
-		if (depth < MAXDEPTH || uniformrand < rrTop) {
-			//perfect specular = perfect
-			int nextDepth = surface.modelcheck(Perfect) ? depth : depth + 1;
-			// affect probabillity
-			returncolor = returncolor + (Castray(out, myscene, nextDepth) * surface.getcoeff());
-			returncolor = surface.getsurfcolor(); // todo remove once fov fixed
-		}
-		*/
-
-		//break;
-	}
-	return returncolor;
 }

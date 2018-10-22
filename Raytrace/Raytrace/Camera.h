@@ -15,6 +15,7 @@ const int WIDTH = 200;
 const int HEIGHT = 200;
 #define MAXVALUE 1e5f
 const int  MAXDEPTH =  5; // will create artefacts  
+const int SHADOWRAYS = 2;
 
 class Camera
 {
@@ -31,6 +32,8 @@ public:
 	void setuppixels();
 	double rays(Scene& myscene);
 	
+	ColorDbl shadowrays(Vertex intersection, Direction norm,Scene myscene); // todo
+
 	ColorDbl Castray(Ray& myray, Scene myscene,int depth  = 0);
 	ColorDbl Castray2(Ray& myray, Scene myscene,int depth  = 0);
 private:

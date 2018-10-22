@@ -47,6 +47,8 @@ void Scene::CreateWorld()
 	ColorDbl gc(0, 200, 0);
 	ColorDbl cc(0, 200, 200);
 	ColorDbl yc(200, 200, 0);
+	ColorDbl blackc(15, 15, 15);
+
 
 	Surface fin(finc);
 	Surface white(whitec);
@@ -55,13 +57,15 @@ void Scene::CreateWorld()
 	Surface g(gc);
 	Surface c(cc);
 	Surface y(yc);
+	Surface black(blackc);
+	Surface Mirror(ColorDbl(0.0f), Perfect);
 
 
 	// Top
 	Triangle T1(V1, V13, V3, N1, white);
 	Triangle T2(V3, V13, V5, N1, white);
-	Triangle T3(V1, V2, V5, N1, white);
-	Triangle T4(V2, V6, V5, N1, white);
+	Triangle T3(V1, V2, V5, N1, white); // tought lightsource
+	Triangle T4(V2, V6, V5, N1, white);// tought lightsource
 	Triangle T5(V2, V4, V14, N1, white);
 	Triangle T6(V4, V6, V14, N1, white);
 
@@ -124,12 +128,19 @@ void Scene::CreateWorld()
 	Trianglelist.push_back(T22);
 
 	// Front right
-	Triangle T23(V4, V6, V8, N8, y);
+	Triangle T23(V4, V6, V10, N8, y);
 	Triangle T24(V6, V12, V10, N8, y);
 
 	Trianglelist.push_back(T23);
 	Trianglelist.push_back(T24);
-
+	
+	//create lightsource
+	Vertex lightpos(5,0,4.5,1);
+	Triangle lightsourcetri = T4;
+	lightsourcetri.getsurf().setsurf(ColorDbl(1, 1, 1),Lightsource);
+	light.push_back(lightsourcetri);
+	//light.object = lightsourcetri;
+	
 }
 
 ColorDbl Scene::lightcontribution(Vertex v, Direction norm)

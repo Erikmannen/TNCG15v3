@@ -3,6 +3,7 @@
 #include "ColorDbl.h"
 #include "Direction.h"
 #include <list>
+#include <vector>
 #include "Ray.h"
 #include "Surface.h"
 
@@ -19,6 +20,13 @@ public:
 	 Triangle(const Triangle& tri);
 	 Direction &getnormal() { return normal; };
 	 Surface getsurf() { return trisurf; };
+	 std::vector<Vertex> getvertex() { std::vector<Vertex> vertexlist;
+	 vertexlist.push_back(V0);
+	 vertexlist.push_back(V1);
+	 vertexlist.push_back(V2);
+	 return vertexlist;
+	 };
+	 
 private: 
 	Vertex V0, V1, V2;
 	//ColorDbl trianglecolor;

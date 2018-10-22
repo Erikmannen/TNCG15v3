@@ -20,6 +20,7 @@ struct sphereintersection {
 
 
 
+
 class Scene
 {
 public:
@@ -37,10 +38,11 @@ public:
 
 	void addsph(Sphere newsph) { Spherelist.push_back(newsph); };
 	std::list<Triangle> gettrilist() { return Trianglelist; };
+	std::list<Triangle> getlights() { return light; };
 private:
 	std::list<Triangle> Trianglelist;
 	std::vector<Sphere> Spherelist;
-	
+	std::list<Triangle> light;
 	
 };
 

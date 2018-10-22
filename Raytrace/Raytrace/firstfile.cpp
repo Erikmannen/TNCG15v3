@@ -169,6 +169,7 @@ int main()
 	}	
 	Scene scen2;
 	Camera cam;
+	
 		
 	cam.render(scen2);
 	

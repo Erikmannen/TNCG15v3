@@ -28,6 +28,8 @@ public:
 	
 	double getcoeff() { return coeff; };
 	ColorDbl getsurfcolor() { return surfacecolor; };
+	void setsurf(ColorDbl incolor,int model= Lambertian) { surfacecolor = incolor;
+	reflectionmodel = model;};
 
 private:
 	ColorDbl surfacecolor;
