@@ -4,6 +4,7 @@
 #include <vector>
 #include <list>
 #include "Surface.h"
+#include "Tetrahedron.h"
 
 // T kan vara triangle och senare sphere
 
@@ -21,6 +22,7 @@ struct sphereintersection {
 
 
 
+
 class Scene
 {
 public:
@@ -29,6 +31,7 @@ public:
 	//returns vector  with all intersected objects of type 
 	std::list<triangleintersection> rayIntersectionfortri(Ray arg); 
 	std::vector<sphereintersection> rayIntersectionforsph(Ray arg); 
+	std::vector<Tetrahedron> rayIntersectionforstetra(Ray arg);
 
 	size_t trilistsize() { return Trianglelist.size(); };
 	size_t sphlistsize() { return Spherelist.size(); };
@@ -37,10 +40,17 @@ public:
 	ColorDbl lightcontribution(Vertex v, Direction norm); // todo
 
 	void addsph(Sphere newsph) { Spherelist.push_back(newsph); };
+	void addtetra(Tetrahedron newtetra) { 
+		for(Triangle tri : newtetra.gettris())
+		{
+			Trianglelist.push_back(tri);
+		}
+		};
 	std::list<Triangle> gettrilist() { return Trianglelist; };
 	std::list<Triangle> getlights() { return light; };
 private:
 	std::list<Triangle> Trianglelist;
+	
 	std::vector<Sphere> Spherelist;
 	std::list<Triangle> light;
 	

@@ -56,7 +56,7 @@ void Scene::CreateWorld()
 	Surface r(rc);
 	Surface g(gc);
 	Surface c(cc);
-	Surface y(yc);
+	Surface y(yc,Perfect);
 	Surface black(blackc);
 	Surface Mirror(ColorDbl(0.0f), Perfect);
 
@@ -202,3 +202,20 @@ std::vector<sphereintersection> Scene::rayIntersectionforsph(Ray arg)
 
 
 }
+/*
+std::vector<Tetrahedron> Scene::rayIntersectionforstetra(Ray arg)
+{
+	//return
+	std::vector<Tetrahedron> intersections;
+
+	for (Tetrahedron tetra : Tetralist) {
+		
+		tetraintersection Intersector; // sph (returntype for intersectionobjects)
+		for(Triangle tri : tetra.gettris())
+		{tri.rayIntersection() }
+		
+	}
+
+	return intersections;
+}
+*/

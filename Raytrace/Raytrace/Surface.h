@@ -10,10 +10,10 @@ class Surface
 {
 public:
 	
-	Surface(ColorDbl insurfcolor = ColorDbl(0.0), const int model = Lambertian) : surfacecolor(insurfcolor), reflectionmodel(model){
+	Surface(ColorDbl insurfcolor = ColorDbl(0.0), const int model = Lambertian,ColorDbl em = ColorDbl(0.0)) : surfacecolor(insurfcolor), reflectionmodel(model){
 		if (model == Lightsource)
 		{
-			emission = ColorDbl(0, 0, 0);// set emission if lightsource 
+			emission = ColorDbl(20);// set emission if lightsource 
 		}
 	};
 	~Surface();
@@ -33,8 +33,8 @@ public:
 
 private:
 	ColorDbl surfacecolor;
-	int reflectionmodel = Lambertian; // for grade 3
-	ColorDbl emission = ColorDbl(0.0);
+	int reflectionmodel; // for grade 3
+	ColorDbl emission;
 									  //emission , absorption 
 	// coefficient coeff needs to be between [0,1] not sure how to chose it
 	double coeff = 0.7;
