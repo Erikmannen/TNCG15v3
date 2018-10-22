@@ -130,7 +130,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Camera2.cpp" />
     <ClCompile Include="ColorDbl.cpp" />
     <ClCompile Include="Direction.cpp" />
     <ClCompile Include="firstfile.cpp" />
@@ -145,7 +144,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="Camera2.h" />
     <ClInclude Include="ColorDbl.h" />
     <ClInclude Include="Direction.h" />
     <ClInclude Include="Lightsource.h" />

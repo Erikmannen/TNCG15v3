@@ -3,15 +3,10 @@
 class Direction
 {
 public:
-	Direction() :
-		Dir(0.0, 0.0, 0.0) {};
 
-	Direction(double x1, double y1, double z1) :
+	Direction(double x1  = 0, double y1 = 0, double z1 = 0) :
 		Dir(x1, y1, z1) {};
 
-	/*Direction(Direction& D) :
-		Dir(D.Dir) {};
-	*/
 	Direction(const Direction & dir) :Dir(dir.Dir){};
 
 	~Direction();

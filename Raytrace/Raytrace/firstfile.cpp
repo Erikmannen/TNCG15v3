@@ -5,13 +5,12 @@
 #include "Scene.h"
 #include "Camera.h"
 
-//lodepng för att spara bilder på dirren
 
 using namespace std;
 
 void dispintersection(Triangle & tri, Ray& ray)
 {
-	glm::vec3 t = glm::vec3(0.0);
+	glm::vec4 t = glm::vec4(0.0);
 	bool intersection = tri.rayIntersection(ray, t);
 	if (intersection == true)
 		cout << "ray intersected" << endl;
@@ -31,7 +30,7 @@ void testtri()
 		Vertex(-2.0f, 0.0f, 0.0f));
 
 	cout << endl << "test 1 - Hit expected" << endl;
-	glm::vec3  tOut(0,0,0);
+	glm::vec4  tOut(0,0,0,0);
 	bool intersected = false;
 	intersected = t.rayIntersection(r, tOut);
 	if (intersected == true)
@@ -44,7 +43,7 @@ void testtri()
 		Vertex(0.0f, 0.0f, 0.0f),
 		Vertex(-1.0f, 0.49f, 0.0f));
 
-	tOut = glm::vec3(0,0,0);
+	tOut = glm::vec4(0,0,0,0);
 	intersected = false;
 	intersected = t.rayIntersection(r2, tOut);
 	if (intersected == true)
@@ -57,7 +56,7 @@ void testtri()
 		Vertex(1.0f, 0.49f, 0.0f));
 	cout<< endl << "test 3  - Hit not expected" <<endl;
 
-	tOut = glm::vec3(0, 0, 0);
+	tOut = glm::vec4(0, 0, 0, 0);
 	intersected = false;
 	intersected = t.rayIntersection(r3, tOut);
 	if (intersected == true)
@@ -168,11 +167,11 @@ int main()
 	{
 		std::cout << i.getsurf().getsurfcolor() << ' ';
 	}	
-
-	Scene scene2;
-
+	Scene scen2;
 	Camera cam;
-	cam.render(scene2);
+	
+		
+	cam.render(scen2);
 	
 	while (true)
 	{
