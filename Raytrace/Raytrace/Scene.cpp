@@ -56,7 +56,7 @@ void Scene::CreateWorld()
 	Surface r(rc);
 	Surface g(gc);
 	Surface c(cc);
-	Surface y(yc,Perfect);
+	Surface y(yc);
 	Surface black(blackc);
 	Surface Mirror(ColorDbl(0.0f), Perfect);
 

@@ -208,44 +208,64 @@ ColorDbl Camera::Castray(Ray & myray, Scene myscene, int depth)
 		for (triangleintersection &intersection : triintersections) {
 			Triangle t = intersection.object;
 			Surface surface = t.getsurf();
-
+			Direction normal = t.getnormal();
+			glm::vec3 dirr = myray.getend().getcoords() - myray.getstart().getcoords();
+			double geometric = double(glm::dot(normal.getDir(), -glm::normalize(dirr)));
 			//terminate if hit a lightsource
 			if (surface.modelcheck(Lightsource))
 			{
 				returncolor = surface.getsurfcolor();
 				break; // no nned to continue for loop 
 			}
+			else if (surface.modelcheck(Perfect))
+			{
+				
+				glm::vec4 refdirr = glm::vec4(glm::reflect(dirr, normal.getDir()), 1.0);
+				Ray r(intersection.point, Vertex(refdirr.x, refdirr.y, refdirr.z, refdirr.z));
+				//returncolor = surface.Perfectreflec() * geometric;
+				return Castray(r, myscene, depth);
 
-
-			Direction normal = t.getnormal();
-			
-			Ray out = surface.rayreflection(myray, intersection.point, normal);
-			double angle = glm::angle(out.getend().getcoords() - out.getstart().getcoords(), normal.getDir());
-			
-			// se fö? 
-			ColorDbl emittance = surface.Surfacereflect(myray,out,normal)* cos(angle);
-			//std::cout << std::endl << "emittance : " << emittance;
-
-			returncolor = returncolor + emittance;
-			
-			
-			// terminate using russian roulett
-			// randnrgenerator
-			// uniform brdf 
-			std::default_random_engine generator;
-			std::uniform_real_distribution<float> distribution(0.0, 255);
-			float uniformrand = distribution(generator);
-			float rrTop = glm::max(glm::max(emittance.Red, emittance.Green), emittance.Blue);
-			
-			if (depth < MAXDEPTH || uniformrand < rrTop) {
-				//perfect specular = perfect
-				int nextDepth = surface.modelcheck(Perfect) ? depth : depth + 1;
-				// affect probabillity
-				returncolor =returncolor+(Castray(out, myscene, nextDepth) * surface.getcoeff());
-				returncolor = surface.getsurfcolor(); // todo remove once fov fixed
 			}
-			
+			else
+			{
+				if (depth < MAXDEPTH)
+				{
+				
+					returncolor = surface.lamreflec();// *geometric;
+
+				}
+			}
+				/*
+
+
+				Ray out = surface.rayreflection(myray, intersection.point, normal);
+				double angle = glm::angle(out.getend().getcoords() - out.getstart().getcoords(), normal.getDir());
+
+				// se fö? 
+				ColorDbl emittance = surface.Surfacereflect(myray, out, normal)* cos(angle);
+				//std::cout << std::endl << "emittance : " << emittance;
+
+				returncolor = returncolor + emittance;
+
+
+				// terminate using russian roulett
+				// randnrgenerator
+				// uniform brdf 
+				std::default_random_engine generator;
+				std::uniform_real_distribution<float> distribution(0.0, 255);
+				float uniformrand = distribution(generator);
+				float rrTop = glm::max(glm::max(emittance.Red, emittance.Green), emittance.Blue);
+
+				if (depth < MAXDEPTH) {
+					//perfect specular = perfect
+					int nextDepth = surface.modelcheck(Perfect) ? depth : depth + 1;
+					// affect probabillity
+					returncolor = returncolor + (Castray(out, myscene, nextDepth) * surface.getcoeff());
+					//returncolor = surface.getsurfcolor(); // todo remove once fov fixed
+				}
+			}
 			break;
+				*/
 		}
 	}
 	else {
@@ -255,32 +275,49 @@ ColorDbl Camera::Castray(Ray & myray, Scene myscene, int depth)
 			Vertex temppoint(sphereIntersection.point.getcoords().x, sphereIntersection.point.getcoords().y, sphereIntersection.point.getcoords().z);
 			Direction normal = s.getnormal(temppoint);
 
+			if (surface.modelcheck(Perfect))
+			{
+				glm::vec3 dirr = myray.getend().getcoords() - myray.getstart().getcoords();
+				glm::vec4 refdirr = glm::vec4(glm::reflect(dirr, normal.getDir()), 1.0);
+				Ray r(sphereIntersection.point, Vertex(refdirr.x, refdirr.y, refdirr.z, refdirr.z));
+				returncolor = Castray(r, myscene, depth); //  Castray(r,myscene,depth);
 
-			Ray out = surface.rayreflection(myray, temppoint, normal);
-			double angle = glm::angle(out.getend().getcoords()- out.getstart().getcoords(), normal.getDir());
-
-			ColorDbl emittance = surface.Surfacereflect(out, myray, normal);// * cos(angle);
-			//ColorDbl lightContribution = scene.getLightContribution(sphereIntersection.point, normal);
-			
-			returncolor = returncolor + emittance;
-			
-		
-			// terminate using russian roulett
-			// randnrgenerator
-			// uniform brdf 
-			std::default_random_engine generator;
-			std::uniform_real_distribution<float> distribution(0.0, 255);
-			float uniformrand = distribution(generator);
-			double rrTop = glm::max(glm::max(emittance.Red, emittance.Green), emittance.Blue);
-			
-			if (depth < MAXDEPTH || uniformrand < rrTop) {
-				//perfect specular = perfect
-				int nextDepth = surface.modelcheck(Perfect) ? depth : depth + 1;
-				// affect probabillity
-				returncolor = returncolor + (Castray(out, myscene, nextDepth) * surface.getcoeff());
 			}
-			break;
+			else
+			{
+				if (depth < MAXDEPTH)
+					returncolor = surface.lamreflec();
+				/*
+				 
+				 
+				 
 
+				Ray out = surface.rayreflection(myray, temppoint, normal);
+				double angle = glm::angle(out.getend().getcoords() - out.getstart().getcoords(), normal.getDir());
+
+				ColorDbl emittance = surface.Surfacereflect(out, myray, normal);// * cos(angle);
+				//ColorDbl lightContribution = scene.getLightContribution(sphereIntersection.point, normal);
+
+				returncolor = returncolor + emittance;
+
+
+				// terminate using russian roulett
+				// randnrgenerator
+				// uniform brdf 
+				std::default_random_engine generator;
+				std::uniform_real_distribution<float> distribution(0.0, 255);
+				float uniformrand = distribution(generator);
+				double rrTop = glm::max(glm::max(emittance.Red, emittance.Green), emittance.Blue);
+
+				if (depth < MAXDEPTH) {
+					//perfect specular = perfect
+					int nextDepth = surface.modelcheck(Perfect) ? depth : depth + 1;
+					// affect probabillity
+					returncolor = returncolor + (Castray(out, myscene, nextDepth) * surface.getcoeff());
+				}
+				break;
+				 */
+			}
 
 		}
 	}
