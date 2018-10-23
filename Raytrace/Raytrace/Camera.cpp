@@ -180,6 +180,7 @@ ColorDbl Camera::Castray(Ray & myray, Scene myscene, int depth)
 	
 	std::list<triangleintersection> triintersections = myscene.rayIntersectionfortri(myray);
 	std::vector<sphereintersection> sphintersections = myscene.rayIntersectionforsph(myray);
+	
 	ColorDbl returncolor(0);
 	float disttotri = MAXVALUE;
 	float disttosph = MAXVALUE;
@@ -192,7 +193,7 @@ ColorDbl Camera::Castray(Ray & myray, Scene myscene, int depth)
 	}
 	if (sphintersections.size()) {
 		disttosph = glm::distance(sphintersections.front().point.getcoords(), myray.getstart().getcoords()); // todo sortera
-		std::cout << std::endl << "disttosph : " << disttosph << std::endl;
+		//std::cout << std::endl << "disttosph : " << disttosph << std::endl;
 		
 
 	}
@@ -212,9 +213,9 @@ ColorDbl Camera::Castray(Ray & myray, Scene myscene, int depth)
 			if (surface.modelcheck(Lightsource))
 			{
 				returncolor = surface.getsurfcolor();
-				//std::cout << "counter : " << "\n";
 				break; // no nned to continue for loop 
 			}
+
 
 			Direction normal = t.getnormal();
 			

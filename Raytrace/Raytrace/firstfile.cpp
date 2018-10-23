@@ -5,7 +5,6 @@
 #include "Scene.h"
 #include "Camera.h"
 
-
 using namespace std;
 
 void dispintersection(Triangle & tri, Ray& ray)
@@ -169,8 +168,19 @@ int main()
 	}	
 	Scene scen2;
 	Camera cam;
-	
-		
+	Sphere sph(Vertex(10,0,0),2.0f,Surface(ColorDbl(180,0,0),Perfect));
+	scen2.addsph(sph);
+	for (Triangle tri : scen2.gettrilist())
+	{
+		if(tri.getsurf().modelcheck(Perfect))
+		{
+			cout << "true " << endl;
+		}
+	}
+	Tetrahedron tetra(Vertex(1, 1, 1, 0), Vertex(0.2, 0.3, -0.2, 0), Vertex(0, 0, 0, 0), Vertex(0, 0.8, 0, 0), Surface(ColorDbl(0,0,0), Lambertian));
+	scen2.addtetra(tetra);
+
+
 	cam.render(scen2);
 	
 	while (true)
