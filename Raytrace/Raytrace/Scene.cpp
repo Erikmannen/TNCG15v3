@@ -137,9 +137,10 @@ void Scene::CreateWorld()
 	
 	//create lightsource
 	Vertex lightpos(5,0,4.5,1);
-	Triangle lightsourcetri = T4;
-	lightsourcetri.getsurf().setsurf(ColorDbl(1, 1, 1),Lightsource);
-	light.push_back(lightsourcetri);
+	light = T4;
+	light.getsurf().setsurf(ColorDbl(255, 255, 255),Lightsource);
+	light.settolight();
+	//light.push_back(lightsourcetri);
 	//light.object = lightsourcetri;
 	
 }

@@ -32,13 +32,18 @@ public:
 	void setuppixels();
 	double rays(Scene& myscene);
 	
-	ColorDbl shadowrays(Vertex intersection, Direction norm,Scene myscene); // todo
+	ColorDbl local(Vertex intersection, Direction norm,Scene myscene); // todo
 
 	ColorDbl Castray(Ray& myray, Scene myscene,int depth  = 0);
 	ColorDbl Castray2(Ray& myray, Scene myscene,int depth  = 0);
 private:
 	
-	
+	ColorDbl handler(Surface surface ,Direction normal, Vertex point, Ray myray, Scene myscene, int depth);
+	//sphereintersection
+	ColorDbl spherehandler(sphereintersection sphereIntersection, Ray myray, Scene myscene, int depth);
+	//triintersection
+	ColorDbl trihandler(triangleintersection intersection, Ray myray, Scene myscene, int depth);
+	int closest(Ray ray, Scene myscene);
 	//Eyepos motsvarar Ep
 	Vertex Ep1, Ep2;
 	Direction upDir;

@@ -28,9 +28,13 @@ public:
 	
 	double getcoeff() { return coeff; };
 	ColorDbl getsurfcolor() { return surfacecolor; };
+	ColorDbl getemission() {
+		return emission;
+	};
+
 	void setsurf(ColorDbl incolor,int model= Lambertian) { surfacecolor = incolor;
 	reflectionmodel = model;};
-
+	
 private:
 	ColorDbl surfacecolor;
 	int reflectionmodel; // for grade 3

@@ -38,6 +38,28 @@ Triangle::Triangle(const Triangle & tri)
 	normal = tri.normal;
 }
 
+Vertex Triangle::getrandpointontri()
+{
+	double area = 0.5 * glm::length(glm::cross(V1.getcoords(), V2.getcoords()));
+	double max = 1 / area;
+	// randnrgenerator
+	std::default_random_engine generator;
+	// uniform brdf 
+	std::uniform_real_distribution<float> distributiona(0.0, max);
+	std::uniform_real_distribution<float> distributionb(0.0, max);
+	
+	// se fö 11
+	float a = distributiona(generator); // xi 
+	float b = distributionb(generator); // xi 
+	if (a + b > 1.0) {
+		return getrandpointontri();
+	}
+	glm::vec3 pos = (1.0f - a - b) * V0.getcoords() + a * V1.getcoords() + b * V2.getcoords();
+	pos =  pos + 0.001f*glm::vec3(0.0f, 0.0f, -1.0f);
+	return Vertex(pos.x, pos.y, pos.z);
+	
+}
+
 //intersection using Möller-Trumbore algo
 //return intersection point in var intersect 
 //returning true if intersecting or false if not

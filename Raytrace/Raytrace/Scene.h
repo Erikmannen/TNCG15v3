@@ -47,12 +47,12 @@ public:
 		}
 		};
 	std::list<Triangle> gettrilist() { return Trianglelist; };
-	std::list<Triangle> getlights() { return light; };
+	Triangle getlights() { return light; };
 private:
 	std::list<Triangle> Trianglelist;
 	
 	std::vector<Sphere> Spherelist;
-	std::list<Triangle> light;
+	Triangle light;
 	
 };
 
