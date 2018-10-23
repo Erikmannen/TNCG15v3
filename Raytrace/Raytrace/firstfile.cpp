@@ -178,7 +178,7 @@ int main()
 		}
 	}
 	Tetrahedron tetra(Vertex(1, 1, 1, 0), Vertex(0.2, 0.3, -0.2, 0), Vertex(0, 0, 0, 0), Vertex(0, 0.8, 0, 0), Surface(ColorDbl(0,0,0), Lambertian));
-	//scen2.addtetra(tetra);
+	scen2.addtetra(tetra);
 
 
 	cam.render(scen2);

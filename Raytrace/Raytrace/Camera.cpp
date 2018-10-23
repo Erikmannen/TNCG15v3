@@ -214,24 +214,25 @@ ColorDbl Camera::Castray(Ray & myray, Scene myscene, int depth)
 			//terminate if hit a lightsource
 			if (surface.modelcheck(Lightsource))
 			{
-				returncolor = surface.getsurfcolor();
+				returncolor = ColorDbl(255, 255, 255);//surface.getsurfcolor();
 				break; // no nned to continue for loop 
-			}
+			}	
 			else if (surface.modelcheck(Perfect))
 			{
 				
-				glm::vec4 refdirr = glm::vec4(glm::reflect(dirr, normal.getDir()), 1.0);
-				Ray r(intersection.point, Vertex(refdirr.x, refdirr.y, refdirr.z, refdirr.z));
+				glm::vec4 refdirr = glm::vec4(intersection.point.getcoords(),intersection.point.getw()) + glm::vec4(glm::reflect(dirr, normal.getDir()), 1.0);
+				Ray r(intersection.point, Vertex(refdirr.x, refdirr.y, refdirr.z,refdirr.w));
 				//returncolor = surface.Perfectreflec() * geometric;
-				return Castray(r, myscene, depth);
+				returncolor =  Castray(r, myscene, depth++);
 
 			}
 			else
 			{
 				if (depth < MAXDEPTH)
 				{
-				
-					returncolor = surface.lamreflec();// *geometric;
+					Ray out = surface.rayreflection(myray, intersection.point, normal);
+					double angle = glm::angle(out.getend().getcoords() - out.getstart().getcoords(), normal.getDir());
+					returncolor = surface.lamreflec()*cos(angle);// *geometric;
 
 				}
 			}
@@ -280,7 +281,7 @@ ColorDbl Camera::Castray(Ray & myray, Scene myscene, int depth)
 				glm::vec3 dirr = myray.getend().getcoords() - myray.getstart().getcoords();
 				glm::vec4 refdirr = glm::vec4(glm::reflect(dirr, normal.getDir()), 1.0);
 				Ray r(sphereIntersection.point, Vertex(refdirr.x, refdirr.y, refdirr.z, refdirr.z));
-				returncolor = Castray(r, myscene, depth); //  Castray(r,myscene,depth);
+				returncolor = Castray(r, myscene, depth++); //  Castray(r,myscene,depth);
 
 			}
 			else

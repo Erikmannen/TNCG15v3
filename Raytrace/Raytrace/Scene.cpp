@@ -31,6 +31,7 @@ void Scene::CreateWorld()
 	Vertex V15(0, 0, 5);
 	Vertex V16(10, 0, -5);
 
+
 	Direction N1(0, 0, -1); // Top
 	Direction N2(0, 0, 1); // Bottom
 	Direction N3(0, 1, 0); // Front
@@ -55,7 +56,7 @@ void Scene::CreateWorld()
 	Surface b(bc);
 	Surface r(rc);
 	Surface g(gc);
-	Surface c(cc);
+	Surface c(cc,Perfect);
 	Surface y(yc);
 	Surface black(blackc);
 	Surface Mirror(ColorDbl(0.0f), Perfect);

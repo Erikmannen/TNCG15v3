@@ -27,6 +27,7 @@ public:
 	 return vertexlist;
 	 };
 	 
+	 
 private: 
 	Vertex V0, V1, V2;
 	//ColorDbl trianglecolor;
