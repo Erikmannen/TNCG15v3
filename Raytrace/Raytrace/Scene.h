@@ -30,7 +30,7 @@ public:
 	~Scene();
 	//returns vector  with all intersected objects of type 
 	std::list<triangleintersection> rayIntersectionfortri(Ray arg); 
-	std::vector<sphereintersection> rayIntersectionforsph(Ray arg); 
+	std::list<sphereintersection> rayIntersectionforsph(Ray arg); 
 	std::vector<Tetrahedron> rayIntersectionforstetra(Ray arg);
 
 	size_t trilistsize() { return Trianglelist.size(); };

@@ -13,7 +13,7 @@ public:
 	Surface(ColorDbl insurfcolor = ColorDbl(0.0), const int model = Lambertian,ColorDbl em = ColorDbl(0.0)) : surfacecolor(insurfcolor), reflectionmodel(model){
 		if (model == Lightsource)
 		{
-			emission = ColorDbl(20);// set emission if lightsource 
+			emission = ColorDbl(255,255,255);// set emission if lightsource 
 		}
 	};
 	~Surface();

@@ -14,7 +14,7 @@
 const int WIDTH = 200;
 const int HEIGHT = 200;
 #define MAXVALUE 1e5f
-const int  MAXDEPTH =  5; // will create artefacts  
+const int  MAXDEPTH =  2; // will create artefacts  
 const int SHADOWRAYS = 2;
 
 class Camera
@@ -44,6 +44,11 @@ private:
 	//triintersection
 	ColorDbl trihandler(triangleintersection intersection, Ray myray, Scene myscene, int depth);
 	int closest(Ray ray, Scene myscene);
+	ColorDbl shadow(Surface surface, Direction normal, Vertex point, Ray myray, Scene myscene, ColorDbl color);
+	
+	Ray sampleShadowray(Vertex fromPoint, Scene myscene);
+
+
 	//Eyepos motsvarar Ep
 	Vertex Ep1, Ep2;
 	Direction upDir;

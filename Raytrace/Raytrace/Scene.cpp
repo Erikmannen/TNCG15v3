@@ -28,7 +28,7 @@ void Scene::CreateWorld()
 	Vertex V12(10, -6, -5);
 	Vertex V13(0, 0, 5);
 	Vertex V14(10, 0, 5);
-	Vertex V15(0, 0, 5);
+	Vertex V15(0, 0, -5);
 	Vertex V16(10, 0, -5);
 
 
@@ -81,7 +81,7 @@ void Scene::CreateWorld()
 	// Bottom
 	Triangle T7(V7, V15, V9, N2, white);
 	Triangle T8(V9, V15, V11, N2, white);
-	Triangle T9(V7, V8, V11, N2, white);
+	Triangle T9(V7, V8, V11, N2, white); 
 	Triangle T10(V8, V12, V11, N2, white);
 	Triangle T11(V8, V10, V16, N2, white);
 	Triangle T12(V10, V12, V16, N2, white);
@@ -137,9 +137,10 @@ void Scene::CreateWorld()
 	
 	//create lightsource
 	Vertex lightpos(5,0,4.5,1);
-	light = T4;
+	light = T3; // t4 har varit go2 tester
 	light.getsurf().setsurf(ColorDbl(255, 255, 255),Lightsource);
 	light.settolight();
+	Trianglelist.push_back(light);
 	//light.push_back(lightsourcetri);
 	//light.object = lightsourcetri;
 	
@@ -180,10 +181,10 @@ std::list<triangleintersection> Scene::rayIntersectionfortri(Ray arg)
 		return intersections;
 }
 
-std::vector<sphereintersection> Scene::rayIntersectionforsph(Ray arg)
+std::list<sphereintersection> Scene::rayIntersectionforsph(Ray arg)
 {
 	//return
-	std::vector<sphereintersection> intersections;
+	std::list<sphereintersection> intersections;
 
 	// for each sph in spherelist 		
 			for (Sphere sph : Spherelist) {
