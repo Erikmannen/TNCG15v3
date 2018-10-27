@@ -41,16 +41,27 @@ Triangle::Triangle(const Triangle & tri)
 Vertex Triangle::getrandpointontri()
 {
 	double area = 0.5 * glm::length(glm::cross(V1.getcoords(), V2.getcoords()));
-	double max = 1 / area;
+	double max = 1 / area; 
+	/*
+	std::cout << "max : " << max << "\n";
 	// randnrgenerator
 	std::default_random_engine generator;
 	// uniform brdf 
-	std::uniform_real_distribution<float> distributiona(0.0, max);
 	std::uniform_real_distribution<float> distributionb(0.0, max);
-	
+	std::uniform_real_distribution<float> distributiona(0.0, max);
+																  */
+	std::random_device rd;  //Will be used to obtain a seed for the random number engine
+	std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
+	std::uniform_real_distribution<> dis1(0.0, max);
+	std::uniform_real_distribution<> dis2(0.0, max);
+
+	float a = dis1(rd);
+	float b = dis2(rd);
 	// se fö 11
-	float a = distributiona(generator); // xi 
-	float b = distributionb(generator); // xi 
+	//float a = distributiona(generator); // xi 
+	//float b = distributionb(generator); // xi 
+	//std::cout << " a : " << a << "\n";
+	//std::cout << " b : " << b << "\n";
 	if (a + b > 1.0) {
 		return getrandpointontri();
 	}

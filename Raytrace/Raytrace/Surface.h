@@ -10,11 +10,8 @@ class Surface
 {
 public:
 	
-	Surface(ColorDbl insurfcolor = ColorDbl(0.0), const int model = Lambertian,ColorDbl em = ColorDbl(0.0)) : surfacecolor(insurfcolor), reflectionmodel(model){
-		if (model == Lightsource)
-		{
-			emission = ColorDbl(255,255,255);// set emission if lightsource 
-		}
+	Surface(ColorDbl insurfcolor = ColorDbl(0.0), const int model = Lambertian,ColorDbl em = ColorDbl(0.0)) : surfacecolor(insurfcolor), reflectionmodel(model), emission(em){
+		
 	};
 	~Surface();
 	
@@ -31,7 +28,7 @@ public:
 	ColorDbl getemission() {
 		return emission;
 	};
-
+	void setemission(ColorDbl inemission) { emission = inemission; };
 	void setsurf(ColorDbl incolor,int model= Lambertian) { surfacecolor = incolor;
 	reflectionmodel = model;};
 	

@@ -42,7 +42,7 @@ void Scene::CreateWorld()
 	Direction N8(-2 / sqrt(5), 1 / sqrt(5), 0); // Front right
 
 	ColorDbl finc(255, 0, 204);
-	ColorDbl whitec(255, 255, 255);
+	ColorDbl whitec(210, 210, 210);
 	ColorDbl bc(0, 0, 200);
 	ColorDbl rc(200, 0, 0);
 	ColorDbl gc(0, 200, 0);
@@ -56,16 +56,17 @@ void Scene::CreateWorld()
 	Surface b(bc);
 	Surface r(rc);
 	Surface g(gc);
-	Surface c(cc,Perfect);
+	Surface c(cc,Perfect); // perfect
 	Surface y(yc);
 	Surface black(blackc);
 	Surface Mirror(ColorDbl(0.0f), Perfect);
+	Surface lights(ColorDbl(255, 255, 255), Lightsource, ColorDbl(255, 255, 255));
 
 
 	// Top
 	Triangle T1(V1, V13, V3, N1, white);
 	Triangle T2(V3, V13, V5, N1, white);
-	Triangle T3(V1, V2, V5, N1, white); // tought lightsource
+	Triangle T3(V1, V2, V5, N1, lights); // tought lightsource
 	Triangle T4(V2, V6, V5, N1, white);// tought lightsource
 	Triangle T5(V2, V4, V14, N1, white);
 	Triangle T6(V4, V6, V14, N1, white);
@@ -136,11 +137,11 @@ void Scene::CreateWorld()
 	Trianglelist.push_back(T24);
 	
 	//create lightsource
-	Vertex lightpos(5,0,4.5,1);
+	//Vertex lightpos(5,0,4.5,1);
+	T3.islight = true;
 	light = T3; // t4 har varit go2 tester
-	light.getsurf().setsurf(ColorDbl(255, 255, 255),Lightsource);
-	light.settolight();
-	Trianglelist.push_back(light);
+	
+	//Trianglelist.push_back(light);
 	//light.push_back(lightsourcetri);
 	//light.object = lightsourcetri;
 	

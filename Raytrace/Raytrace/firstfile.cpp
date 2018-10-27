@@ -168,7 +168,7 @@ int main()
 	}	
 	Scene scen2;
 	Camera cam;
-	Sphere sph(Vertex(10,2,-2),1.0f,Surface(ColorDbl(20,20,20),Lambertian));
+	Sphere sph(Vertex(10,-4,-4),1.0f,Surface(ColorDbl(204,102,102),Lambertian));
 	scen2.addsph(sph);
 	for (Triangle tri : scen2.gettrilist())
 	{
