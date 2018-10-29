@@ -43,6 +43,7 @@ void Scene::CreateWorld()
 
 	ColorDbl finc(255, 0, 204);
 	ColorDbl whitec(210, 210, 210);
+	ColorDbl white2(220, 220, 220);
 	ColorDbl bc(0, 0, 200);
 	ColorDbl rc(200, 0, 0);
 	ColorDbl gc(0, 200, 0);
@@ -56,7 +57,7 @@ void Scene::CreateWorld()
 	Surface b(bc);
 	Surface r(rc);
 	Surface g(gc);
-	Surface c(cc,Perfect); // perfect
+	Surface c(cc); // perfect
 	Surface y(yc);
 	Surface black(blackc);
 	Surface Mirror(ColorDbl(0.0f), Perfect);
@@ -64,12 +65,12 @@ void Scene::CreateWorld()
 
 
 	// Top
-	Triangle T1(V1, V13, V3, N1, white);
-	Triangle T2(V3, V13, V5, N1, white);
+	Triangle T1(V1, V13, V3, N1, white2);
+	Triangle T2(V3, V13, V5, N1, white2);
 	Triangle T3(V1, V2, V5, N1, lights); // tought lightsource
-	Triangle T4(V2, V6, V5, N1, white);// tought lightsource
-	Triangle T5(V2, V4, V14, N1, white);
-	Triangle T6(V4, V6, V14, N1, white);
+	Triangle T4(V2, V6, V5, N1, white2);// tought lightsource
+	Triangle T5(V2, V4, V14, N1, white2);
+	Triangle T6(V4, V6, V14, N1, white2);
 
 	Trianglelist.push_back(T1);
 	Trianglelist.push_back(T2);
@@ -174,11 +175,11 @@ std::list<triangleintersection> Scene::rayIntersectionfortri(Ray arg)
 				intersections.push_back(Intersector);
 			}
 		}
-		glm::vec3 rayStart = arg.getstart().getcoords();
+		/*glm::vec3 rayStart = arg.getstart().getcoords();
 		intersections.sort([&rayStart]( triangleintersection &a,  triangleintersection &b) {
 			
 			return glm::length(a.point.getcoords() - rayStart) < glm::length(b.point.getcoords() - rayStart);
-		});
+		});*/
 		return intersections;
 }
 
