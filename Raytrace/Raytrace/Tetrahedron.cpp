@@ -20,6 +20,12 @@ Tetrahedron::Tetrahedron(Vertex inbot, Vertex inleft, Vertex inright, Vertex int
 	Direction nom1(normal1.x, normal1.y, normal1.z);
 	Direction nom2(normal2.x, normal2.y, normal2.z);
 	Direction nom3(normal3.x, normal3.y, normal3.z);
+	std::cout << nom0.getDir().x<<","<< nom0.getDir().y<< nom0.getDir().z << "\n";
+	std::cout << nom1.getDir().x<<","<< nom1.getDir().y<< nom1.getDir().z << "\n";
+	std::cout << nom2.getDir().x<<","<< nom2.getDir().y<< nom2.getDir().z << "\n";
+	std::cout << nom3.getDir().x<<","<< nom3.getDir().y<< nom3.getDir().z << "\n";
+
+	std::cout << tetrasurf.getsurfcolor()<< "\n";
 
 	tris.push_back( Triangle(top, left, right, nom0, tetrasurf));
 	tris.push_back(Triangle(top, bot, left, nom1, tetrasurf));

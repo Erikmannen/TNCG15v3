@@ -34,24 +34,22 @@ public:
 	
 	
 	ColorDbl Castray(Ray& myray, Scene myscene,int depth  = 0);
-	ColorDbl Castray2(Ray& myray, Scene myscene,int depth  = 0);
+	int closest(Ray ray, Scene myscene);
+
 private:
 	
 	ColorDbl handler(Surface surface ,Direction normal, Vertex point, Ray myray, Scene myscene, int depth);
 	ColorDbl handler2(Surface surface ,Direction normal, Vertex point, Ray myray, Scene myscene, int depth);
 	ColorDbl handler3(Surface surface ,Direction normal, Vertex point, Ray myray, Scene myscene, int depth);
 	
-	int closest(Ray ray, Scene myscene);
-	ColorDbl shadow(Surface surface, Direction normal, Vertex point, Ray myray, Scene myscene, ColorDbl color);
 	
+	ColorDbl shadow(Surface surface, Direction normal, Vertex point, Ray myray, Scene myscene, ColorDbl color);
 	Ray sampleShadowray(Vertex fromPoint, Scene myscene);
-
 	ColorDbl direct(Vertex point , Scene myscene,Direction normal);
 	ColorDbl indirect(Surface s,Vertex point, Scene myscene, Direction normal,int depth);
 	ColorDbl direct2(Vertex point , Scene myscene,Direction normal, glm::vec3 objNormal, ColorDbl color,ColorDbl brdf);
 
 	ColorDbl dirrrad(Vertex point, Surface s, Direction normal, Scene myscne);
-	ColorDbl indirrrad(Vertex point, Surface s, Direction normal);
 	glm::vec3 CalcRandomPDFRay(glm::vec3 &normal);
 	//Eyepos motsvarar Ep
 	Vertex Ep1, Ep2;
