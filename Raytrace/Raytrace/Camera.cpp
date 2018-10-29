@@ -301,31 +301,30 @@ ColorDbl Camera::handler3(Surface surface, Direction normal, Vertex point, Ray m
 	}
 	else if (surface.modelcheck(Perfect))
 	{
-		//std::cout<<"start"  << myray.getstart() << "\n";
-		glm::vec3 dirr = point.getcoords() - myray.getstart().getcoords();
-		glm::vec4 refdirr = glm::vec4(point.getcoords(), 0) + glm::vec4(glm::reflect(dirr, normal.getDir()), 1.0);
-		Ray r(point, Vertex(refdirr.x, refdirr.y, refdirr.z));
+		glm::vec3 dirr = myray.getend().getcoords() - myray.getstart().getcoords();
+		glm::vec4 newDir = glm::vec4(glm::reflect(glm::vec3(dirr), normal.getDir()), 1.0);
+		glm::vec4 ppdir = glm::vec4(point.getcoords(), point.getw()) + newDir;
+		Ray r(point, Vertex(ppdir.x, ppdir.y, ppdir.z, ppdir.w));
+	
 
-		
-		
 		// check if empty
-		if (closest(r,myscene) == 0) {
+		if (closest(r, myscene) == 0) {
 			//std::cout << std::endl << "disttotri " << std::endl;
 
 			triangleintersection t = myscene.rayIntersectionfortri(r).front();
 			Vertex p = t.point;
-			Surface s =  t.object.getsurf();
+			Surface s = t.object.getsurf();
 			Direction norm = t.object.getnormal();
 			return handler3(s, norm, p, r, myscene, depth);
 		}
 		else if (closest(r, myscene) == 1) {
-			
+
 			sphereintersection t = myscene.rayIntersectionforsph(r).front();
 			Vertex p = t.point;
 			Surface s = t.object.getsurf();
 			Direction norm = t.object.getnormal(p);
 			return handler3(s, norm, p, r, myscene, depth);
-			
+
 		}
 		else
 		{
@@ -334,9 +333,8 @@ ColorDbl Camera::handler3(Surface surface, Direction normal, Vertex point, Ray m
 			//	<< "Ray end: " << myray.getend() << std::endl;
 
 		}
-		
-		return Castray(r, myscene, depth);
 
+		return Castray(r, myscene, depth);
 
 	}
 	
