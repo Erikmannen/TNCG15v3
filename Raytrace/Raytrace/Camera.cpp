@@ -134,6 +134,7 @@ ColorDbl Camera::Castray(Ray & myray, Scene myscene, int depth)
 			Surface s = t.getsurf();
 			Direction normal = t.getnormal();
 			returncolor = handler3(s,normal, intersection.point, myray, myscene, depth);
+			break;
 		}
 	}
 	else if(close == 1) {
@@ -143,6 +144,8 @@ ColorDbl Camera::Castray(Ray & myray, Scene myscene, int depth)
 			Vertex temppoint(intersection.point.getcoords().x, intersection.point.getcoords().y, intersection.point.getcoords().z);
 			Direction normal = ts.getnormal(temppoint);
 			returncolor = handler3(s, normal, intersection.point,myray, myscene, depth);
+			break;
+
 		}
 	}
 
@@ -251,11 +254,11 @@ ColorDbl Camera::handler3(Surface surface, Direction normal, Vertex point, Ray m
 	else if (surface.modelcheck(Lambertian))
 	{
 
-		ColorDbl emittance = surface.lamreflec();
+		//ColorDbl emittance = surface.lamreflec();
 
 		Vertex lightpoint = myscene.getlights().getrandpointontri();
 		Ray shadowray(point, lightpoint);
-		float lightdistance = glm::length(shadowray.getend().getcoords() - shadowray.getstart().getcoords());
+		float lightdistance = glm::distance(shadowray.getend().getcoords() , shadowray.getstart().getcoords());
 		float shadowdistance = MAXVALUE;
 		//glm::distance(shadowray.getend().getcoords() - shadowray.getstart().getcoords());
 	
@@ -267,15 +270,7 @@ ColorDbl Camera::handler3(Surface surface, Direction normal, Vertex point, Ray m
 			else
 				shadowdistance = glm::distance(myscene.rayIntersectionfortri(shadowray).front().point.getcoords(), point.getcoords()); // todo sortera
 
-			/*ColorDbl temp = myscene.rayIntersectionfortri(shadowray).front().object.getsurf().getsurfcolor();
-			if(temp.getColor() == glm::vec3(220, 220, 220))
-			{
-				std::cout << "roof" << "\n";
-				std::cout << "shadowdist" << shadowdistance <<"\n";
-				std::cout << "lightdistance" << lightdistance <<"\n";
-			}*/
-			//std::cout << "case 1 " << "\n";
-			//std::cout << myscene.rayIntersectionfortri(shadowray).front().object.getsurf().getsurfcolor();
+		
 		}
 		else if (closest(shadowray, myscene) == 1) {
 			//std::cout << "case 2 " << "\n";
@@ -288,7 +283,7 @@ ColorDbl Camera::handler3(Surface surface, Direction normal, Vertex point, Ray m
 			double shadowAngle = glm::angle(glm::normalize(normal.getDir()),
 				glm::normalize(glm::vec3(shadowray.getend().getcoords() - shadowray.getstart().getcoords())));
 			double lightfraction;
-			if (shadowAngle > 1.57)
+			if (shadowAngle > 1.57  )
 				return ColorDbl(0);
 			else
 				lightfraction = cos(shadowAngle);
@@ -326,15 +321,9 @@ ColorDbl Camera::handler3(Surface surface, Direction normal, Vertex point, Ray m
 			return handler3(s, norm, p, r, myscene, depth);
 
 		}
-		else
-		{
+		// miss 
 
-			std::cout << "2 : ";
-			//	<< "Ray end: " << myray.getend() << std::endl;
-
-		}
-
-		return Castray(r, myscene, depth);
+		
 
 	}
 	
@@ -618,6 +607,7 @@ int Camera::closest(Ray ray , Scene myscene)
 	}
 	else if (!triintersections.size() && !sphintersections.size())
 	{
+		return 2;
 		//	std::cout << "miss Ray origin : " << myray.getstart()
 			//	<< "Ray end: " << myray.getend() << std::endl;
 		
@@ -626,12 +616,12 @@ int Camera::closest(Ray ray , Scene myscene)
 	{
 		return 0;
 	}
-	else if (disttosph < disttotri)
+	else 
 	{
 		return 1;
 	}
 	
-	return 2;
+	
 }
 
 glm::vec3 Camera::CalcRandomPDFRay(glm::vec3 &normal) {

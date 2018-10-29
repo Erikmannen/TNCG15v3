@@ -74,7 +74,7 @@ void Scene::CreateWorld()
 
 	Trianglelist.push_back(T1);
 	Trianglelist.push_back(T2);
-	Trianglelist.push_back(T3);
+	Trianglelist.push_back(T3); // light is front
 	Trianglelist.push_back(T4);
 	Trianglelist.push_back(T5);
 	Trianglelist.push_back(T6);
@@ -176,7 +176,7 @@ std::list<triangleintersection> Scene::rayIntersectionfortri(Ray arg)
 			}
 		}
 		/*glm::vec3 rayStart = arg.getstart().getcoords();
-		intersections.sort([&rayStart]( triangleintersection &a,  triangleintersection &b) {
+		intersections.sort([&rayStart]( auto &a,  auto &b) {
 			
 			return glm::length(a.point.getcoords() - rayStart) < glm::length(b.point.getcoords() - rayStart);
 		});*/

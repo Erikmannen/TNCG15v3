@@ -177,8 +177,8 @@ int main()
 			cout << "true " << endl;
 		}
 	}
-	Tetrahedron tetra(Vertex(1, 1, 1, 0), Vertex(0.2, 0.3, -0.2, 0), Vertex(0, 0, 0, 0), Vertex(0, 0.8, 0, 0), Surface(ColorDbl(0,0,0), Lambertian));
-	//scen2.addtetra(tetra);
+	Tetrahedron tetra(Vertex(4, -1, -5, 0), Vertex(5, -2, -5, 0), Vertex(6, -1, -5, 0), Vertex(5, -1.5, -2, 0), Surface(ColorDbl(0,200,0), Lambertian));
+	scen2.addtetra(tetra);
 
 
 	cam.render(scen2);

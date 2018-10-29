@@ -32,8 +32,7 @@ public:
 	void setuppixels();
 	double rays(Scene& myscene);
 	
-	ColorDbl local(Vertex intersection, Direction norm,Scene myscene); // todo
-
+	
 	ColorDbl Castray(Ray& myray, Scene myscene,int depth  = 0);
 	ColorDbl Castray2(Ray& myray, Scene myscene,int depth  = 0);
 private:

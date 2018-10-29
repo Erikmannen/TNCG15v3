@@ -31,8 +31,7 @@ public:
 	//returns vector  with all intersected objects of type 
 	std::list<triangleintersection> rayIntersectionfortri(Ray arg); 
 	std::list<sphereintersection> rayIntersectionforsph(Ray arg); 
-	std::vector<Tetrahedron> rayIntersectionforstetra(Ray arg);
-
+	
 	size_t trilistsize() { return Trianglelist.size(); };
 	size_t sphlistsize() { return Spherelist.size(); };
 	void CreateWorld();
@@ -41,9 +40,10 @@ public:
 
 	void addsph(Sphere newsph) { Spherelist.push_back(newsph); };
 	void addtetra(Tetrahedron newtetra) { 
+		int counter = 0;
 		for(Triangle tri : newtetra.gettris())
 		{
-			Trianglelist.push_back(tri);
+			Trianglelist.push_front(tri);
 		}
 		};
 	std::list<Triangle> gettrilist() { return Trianglelist; };
