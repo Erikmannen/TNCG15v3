@@ -88,9 +88,9 @@ void Camera::createImageFile(const std::string name, const double &max)
 		std::cout << color << std::endl;
 
 			(void)fprintf(fp, "%d %d %d ",
-				(int)(color.Red),
-				(int)(color.Green ),
-				(int)(color.Blue ));
+				(int)(color.Red*255/max),
+				(int)(color.Green * 255 / max),
+				(int)(color.Blue * 255 / max));
 			/*
 			(void)fprintf(fp, "%d %d %d ",
 				(int)(color.Red*255/max),
@@ -250,6 +250,9 @@ ColorDbl Camera::handler3(Surface surface, Direction normal, Vertex point, Ray m
 	}
 	else if (surface.modelcheck(Lambertian))
 	{
+
+		ColorDbl emittance = surface.lamreflec();
+
 		Vertex lightpoint = myscene.getlights().getrandpointontri();
 		Ray shadowray(point, lightpoint);
 		float lightdistance = glm::length(shadowray.getend().getcoords() - shadowray.getstart().getcoords());
@@ -264,13 +267,13 @@ ColorDbl Camera::handler3(Surface surface, Direction normal, Vertex point, Ray m
 			else
 				shadowdistance = glm::distance(myscene.rayIntersectionfortri(shadowray).front().point.getcoords(), point.getcoords()); // todo sortera
 
-			ColorDbl temp = myscene.rayIntersectionfortri(shadowray).front().object.getsurf().getsurfcolor();
+			/*ColorDbl temp = myscene.rayIntersectionfortri(shadowray).front().object.getsurf().getsurfcolor();
 			if(temp.getColor() == glm::vec3(220, 220, 220))
 			{
 				std::cout << "roof" << "\n";
 				std::cout << "shadowdist" << shadowdistance <<"\n";
 				std::cout << "lightdistance" << lightdistance <<"\n";
-			}
+			}*/
 			//std::cout << "case 1 " << "\n";
 			//std::cout << myscene.rayIntersectionfortri(shadowray).front().object.getsurf().getsurfcolor();
 		}
@@ -289,10 +292,12 @@ ColorDbl Camera::handler3(Surface surface, Direction normal, Vertex point, Ray m
 				return ColorDbl(0);
 			else
 				lightfraction = cos(shadowAngle);
+			
 			return surface.lamreflec() * lightfraction;// lightfrac ger soft shadows
 			
 		}
-		return surface.lamreflec();
+		else
+			return surface.lamreflec();
 	}
 	else if (surface.modelcheck(Perfect))
 	{
@@ -300,6 +305,8 @@ ColorDbl Camera::handler3(Surface surface, Direction normal, Vertex point, Ray m
 		glm::vec3 dirr = point.getcoords() - myray.getstart().getcoords();
 		glm::vec4 refdirr = glm::vec4(point.getcoords(), 0) + glm::vec4(glm::reflect(dirr, normal.getDir()), 1.0);
 		Ray r(point, Vertex(refdirr.x, refdirr.y, refdirr.z));
+
+		
 		
 		// check if empty
 		if (closest(r,myscene) == 0) {
@@ -322,11 +329,12 @@ ColorDbl Camera::handler3(Surface surface, Direction normal, Vertex point, Ray m
 		}
 		else
 		{
-			
+
 			std::cout << "2 : ";
-				//	<< "Ray end: " << myray.getend() << std::endl;
+			//	<< "Ray end: " << myray.getend() << std::endl;
 
 		}
+		
 		return Castray(r, myscene, depth);
 
 
