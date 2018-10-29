@@ -28,8 +28,9 @@ void Scene::CreateWorld()
 	Vertex V12(10, -6, -5);
 	Vertex V13(0, 0, 5);
 	Vertex V14(10, 0, 5);
-	Vertex V15(0, 0, 5);
+	Vertex V15(0, 0, -5);
 	Vertex V16(10, 0, -5);
+
 
 	Direction N1(0, 0, -1); // Top
 	Direction N2(0, 0, 1); // Bottom
@@ -41,7 +42,8 @@ void Scene::CreateWorld()
 	Direction N8(-2 / sqrt(5), 1 / sqrt(5), 0); // Front right
 
 	ColorDbl finc(255, 0, 204);
-	ColorDbl whitec(255, 255, 255);
+	ColorDbl whitec(210, 210, 210);
+	ColorDbl white2(220, 220, 220);
 	ColorDbl bc(0, 0, 200);
 	ColorDbl rc(200, 0, 0);
 	ColorDbl gc(0, 200, 0);
@@ -55,23 +57,24 @@ void Scene::CreateWorld()
 	Surface b(bc);
 	Surface r(rc);
 	Surface g(gc);
-	Surface c(cc);
-	Surface y(yc,Perfect);
+	Surface c(cc,Perfect); // perfect
+	Surface y(yc);
 	Surface black(blackc);
 	Surface Mirror(ColorDbl(0.0f), Perfect);
+	Surface lights(ColorDbl(255, 255, 255), Lightsource, ColorDbl(255, 255, 255));
 
 
 	// Top
-	Triangle T1(V1, V13, V3, N1, white);
-	Triangle T2(V3, V13, V5, N1, white);
-	Triangle T3(V1, V2, V5, N1, white); // tought lightsource
-	Triangle T4(V2, V6, V5, N1, white);// tought lightsource
-	Triangle T5(V2, V4, V14, N1, white);
-	Triangle T6(V4, V6, V14, N1, white);
+	Triangle T1(V1, V13, V3, N1, white2);
+	Triangle T2(V3, V13, V5, N1, white2);
+	Triangle T3(V1, V2, V5, N1, lights); // tought lightsource
+	Triangle T4(V2, V6, V5, N1, white2);// tought lightsource
+	Triangle T5(V2, V4, V14, N1, white2);
+	Triangle T6(V4, V6, V14, N1, white2);
 
 	Trianglelist.push_back(T1);
 	Trianglelist.push_back(T2);
-	Trianglelist.push_back(T3);
+	Trianglelist.push_back(T3); // light is front
 	Trianglelist.push_back(T4);
 	Trianglelist.push_back(T5);
 	Trianglelist.push_back(T6);
@@ -80,7 +83,7 @@ void Scene::CreateWorld()
 	// Bottom
 	Triangle T7(V7, V15, V9, N2, white);
 	Triangle T8(V9, V15, V11, N2, white);
-	Triangle T9(V7, V8, V11, N2, white);
+	Triangle T9(V7, V8, V11, N2, white); 
 	Triangle T10(V8, V12, V11, N2, white);
 	Triangle T11(V8, V10, V16, N2, white);
 	Triangle T12(V10, V12, V16, N2, white);
@@ -135,10 +138,12 @@ void Scene::CreateWorld()
 	Trianglelist.push_back(T24);
 	
 	//create lightsource
-	Vertex lightpos(5,0,4.5,1);
-	Triangle lightsourcetri = T4;
-	lightsourcetri.getsurf().setsurf(ColorDbl(1, 1, 1),Lightsource);
-	light.push_back(lightsourcetri);
+	//Vertex lightpos(5,0,4.5,1);
+	T3.islight = true;
+	light = T3; // t4 har varit go2 tester
+	
+	//Trianglelist.push_back(light);
+	//light.push_back(lightsourcetri);
 	//light.object = lightsourcetri;
 	
 }
@@ -170,18 +175,18 @@ std::list<triangleintersection> Scene::rayIntersectionfortri(Ray arg)
 				intersections.push_back(Intersector);
 			}
 		}
-		glm::vec3 rayStart = arg.getstart().getcoords();
-		intersections.sort([&rayStart]( triangleintersection &a,  triangleintersection &b) {
+		/*glm::vec3 rayStart = arg.getstart().getcoords();
+		intersections.sort([&rayStart]( auto &a,  auto &b) {
 			
 			return glm::length(a.point.getcoords() - rayStart) < glm::length(b.point.getcoords() - rayStart);
-		});
+		});*/
 		return intersections;
 }
 
-std::vector<sphereintersection> Scene::rayIntersectionforsph(Ray arg)
+std::list<sphereintersection> Scene::rayIntersectionforsph(Ray arg)
 {
 	//return
-	std::vector<sphereintersection> intersections;
+	std::list<sphereintersection> intersections;
 
 	// for each sph in spherelist 		
 			for (Sphere sph : Spherelist) {

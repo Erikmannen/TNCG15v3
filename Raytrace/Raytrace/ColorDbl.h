@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream> 
 #include <string>
+#include <glm.hpp>
 
 class ColorDbl
 {
@@ -24,6 +25,8 @@ public:
 
 	// get functions
 	double getColor(std::string S);
+	glm::vec3 getColor() { return glm::vec3(Red, Green, Blue);
+	};
 
 	friend std::ostream& operator<<(std::ostream& os, const ColorDbl& c);
 

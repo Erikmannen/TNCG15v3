@@ -168,7 +168,7 @@ int main()
 	}	
 	Scene scen2;
 	Camera cam;
-	Sphere sph(Vertex(10,0,0),2.0f,Surface(ColorDbl(180,0,0),Perfect));
+	Sphere sph(Vertex(8,-3,-3),1.0f,Surface(ColorDbl(204,102,102),Lambertian));
 	scen2.addsph(sph);
 	for (Triangle tri : scen2.gettrilist())
 	{
@@ -177,16 +177,16 @@ int main()
 			cout << "true " << endl;
 		}
 	}
-	Tetrahedron tetra(Vertex(1, 1, 1, 0), Vertex(0.2, 0.3, -0.2, 0), Vertex(0, 0, 0, 0), Vertex(0, 0.8, 0, 0), Surface(ColorDbl(0,0,0), Lambertian));
+	Tetrahedron tetra(Vertex(4, -1, -5, 0), Vertex(5, -2, -5, 0), Vertex(6, -1, -5, 0), Vertex(5, -1.5, -2, 0), Surface(ColorDbl(0,200,0), Lambertian));
 	scen2.addtetra(tetra);
 
 
 	cam.render(scen2);
-	
 	while (true)
 	{
 
 	}
+	
 
 	return 0;
 }

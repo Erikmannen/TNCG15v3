@@ -54,7 +54,7 @@ Ray Ray::hemisphere(Vertex& Position, Direction& normaldirr)
 
 Ray Ray::reflection(Vertex & Postition, Direction & normaldirr)
 {
-	glm::vec4 newend = glm::vec4(glm::reflect(Endpoint.getcoords()-Startpoint.getcoords(), normaldirr.getDir()),1);	
+	glm::vec4 newend =   glm::vec4(glm::reflect(Endpoint.getcoords()-Startpoint.getcoords(), normaldirr.getDir()),1); // +glm::vec4(Postition.getcoords(),Postition.getw()) +
 	Ray r(Postition, Vertex(newend.x, newend.y, newend.z,newend.w));
 	return r;
 }
