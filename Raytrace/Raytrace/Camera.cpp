@@ -78,7 +78,6 @@ double Camera::rays(Scene& myscene) {
 			std::vector<Ray> rays = Img[h][w].getraylist();
 			for (Ray r : rays)
 			{
-				
 				tempcolor = tempcolor + Castray(r, myscene);
 			}
 			tempcolor = tempcolor / Subpixels;
