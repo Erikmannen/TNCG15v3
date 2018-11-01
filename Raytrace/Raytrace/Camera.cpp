@@ -185,25 +185,34 @@ ColorDbl Camera::handler3(Surface surface, Direction normal, Vertex point, Ray m
 	}
 	else if (surface.modelcheck(Perfect)) // perfekt spegling
 	{
-		glm::vec3 dirr = glm::normalize(myray.getend().getcoords() - myray.getstart().getcoords());
+		
+		glm::vec3 dirr = glm::normalize(point.getcoords() - myray.getstart().getcoords());
 		glm::vec4 newDir = glm::vec4(glm::reflect(glm::vec3(dirr), normal.getDir()), 1.0);
 		//glm::vec3 newDir = point.getcoords() - 2.0f * glm::dot(normal.getDir(), point.getcoords()) * normal.getDir();
 		glm::vec4 ppdir = glm::vec4(point.getcoords(), point.getw()) + newDir;
+		
 		//ppdir = glm::vec4(ppdir.x * 2.0f, ppdir.y * 2.0f, ppdir.z * 2.0f,ppdir.w);
 		Ray r(point, Vertex(ppdir.x, ppdir.y, ppdir.z, ppdir.w));
-
+	
 		//Ray r = myray.reflection(point, normal);
 	// r går från intersectionpoint , ut i världen relaterat till hur den speglats i normalen på objectet den träffa
 
 		// fuling men är ok om man utgår från att spegeln bara hämtar en stuts bort
 		/*if (closest(r, myscene) == 0) {
 			//std::cout << std::endl << "disttotri " << std::endl;
-
+			std::list<triangleintersection> list = myscene.rayIntersectionfortri(r);
+		
 			triangleintersection t = myscene.rayIntersectionfortri(r).front();
 			Vertex p = t.point;
+			//std::cout << " first intersection point" << p<<std::endl;
+			//std::cout << " the actual intersection point"<<point << std::endl;
+
+
 			Surface s = t.object.getsurf();
 			Direction norm = t.object.getnormal();
 			return returncolor + handler3(s, norm, p, r, myscene, depth);
+			
+		
 		} // fuling men är ok om man utgår från att spegeln bara hämtar en stuts bort
 		else if (closest(r, myscene) == 1) {
 
@@ -214,6 +223,10 @@ ColorDbl Camera::handler3(Surface surface, Direction normal, Vertex point, Ray m
 			return returncolor + handler3(s, norm, p, r, myscene, depth);
 
 		}*/
+
+		//std::cout << std::endl << "intersections  " << myscene.rayIntersectionfortri(r).size()<<std::endl;
+		//std::cout << std::endl << "color   " << myscene.rayIntersectionfortri(r).front().object.getsurf().getsurfcolor()<<std::endl;
+
 		returncolor = Castray(r, myscene, depth);
 		// miss / base case
 
@@ -254,10 +267,12 @@ ColorDbl Camera::handler3(Surface surface, Direction normal, Vertex point, Ray m
 		float lightdistance = glm::distance(shadowray.getend().getcoords() , shadowray.getstart().getcoords());
 		float shadowdistance = MAXVALUE;
 		//glm::distance(shadowray.getend().getcoords() - shadowray.getstart().getcoords());
-	
+		
+		
+
 		if (closest(shadowray, myscene) == 0)
 		{
-			//std::cout << "case 0 " << "\n";
+		
 			if (myscene.rayIntersectionfortri(shadowray).front().object.islight)
 				shadowdistance = MAXVALUE;
 			else
@@ -271,7 +286,7 @@ ColorDbl Camera::handler3(Surface surface, Direction normal, Vertex point, Ray m
 		}
 	//	std::cout << "shadowdistance : " << shadowdistance << "\n";
 		//std::cout << "lightdistaance : " << lightdistance << "\n";
-		if (shadowdistance < lightdistance)
+		if (shadowdistance > lightdistance)
 		{
 			double shadowAngle = glm::angle(glm::normalize(normal.getDir()),
 				glm::normalize(glm::vec3(shadowray.getend().getcoords() - shadowray.getstart().getcoords())));
@@ -289,13 +304,13 @@ ColorDbl Camera::handler3(Surface surface, Direction normal, Vertex point, Ray m
 				returncolor = ColorDbl(0);
 			else {
 				lightfraction = cos(shadowAngle);
-				returncolor = returncolor +  surface.lamreflec() * lightfraction;
+				returncolor = returncolor + surface.lamreflec() * lightfraction;
 			}
 			//return  surface.lamreflec() * lightfraction;// lightfrac ger soft shadows
-			
+
 		}
 		else
-			returncolor =  surface.getsurfcolor();
+			returncolor = returncolor;// surface.getsurfcolor();
 	}
 	
 	
