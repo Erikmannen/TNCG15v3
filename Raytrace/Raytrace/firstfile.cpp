@@ -177,7 +177,7 @@ int main()
 			cout << "true " << endl;
 		}
 	}
-	Tetrahedron tetra(Vertex(4, -2, -5, 0), Vertex(5, -3, -5, 0), Vertex(6, -2, -5, 0), Vertex(5, -2.5, -2, 0), Surface(ColorDbl(20,200,0), Lambertian));
+	Tetrahedron tetra(Vertex(10, 0, -5, 0), Vertex(11, 1, -5, 0), Vertex(12, 0, -5, 0), Vertex(11, 1.5, -2, 0), Surface(ColorDbl(20,200,0), Lambertian));
 	scen2.addtetra(tetra);
 
 

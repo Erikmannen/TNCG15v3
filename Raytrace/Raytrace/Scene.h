@@ -43,6 +43,7 @@ public:
 		int counter = 0;
 		for(Triangle tri : newtetra.gettris())
 		{
+			std::cout<<tri.getsurf().getsurfcolor();
 			Trianglelist.push_front(tri);
 		}
 		};

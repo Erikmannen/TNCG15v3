@@ -61,13 +61,13 @@ void Scene::CreateWorld()
 	Surface y(yc);
 	Surface black(blackc);
 	Surface Mirror(ColorDbl(0.0f), Perfect);
-	Surface lights(ColorDbl(255, 255, 255), Lightsource, ColorDbl(255, 255, 255));
+	Surface lights(ColorDbl(255, 255, 255), Lightsource, white2);
 
 
 	// Top
 	Triangle T1(V1, V13, V3, N1, white2);
 	Triangle T2(V3, V13, V5, N1, white2);
-	Triangle T3(V1, V2, V5, N1, lights); // tought lightsource
+	Triangle T3(V1, V2, V5, N1, white2); // tought lightsource
 	Triangle T4(V2, V6, V5, N1, white2);// tought lightsource
 	Triangle T5(V2, V4, V14, N1, white2);
 	Triangle T6(V4, V6, V14, N1, white2);
@@ -136,11 +136,25 @@ void Scene::CreateWorld()
 
 	Trianglelist.push_back(T23);
 	Trianglelist.push_back(T24);
-	
+
+	// Light source
+	Vertex L1(10, 1, 4.99);
+	Vertex L2(10, -1, 4.99);
+	Vertex L3(8, -1, 4.99);
+	Vertex L4(8, 1, 4.99);
+
+	Triangle Light1(L4, L1, L2, N1, lights);
+	Triangle Light2(L4, L2, L3, N1, lights);
+
+	Trianglelist.push_front(Light1);
+	Trianglelist.push_front(Light2);
+
 	//create lightsource
 	//Vertex lightpos(5,0,4.5,1);
-	T3.islight = true;
-	light = T3; // t4 har varit go2 tester
+	Light1.islight = true;
+	Light2.islight = true;
+	light = Light1; // t4 har varit go2 tester
+
 	
 	//Trianglelist.push_back(light);
 	//light.push_back(lightsourcetri);
@@ -150,7 +164,6 @@ void Scene::CreateWorld()
 
 ColorDbl Scene::lightcontribution(Vertex v, Direction norm)
 {
-
 	return ColorDbl();
 }
 
@@ -175,11 +188,24 @@ std::list<triangleintersection> Scene::rayIntersectionfortri(Ray arg)
 				intersections.push_back(Intersector);
 			}
 		}
-		/*glm::vec3 rayStart = arg.getstart().getcoords();
-		intersections.sort([&rayStart]( auto &a,  auto &b) {
+		glm::vec3 rayStart = arg.getstart().getcoords();
+		intersections.sort([&rayStart]( triangleintersection &a,  triangleintersection &b) {
 			
+			
+			glm::vec3 alength = a.point.getcoords() - rayStart;
+			glm::vec3 blength = b.point.getcoords() - rayStart;
+
+
 			return glm::length(a.point.getcoords() - rayStart) < glm::length(b.point.getcoords() - rayStart);
-		});*/
+		});
+		/*std::cout << "New List: \n";
+		for (auto v : intersections)
+		{
+			float alength = glm::length(v.point.getcoords() - rayStart);
+			std::cout << alength << "\n";
+		}
+			*/
+		
 		return intersections;
 }
 

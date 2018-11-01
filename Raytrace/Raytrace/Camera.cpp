@@ -41,11 +41,25 @@ void Camera::setuppixels() {
 	for (int h = 0; h < HEIGHT; ++h) {
 		for (int w = 0; w < WIDTH; ++w)
 		{
-
 			Img[h][w].setPixelColor(ColorDbl());
-			Ray* tempray = pixeltoray2(w, h);
-			//std::cout << tempray->getstart() << " -> " << tempray->getend() << std::endl;
-			Img[h][w].addray(*tempray);
+			float diff = 1.0f / Subpixels;
+			for (int subX = 0; subX < Subpixels; ++subX)
+				for(int subY = 0; subY < Subpixels; ++subY)
+				{
+					double xMax =  w + (subX + 1)*diff;
+					double xMin = w + subX * diff;
+
+					double yMax = h + (subY + 1)*diff;
+					double yMin = h + subY * diff;
+
+					// En punkt på pixeln mellan 0 och 1 i y- och x-led
+					double x = (xMax - xMin) * ((double)rand() / (double)RAND_MAX) + xMin;
+					double y = (yMax - yMin) * ((double)rand() / (double)RAND_MAX) + yMin;
+
+					Ray* tempray = pixeltoray2(x, y);
+					//std::cout << tempray->getstart() << " -> " << tempray->getend() << std::endl;
+					Img[h][w].addray(*tempray);
+				}
 		
 		}
 	}
@@ -67,6 +81,7 @@ double Camera::rays(Scene& myscene) {
 				
 				tempcolor = tempcolor + Castray(r, myscene);
 			}
+			tempcolor = tempcolor / Subpixels;
 			Img[h][w].setPixelColor(tempcolor);
 			maximage = glm::max(maximage, glm::max(tempcolor.Red, glm::max(tempcolor.Green, tempcolor.Blue)));
 
@@ -133,7 +148,7 @@ ColorDbl Camera::Castray(Ray & myray, Scene myscene, int depth)
 			Triangle t = intersection.object;
 			Surface s = t.getsurf();
 			Direction normal = t.getnormal();
-			returncolor = handler3(s,normal, intersection.point, myray, myscene, depth);
+			returncolor = returncolor + handler3(s,normal, intersection.point, myray, myscene, depth);
 			break;
 		}
 	}
@@ -143,7 +158,7 @@ ColorDbl Camera::Castray(Ray & myray, Scene myscene, int depth)
 			Surface s = ts.getsurf();
 			Vertex temppoint(intersection.point.getcoords().x, intersection.point.getcoords().y, intersection.point.getcoords().z);
 			Direction normal = ts.getnormal(temppoint);
-			returncolor = handler3(s, normal, intersection.point,myray, myscene, depth);
+			returncolor = returncolor + handler3(s, normal, intersection.point,myray, myscene, depth);
 			break;
 
 		}
@@ -159,14 +174,57 @@ ColorDbl Camera::handler3(Surface surface, Direction normal, Vertex point, Ray m
 	std::random_device rd;  //Will be used to obtain a seed for the random number engine
 	std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
 	std::uniform_real_distribution<> dis(0.0, 1.0);
-												   */
+		*/				
+	glm::vec3 directIllumination(0.0);
+	glm::vec3 indirectIllumination(0.0);
+
+	ColorDbl returncolor(0);
 	if (surface.modelcheck(Lightsource))
 	{
-		return surface.getemission();
+		returncolor =  surface.getemission();
 	}
+	else if (surface.modelcheck(Perfect)) // perfekt spegling
+	{
+		glm::vec3 dirr = glm::normalize(myray.getend().getcoords() - myray.getstart().getcoords());
+		glm::vec4 newDir = glm::vec4(glm::reflect(glm::vec3(dirr), normal.getDir()), 1.0);
+		//glm::vec3 newDir = point.getcoords() - 2.0f * glm::dot(normal.getDir(), point.getcoords()) * normal.getDir();
+		glm::vec4 ppdir = glm::vec4(point.getcoords(), point.getw()) + newDir;
+		//ppdir = glm::vec4(ppdir.x * 2.0f, ppdir.y * 2.0f, ppdir.z * 2.0f,ppdir.w);
+		Ray r(point, Vertex(ppdir.x, ppdir.y, ppdir.z, ppdir.w));
+
+		//Ray r = myray.reflection(point, normal);
+	// r går från intersectionpoint , ut i världen relaterat till hur den speglats i normalen på objectet den träffa
+
+		// fuling men är ok om man utgår från att spegeln bara hämtar en stuts bort
+		/*if (closest(r, myscene) == 0) {
+			//std::cout << std::endl << "disttotri " << std::endl;
+
+			triangleintersection t = myscene.rayIntersectionfortri(r).front();
+			Vertex p = t.point;
+			Surface s = t.object.getsurf();
+			Direction norm = t.object.getnormal();
+			return returncolor + handler3(s, norm, p, r, myscene, depth);
+		} // fuling men är ok om man utgår från att spegeln bara hämtar en stuts bort
+		else if (closest(r, myscene) == 1) {
+
+			sphereintersection t = myscene.rayIntersectionforsph(r).front();
+			Vertex p = t.point;
+			Surface s = t.object.getsurf();
+			Direction norm = t.object.getnormal(p);
+			return returncolor + handler3(s, norm, p, r, myscene, depth);
+
+		}*/
+		returncolor = Castray(r, myscene, depth);
+		// miss / base case
+
+		//return Castray(r, myscene, depth);
+
+	}
+
 	else if (surface.modelcheck(Lambertian))
 	{
 
+		
 		/*
 		std::uniform_real_distribution<> disAngle(0.0, M_PI);
 
@@ -219,63 +277,30 @@ ColorDbl Camera::handler3(Surface surface, Direction normal, Vertex point, Ray m
 				glm::normalize(glm::vec3(shadowray.getend().getcoords() - shadowray.getstart().getcoords())));
 			double lightfraction;
 			//float cos_theta = 
-			glm::vec3 compareer = glm::vec3(surface.getsurfcolor().Red, surface.getsurfcolor().Green, surface.getsurfcolor().Blue);
+			/*glm::vec3 compareer = glm::vec3(surface.getsurfcolor().Red, surface.getsurfcolor().Green, surface.getsurfcolor().Blue);
 			if (compareer == glm::vec3(20, 200, 0))
 			{
 				std::cout << "hit tetra";
 				std::cout << surface.getsurfcolor()<<"\n";
 				std::cout << shadowAngle;
 
-			}
-			if (shadowAngle > 1.57  )
-				return ColorDbl(0);
+			}*/
+			if (shadowAngle > 1.57f)
+				returncolor = ColorDbl(0);
 			else {
 				lightfraction = cos(shadowAngle);
-				return  surface.lamreflec() * lightfraction;
+				returncolor = returncolor +  surface.lamreflec() * lightfraction;
 			}
-
-				
 			//return  surface.lamreflec() * lightfraction;// lightfrac ger soft shadows
 			
 		}
 		else
-			return surface.getsurfcolor();
-	}
-	else if (surface.modelcheck(Perfect)) // perfekt spegling
-	{
-		glm::vec3 dirr = myray.getend().getcoords() - myray.getstart().getcoords();
-		glm::vec4 newDir = glm::vec4(glm::reflect(glm::vec3(dirr), normal.getDir()), 1.0);
-		glm::vec4 ppdir = glm::vec4(point.getcoords(), point.getw()) + newDir;
-		Ray r(point, Vertex(ppdir.x, ppdir.y, ppdir.z, ppdir.w));
-	// r går från intersectionpoint , ut i världen relaterat till hur den speglats i normalen på objectet den träffa
-
-		// fuling men är ok om man utgår från att spegeln bara hämtar en stuts bort
-		if (closest(r, myscene) == 0) {
-			//std::cout << std::endl << "disttotri " << std::endl;
-
-			triangleintersection t = myscene.rayIntersectionfortri(r).front();
-			Vertex p = t.point;
-			Surface s = t.object.getsurf();
-			Direction norm = t.object.getnormal();
-			return handler3(s, norm, p, r, myscene, depth);
-		} // fuling men är ok om man utgår från att spegeln bara hämtar en stuts bort
-		else if (closest(r, myscene) == 1) {
-
-			sphereintersection t = myscene.rayIntersectionforsph(r).front();
-			Vertex p = t.point;
-			Surface s = t.object.getsurf();
-			Direction norm = t.object.getnormal(p);
-			return handler3(s, norm, p, r, myscene, depth);
-
-		}
-		// miss / base case
-
-		
-
+			returncolor =  surface.getsurfcolor();
 	}
 	
-	std::cout << "basecase";
-	return ColorDbl(0);
+	
+	
+	return returncolor;
 }
 
 // denna är tänkt att ge vilken intersectiontyp som är närmast
@@ -288,7 +313,8 @@ int Camera::closest(Ray ray , Scene myscene)
 	float disttosph = MAXVALUE;
 
 	// check if empty
-	if (triintersections.size() != 0) {
+	if (triintersections.size() > 0) {
+		
 		disttotri = glm::distance(triintersections.front().point.getcoords(), ray.getstart().getcoords()); // todo sortera
 		//std::cout << std::endl << "disttotri : " << disttotri << std::endl;
 	}
@@ -298,11 +324,15 @@ int Camera::closest(Ray ray , Scene myscene)
 	}
 	else if (!triintersections.size() && !sphintersections.size())
 	{
+		/*std::cout <<" size is 0" << "\n";
+		std::cout << ray.getstart() << "\n";
+		std::cout << ray.getend() << "\n";*/
 		return 2;
 		//	std::cout << "miss Ray origin : " << myray.getstart()
 			//	<< "Ray end: " << myray.getend() << std::endl;
 		
 	}
+	
 	if (disttosph > disttotri)
 	{
 		return 0;

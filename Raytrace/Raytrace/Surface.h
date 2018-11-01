@@ -10,7 +10,8 @@ class Surface
 {
 public:
 	
-	Surface(ColorDbl insurfcolor = ColorDbl(0.0), const int model = Lambertian,ColorDbl em = ColorDbl(0.0)) : surfacecolor(insurfcolor), reflectionmodel(model), emission(em){
+	Surface(ColorDbl insurfcolor = ColorDbl(0.0), const int model = Lambertian,ColorDbl em = ColorDbl(0.0)) 
+		: surfacecolor(insurfcolor), reflectionmodel(model), emission(em){
 		
 	};
 	~Surface();

@@ -27,10 +27,10 @@ Tetrahedron::Tetrahedron(Vertex inbot, Vertex inleft, Vertex inright, Vertex int
 
 	std::cout << tetrasurf.getsurfcolor()<< "\n";
 
-	tris.push_back( Triangle(top, left, right, nom0, tetrasurf));
-	tris.push_back(Triangle(top, bot, left, nom1, tetrasurf));
-	tris.push_back(Triangle(top, right, bot, nom2, tetrasurf));
-	tris.push_back(Triangle(bot, right, left, nom3, tetrasurf));
+	tris.push_back( Triangle(right, top, left, nom0, tetrasurf));
+	tris.push_back(Triangle(right, top, bot, nom1, tetrasurf));
+	tris.push_back(Triangle(bot, top, left, nom2, tetrasurf));
+	tris.push_back(Triangle(left, bot, right, nom3, tetrasurf));
 
 }
 
