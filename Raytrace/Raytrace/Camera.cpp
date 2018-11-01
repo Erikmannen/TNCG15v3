@@ -274,6 +274,7 @@ ColorDbl Camera::handler3(Surface surface, Direction normal, Vertex point, Ray m
 		{
 			double shadowAngle = glm::angle(glm::normalize(normal.getDir()),
 				glm::normalize(glm::vec3(shadowray.getend().getcoords() - shadowray.getstart().getcoords())));
+
 			double lightfraction;
 			//float cos_theta = 
 			/*glm::vec3 compareer = glm::vec3(surface.getsurfcolor().Red, surface.getsurfcolor().Green, surface.getsurfcolor().Blue);
@@ -284,7 +285,7 @@ ColorDbl Camera::handler3(Surface surface, Direction normal, Vertex point, Ray m
 				std::cout << shadowAngle;
 
 			}*/
-			if (shadowAngle > 1.57f)
+			if (shadowAngle > M_PI/2.0f)
 				returncolor = ColorDbl(0);
 			else {
 				lightfraction = cos(shadowAngle);
@@ -296,7 +297,6 @@ ColorDbl Camera::handler3(Surface surface, Direction normal, Vertex point, Ray m
 		else
 			returncolor =  surface.getsurfcolor();
 	}
-	
 	
 	
 	return returncolor;

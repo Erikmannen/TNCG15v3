@@ -138,10 +138,10 @@ void Scene::CreateWorld()
 	Trianglelist.push_back(T24);
 
 	// Light source
-	Vertex L1(10, 1, 4.99);
-	Vertex L2(10, -1, 4.99);
-	Vertex L3(8, -1, 4.99);
-	Vertex L4(8, 1, 4.99);
+	Vertex L1(10, 1, 4.5);
+	Vertex L2(10, -1, 4.5);
+	Vertex L3(8, -1, 4.5);
+	Vertex L4(8, 1, 4.5);
 
 	Triangle Light1(L4, L1, L2, N1, lights);
 	Triangle Light2(L4, L2, L3, N1, lights);
