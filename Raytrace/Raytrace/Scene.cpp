@@ -57,7 +57,7 @@ void Scene::CreateWorld()
 	Surface b(bc);
 	Surface r(rc);
 	Surface g(gc);
-	Surface c(cc,Perfect); // perfect
+	Surface c(cc); // perfect
 	Surface y(yc);
 	Surface black(blackc);
 	Surface Mirror(ColorDbl(0.0f), Perfect);
@@ -228,7 +228,16 @@ std::list<sphereintersection> Scene::rayIntersectionforsph(Ray arg)
 					intersections.push_back(Intersector);
 				}
 			}
-		
+			glm::vec3 rayStart = arg.getstart().getcoords();
+			intersections.sort([&rayStart](sphereintersection &a, sphereintersection &b) {
+
+
+				glm::vec3 alength = a.point.getcoords() - rayStart;
+				glm::vec3 blength = b.point.getcoords() - rayStart;
+
+
+				return glm::length(a.point.getcoords() - rayStart) < glm::length(b.point.getcoords() - rayStart);
+			});
 		return intersections;
 
 

@@ -25,13 +25,15 @@ bool Sphere::SphereIntersection(Ray arg, glm::vec3& intersect)
 	float d1 = -b / 2.0f;
 	float d2 = d1;
 	float rest = glm::pow(d1, 2) - ac;
-	d1 += rest;
-	d2 -= rest;
-
 	if (rest < MINVALUE)
 		return false;
 
 	rest = glm::sqrt(rest);
+	
+	d1 += rest;
+	d2 -= rest;
+
+	
 	if (d1 <= 0 && d2 <= 0) {
 		return false;
 	}
