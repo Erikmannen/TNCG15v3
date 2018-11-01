@@ -318,6 +318,8 @@ int Camera::closest(Ray ray , Scene myscene)
 		//std::cout << std::endl << "disttotri : " << disttotri << std::endl;
 	}
 	if (sphintersections.size() != 0) {
+		if(sphintersections.size() != 1)
+			std::cout << sphintersections.size() << "\n";
 		disttosph = glm::distance(sphintersections.front().point.getcoords(), ray.getstart().getcoords()); // todo sortera
 		//std::cout << std::endl << "disttosph : " << disttosph << std::endl;
 	}
@@ -327,8 +329,7 @@ int Camera::closest(Ray ray , Scene myscene)
 		std::cout << ray.getstart() << "\n";
 		std::cout << ray.getend() << "\n";*/
 		return 2;
-		//	std::cout << "miss Ray origin : " << myray.getstart()
-			//	<< "Ray end: " << myray.getend() << std::endl;
+	
 		
 	}
 	
