@@ -50,6 +50,8 @@ private:
 	ColorDbl direct2(Vertex point , Scene myscene,Direction normal, glm::vec3 objNormal, ColorDbl color,ColorDbl brdf);
 
 	ColorDbl dirrrad(Vertex point, Surface s, Direction normal, Scene myscne);
+	ColorDbl indirectlightning(Ray myray,Surface s, Vertex point, Scene myscene, Direction normal, int depth);
+	ColorDbl directlightning(Ray myray,Surface s, Vertex point, Scene myscene, Direction normal, int depth);
 	glm::vec3 CalcRandomPDFRay(glm::vec3 &normal);
 	//Eyepos motsvarar Ep
 	Vertex Ep1, Ep2;
@@ -57,7 +59,7 @@ private:
 	Direction dir;
 	//800 x 800 array av pixels 
 	Pixel Img[WIDTH][HEIGHT];
-	int Subpixels = 4; // no divided yet
+	int Subpixels = 1; // no divided yet
 	//fov for camera
 	float fov = ((float)M_PI) / 1.5f;
 	glm::vec4 pixelplane[4];

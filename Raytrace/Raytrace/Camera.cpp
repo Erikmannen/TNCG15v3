@@ -168,15 +168,7 @@ ColorDbl Camera::Castray(Ray & myray, Scene myscene, int depth)
 
 ColorDbl Camera::handler3(Surface surface, Direction normal, Vertex point, Ray myray, Scene myscene, int depth)
 {
-	/*
-	glm::vec3 objNormal = normal.getDir();
-	std::random_device rd;  //Will be used to obtain a seed for the random number engine
-	std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
-	std::uniform_real_distribution<> dis(0.0, 1.0);
-		*/				
-	glm::vec3 directIllumination(0.0);
-	glm::vec3 indirectIllumination(0.0);
-
+	
 	ColorDbl returncolor(0);
 	if (surface.modelcheck(Lightsource))
 	{
@@ -184,136 +176,21 @@ ColorDbl Camera::handler3(Surface surface, Direction normal, Vertex point, Ray m
 	}
 	else if (surface.modelcheck(Perfect)) // perfekt spegling
 	{
-		
 		glm::vec3 dirr = glm::normalize(point.getcoords() - myray.getstart().getcoords());
 		glm::vec4 newDir = glm::vec4(glm::reflect(glm::vec3(dirr), normal.getDir()), 1.0);
-		//glm::vec3 newDir = point.getcoords() - 2.0f * glm::dot(normal.getDir(), point.getcoords()) * normal.getDir();
 		glm::vec4 ppdir = glm::vec4(point.getcoords(), point.getw()) + newDir;
-		
-		//ppdir = glm::vec4(ppdir.x * 2.0f, ppdir.y * 2.0f, ppdir.z * 2.0f,ppdir.w);
 		Ray r(point, Vertex(ppdir.x, ppdir.y, ppdir.z, ppdir.w));
-	
-		//Ray r = myray.reflection(point, normal);
-	// r går från intersectionpoint , ut i världen relaterat till hur den speglats i normalen på objectet den träffa
-
-		// fuling men är ok om man utgår från att spegeln bara hämtar en stuts bort
-		/*if (closest(r, myscene) == 0) {
-			//std::cout << std::endl << "disttotri " << std::endl;
-			std::list<triangleintersection> list = myscene.rayIntersectionfortri(r);
-		
-			triangleintersection t = myscene.rayIntersectionfortri(r).front();
-			Vertex p = t.point;
-			//std::cout << " first intersection point" << p<<std::endl;
-			//std::cout << " the actual intersection point"<<point << std::endl;
-
-
-			Surface s = t.object.getsurf();
-			Direction norm = t.object.getnormal();
-			return returncolor + handler3(s, norm, p, r, myscene, depth);
-			
-		
-		} // fuling men är ok om man utgår från att spegeln bara hämtar en stuts bort
-		else if (closest(r, myscene) == 1) {
-
-			sphereintersection t = myscene.rayIntersectionforsph(r).front();
-			Vertex p = t.point;
-			Surface s = t.object.getsurf();
-			Direction norm = t.object.getnormal(p);
-			return returncolor + handler3(s, norm, p, r, myscene, depth);
-
-		}*/
-
-		//std::cout << std::endl << "intersections  " << myscene.rayIntersectionfortri(r).size()<<std::endl;
-		//std::cout << std::endl << "color   " << myscene.rayIntersectionfortri(r).front().object.getsurf().getsurfcolor()<<std::endl;
-
 		returncolor = Castray(r, myscene, depth);
-		// miss / base case
-
-		//return Castray(r, myscene, depth);
 
 	}
-
 	else if (surface.modelcheck(Lambertian))
 	{
 
-		
-		/*
-		std::uniform_real_distribution<> disAngle(0.0, M_PI);
-
-		double incOffset = glm::orientedAngle(glm::normalize(glm::vec2(objNormal.x, objNormal.z)),
-			glm::normalize(glm::vec2(0.0, 1.0)));
-		double asiOffset = glm::orientedAngle(glm::normalize(glm::vec2(objNormal.x, objNormal.y)),
-			glm::normalize(glm::vec2(0.0, 1.0)));
-		double randAsi = 2.0 * disAngle(rd);
-		double randInc = disAngle(rd);
-		glm::vec4 reflDir = glm::vec4((randAsi + asiOffset),
-			sin(randAsi + asiOffset),
-			cos(randInc + incOffset), 1.0);
-
-		glm::vec4 newend = glm::vec4(point.getcoords(),point.getw()) + reflDir;
-		Vertex endver(newend.x, newend.y, newend.z, newend.w);
-		Ray reflRay(point, endver);
-		ColorDbl color(0.0);
-		if (dis(gen) > 0.5) {
-			color = Castray(reflRay,myscene,depth);
-			color = color* 0.3;
-		}
-		*/
-		//ColorDbl emittance = surface.lamreflec();
-
-		Vertex lightpoint = myscene.getlights().getrandpointontri();
-		Ray shadowray(point, lightpoint);
-		float lightdistance = glm::distance(shadowray.getend().getcoords() , shadowray.getstart().getcoords());
-		float shadowdistance = MAXVALUE;
-		//glm::distance(shadowray.getend().getcoords() - shadowray.getstart().getcoords());
-		
-		
-
-		if (closest(shadowray, myscene) == 0)
-		{
-		
-			if (myscene.rayIntersectionfortri(shadowray).front().object.islight)
-				shadowdistance = MAXVALUE;
-			else
-				shadowdistance = glm::distance(myscene.rayIntersectionfortri(shadowray).front().point.getcoords(), point.getcoords()); // todo sortera
-
-		
-		}
-		else if (closest(shadowray, myscene) == 1) {
-			//std::cout << "case 2 " << "\n";
-			shadowdistance = glm::distance(myscene.rayIntersectionforsph(shadowray).front().point.getcoords(), point.getcoords()); // todo sortera
-		}
-	//	std::cout << "shadowdistance : " << shadowdistance << "\n";
-		//std::cout << "lightdistaance : " << lightdistance << "\n";
-		if (shadowdistance > lightdistance)
-		{
-			double shadowAngle = glm::angle(glm::normalize(normal.getDir()),
-				glm::normalize(glm::vec3(shadowray.getend().getcoords() - shadowray.getstart().getcoords())));
-
-			double lightfraction;
-			//float cos_theta = 
-			/*glm::vec3 compareer = glm::vec3(surface.getsurfcolor().Red, surface.getsurfcolor().Green, surface.getsurfcolor().Blue);
-			if (compareer == glm::vec3(20, 200, 0))
-			{
-				std::cout << "hit tetra";
-				std::cout << surface.getsurfcolor()<<"\n";
-				std::cout << shadowAngle;
-
-			}*/
-			if (shadowAngle > M_PI/2.0f)
-				returncolor = ColorDbl(0);
-			else {
-				lightfraction = cos(shadowAngle);
-				returncolor = returncolor + surface.lamreflec() * lightfraction;
-			}
-			//return  surface.lamreflec() * lightfraction;// lightfrac ger soft shadows
-
-		}
-		else
-			returncolor = returncolor;// surface.getsurfcolor();
+		//returncolor = returncolor +  directlightning(myray, surface, point, myscene, normal, depth);
+		ColorDbl temp = indirectlightning(myray, surface, point, myscene, normal, depth);
+		//std::cout << "tempcolor" << temp << "\n";
+		returncolor = returncolor + temp;
 	}
-	
-	
 	return returncolor;
 }
 
@@ -359,6 +236,93 @@ int Camera::closest(Ray ray , Scene myscene)
 	
 	
 }
+
+ColorDbl Camera::indirectlightning(Ray myray,Surface s, Vertex point, Scene myscene, Direction normal, int depth)
+{
+	ColorDbl retcolor(0);
+	if (depth < MAXDEPTH)
+	{
+		Ray out = myray.hemisphere( point, normal);
+		depth++;
+		retcolor = retcolor + Castray(out, myscene, depth)*0.3;
+	}
+	return retcolor;
+}
+
+ColorDbl Camera::directlightning(Ray myray, Surface surface, Vertex point, Scene myscene, Direction normal, int depth)
+{
+	ColorDbl returncolor(0);
+	/*glm::vec3 objNormal = normal.getDir();
+	std::random_device rd;  //Will be used to obtain a seed for the random number engine
+	std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
+	std::uniform_real_distribution<> dis(0.0, 1.0);
+	
+	//glm::distance(shadowray.getend().getcoords() - shadowray.getstart().getcoords());
+
+
+	std::uniform_real_distribution<> disAngle(0.0, M_PI);
+
+	double incOffset = glm::orientedAngle(glm::normalize(glm::vec2(objNormal.x, objNormal.z)),
+		glm::normalize(glm::vec2(0.0, 1.0)));
+	double asiOffset = glm::orientedAngle(glm::normalize(glm::vec2(objNormal.x, objNormal.y)),
+		glm::normalize(glm::vec2(0.0, 1.0)));
+	double randAsi = 2.0 * disAngle(rd);
+	double randInc = disAngle(rd);
+	glm::vec4 reflDir = glm::vec4((randAsi + asiOffset),
+		sin(randAsi + asiOffset),
+		cos(randInc + incOffset), 1.0);
+
+	glm::vec4 newend = glm::vec4(point.getcoords(), point.getw()) + reflDir;
+	Vertex endver(newend.x, newend.y, newend.z, newend.w);
+	Ray reflRay(point, endver);
+	//ColorDbl color(0.0);
+	if (dis(gen) > 0.5) {
+		returncolor = Castray(reflRay, myscene, depth);
+		returncolor = returncolor * 0.3;
+	}*/
+	Vertex lightpoint = myscene.getlights().getrandpointontri();
+	Ray shadowray(point, lightpoint);
+	float lightdistance = glm::distance(shadowray.getend().getcoords(), shadowray.getstart().getcoords());
+	float shadowdistance = MAXVALUE;
+	if (closest(shadowray, myscene) == 0)
+	{
+
+		if (myscene.rayIntersectionfortri(shadowray).front().object.islight)
+			shadowdistance = MAXVALUE;
+		else
+			shadowdistance = glm::distance(myscene.rayIntersectionfortri(shadowray).front().point.getcoords(), point.getcoords()); // todo sortera
+
+
+	}
+	else if (closest(shadowray, myscene) == 1) {
+		//std::cout << "case 2 " << "\n";
+		shadowdistance = glm::distance(myscene.rayIntersectionforsph(shadowray).front().point.getcoords(), point.getcoords()); // todo sortera
+	}
+	//	std::cout << "shadowdistance : " << shadowdistance << "\n";
+		//std::cout << "lightdistaance : " << lightdistance << "\n";
+	if (shadowdistance > lightdistance)
+	{
+		double shadowAngle = glm::angle(glm::normalize(normal.getDir()),
+			glm::normalize(glm::vec3(shadowray.getend().getcoords() - shadowray.getstart().getcoords())));
+
+		double lightfraction;
+
+		if (shadowAngle > M_PI / 2.0f)
+			returncolor = ColorDbl(0);
+		else {
+			lightfraction = cos(shadowAngle);
+			returncolor = returncolor + surface.lamreflec() * lightfraction;
+		}
+		//return  surface.lamreflec() * lightfraction;// lightfrac ger soft shadows
+
+	}
+	else
+		returncolor = returncolor;// surface.getsurfcolor();
+
+
+return returncolor ;
+}
+
 
 
 
@@ -511,6 +475,7 @@ ColorDbl Camera::dirrrad(Vertex point, Surface s, Direction normal, Scene myscen
 	}
 	return color / SHADOWRAYS;
 }
+
 ColorDbl Camera::direct(Vertex point, Scene myscene, Direction normal)
 {
 	ColorDbl clr(0.0);
