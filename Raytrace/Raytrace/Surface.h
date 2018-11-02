@@ -10,7 +10,7 @@ class Surface
 {
 public:
 	
-	Surface(ColorDbl insurfcolor = ColorDbl(0.0), const int model = Lambertian,ColorDbl em = ColorDbl(0.0)) 
+	Surface(ColorDbl insurfcolor = ColorDbl(0.0), const int model = Lambertian,ColorDbl em = ColorDbl(0.3)) 
 		: surfacecolor(insurfcolor), reflectionmodel(model), emission(em){
 		
 	};
@@ -23,7 +23,7 @@ public:
 	ColorDbl Perfectreflec();
 
 	bool modelcheck(const int in) { return in == reflectionmodel; };
-	
+
 	double getcoeff() { return coeff; };
 	ColorDbl getsurfcolor() { return surfacecolor; };
 	ColorDbl getemission() {

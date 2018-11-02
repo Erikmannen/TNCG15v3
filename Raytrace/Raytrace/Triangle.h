@@ -30,6 +30,8 @@ public:
 	};
 	Vertex getrandpointontri();
 	void settolight() { islight = true; };
+
+	double area() { return 0.5 * glm::length(glm::cross(glm::vec3(V1.getcoords() - V0.getcoords()), glm::vec3(V2.getcoords() - V0.getcoords()))); };
 	 
 private: 
 	Vertex V0, V1, V2;

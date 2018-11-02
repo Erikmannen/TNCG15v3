@@ -41,15 +41,16 @@ void Scene::CreateWorld()
 	Direction N7(-2 / sqrt(5), -1 / sqrt(5), 0); // Back right
 	Direction N8(-2 / sqrt(5), 1 / sqrt(5), 0); // Front right
 
-	ColorDbl finc(255, 0, 204);
-	ColorDbl whitec(210, 210, 210);
-	ColorDbl white2(220, 220, 220);
-	ColorDbl bc(0, 0, 200);
-	ColorDbl rc(200, 0, 0);
-	ColorDbl gc(0, 200, 0);
-	ColorDbl cc(0, 200, 200);
-	ColorDbl yc(200, 200, 0);
-	ColorDbl blackc(15, 15, 15);
+	ColorDbl finc(1, 0, 0.8);
+	ColorDbl whitec(0.82, 0.82, 0.82);
+	ColorDbl white2(0.83, 0.83, 0.83);
+	ColorDbl bc(0, 0, 0.78);
+	ColorDbl rc(0.78, 0, 0);
+	ColorDbl gc(0, 0.78, 0);
+	ColorDbl cc(0, 0.78, 0.78);
+	ColorDbl yc(0.78, 0.78, 0);
+	ColorDbl blackc(0.05, 0.05, 0.05);
+
 
 
 	Surface fin(finc);
@@ -153,8 +154,8 @@ void Scene::CreateWorld()
 	//Vertex lightpos(5,0,4.5,1);
 	Light1.islight = true;
 	Light2.islight = true;
-	light = Light1; // t4 har varit go2 tester
-
+	lightList.push_back(Light1); // t4 har varit go2 tester
+	lightList.push_back(Light2);
 	
 	//Trianglelist.push_back(light);
 	//light.push_back(lightsourcetri);
@@ -164,7 +165,39 @@ void Scene::CreateWorld()
 
 ColorDbl Scene::lightcontribution(Vertex v, Direction norm)
 {
-	return ColorDbl();
+	ColorDbl clr(0.0);
+	int lightCount = 0;
+	double lightArea = 0;
+
+	for (Triangle light : lightList) {
+		lightArea += light.area();
+		for (int i = 0; i < SHADOWRAYS; ++i)
+		{
+			++lightCount;
+			glm::vec3 lightPoint = light.getrandpointontri().getcoords();
+			Vertex v2(glm::normalize(lightPoint - v.getcoords()));
+			Ray lightRay(v, v2);
+
+			std::list<sphereintersection> sphereIntersections = rayIntersectionforsph(lightRay);
+			std::list<triangleintersection> triangleIntersections = rayIntersectionfortri(lightRay);
+			triangleintersection intersection = triangleIntersections.front();
+
+			double lightDistance = glm::distance(v.getcoords(), v2.getcoords());
+			double intersectionDistance = glm::distance(v.getcoords(), intersection.point.getcoords());
+
+			if (sphereIntersections.size() > 0 || intersectionDistance < lightDistance)
+				continue;
+
+			double a = glm::dot(-norm.getDir(), lightRay.getdirection().getDir());
+			double d = glm::dot(light.getnormal().getDir(), -lightRay.getdirection().getDir());
+			double b = glm::clamp(d, 0.0, 1.0);
+
+			double geometric = a * b / pow(lightDistance, 2.0);
+
+			clr = clr + (light.getsurf().getsurfcolor() * light.getsurf().getemission() * geometric);
+		}
+	}
+	return clr * lightArea / (double)lightCount;
 }
 
 

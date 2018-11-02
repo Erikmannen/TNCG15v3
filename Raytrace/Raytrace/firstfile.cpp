@@ -29,20 +29,20 @@ void testtri()
 		Vertex(-2.0f, 0.0f, 0.0f));
 
 	cout << endl << "test 1 - Hit expected" << endl;
-	glm::vec4  tOut(0,0,0,0);
+	glm::vec4  tOut(0, 0, 0, 0);
 	bool intersected = false;
 	intersected = t.rayIntersection(r, tOut);
 	if (intersected == true)
 		cout << "hit1" << endl;
 	else
 		cout << "miss1" << endl;
-	
+
 	cout << endl << "test 2 - Hit not expected " << endl;
 	Ray r2(
 		Vertex(0.0f, 0.0f, 0.0f),
 		Vertex(-1.0f, 0.49f, 0.0f));
 
-	tOut = glm::vec4(0,0,0,0);
+	tOut = glm::vec4(0, 0, 0, 0);
 	intersected = false;
 	intersected = t.rayIntersection(r2, tOut);
 	if (intersected == true)
@@ -53,7 +53,7 @@ void testtri()
 	Ray r3(
 		Vertex(0.0f, 0.0f, 0.0f),
 		Vertex(1.0f, 0.49f, 0.0f));
-	cout<< endl << "test 3  - Hit not expected" <<endl;
+	cout << endl << "test 3  - Hit not expected" << endl;
 
 	tOut = glm::vec4(0, 0, 0, 0);
 	intersected = false;
@@ -78,17 +78,17 @@ void testsph()
 
 	//Sphere s(1.0f, glm::vec3(-5.0f, 0.0f, 0.0f), new Surface(ColorDbl(0.0)));
 //	Sphere s2(2.0f, glm::vec3(-5.0f, 0.0f, 0.0f), new Surface(ColorDbl(0.0));
-	
-	Vertex v; 
+
+	Vertex v;
 	Vertex u(1, 0, 0);
-	Ray r(u,v);
+	Ray r(u, v);
 
 	//float tOut = 0;
 	bool intersected = false;
 	glm::vec3 tout(0, 0, 0);
 	intersected = s1.SphereIntersection(r, tout);
 
-	std::cout << endl<< "test sph1- should be 4" << endl;
+	std::cout << endl << "test sph1- should be 4" << endl;
 	if (intersected == true)
 		std::cout << "hit sph" << endl;
 	else
@@ -99,8 +99,8 @@ void testsph()
 	//EXPECT_FLOAT_EQ(tOut, 4.0f) << "distance to sphere should be 4";
 
 	std::cout << endl << "test sph1- should be ?" << endl;
-	
-	tout = glm::vec3(0,0,0);
+
+	tout = glm::vec3(0, 0, 0);
 	intersected = false;
 	intersected = s2.SphereIntersection(r, tout);
 	if (intersected == true)
@@ -109,8 +109,8 @@ void testsph()
 		std::cout << " miss sph2" << endl;
 	cout << "(" << tout.x << "," << tout.y << "," << tout.z << ")" << endl;
 
-	
-	
+
+
 }
 
 int main()
@@ -125,12 +125,12 @@ int main()
 	cout << myray.getstart().getcoords()[1] << endl;
 	Ray ri = Ray(Vertex(0.0f, 0.0f, 0.0f), Vertex(0.0f, 1.0f, 0.0f));
 	Ray rj = Ray(Vertex(0.0f, 0.0f, 0.0f), Vertex(0.0f, 1.0f, 0.0f));
-	
-	
-	Ray r(Vertex(0.0f, 0.0f, 0.0f),Vertex(0.0f, 1.0f, 0.0f));
-	cout << r 
-		<<"riktiga start :  (0.0f, 0.0f, 0.0f) " <<"\n"<<
-		 "riktiga end : (0.0f, 1.0f, 0.0f)" << endl;
+
+
+	Ray r(Vertex(0.0f, 0.0f, 0.0f), Vertex(0.0f, 1.0f, 0.0f));
+	cout << r
+		<< "riktiga start :  (0.0f, 0.0f, 0.0f) " << "\n" <<
+		"riktiga end : (0.0f, 1.0f, 0.0f)" << endl;
 
 	Ray r1(Vertex(0.0f, 0.0f, 0.0f), Vertex(4.0f, 0.0f, 2.0f));
 	cout << r1
@@ -138,11 +138,11 @@ int main()
 		"riktiga end : (4.0f, 0.0f, 2.0f)" << endl;
 	//wont intersect with r but with r1
 	Triangle mytri(Vertex(2.0f, 5.0f, 2.0f),
-				   Vertex(2.0f, -5.0f, 2.0f),
-				   Vertex(4.0f, 0.0f, 2.0f));
-	
+		Vertex(2.0f, -5.0f, 2.0f),
+		Vertex(4.0f, 0.0f, 2.0f));
+
 	//testraytriangleintersection();
-	
+
 	dispintersection(mytri, r);
 	cout << "\n\n";
 	dispintersection(mytri, r1);
@@ -165,19 +165,19 @@ int main()
 	for (Triangle& i : list)
 	{
 		std::cout << i.getsurf().getsurfcolor() << ' ';
-	}	
+	}
 	Scene scen2;
 	Camera cam;
-	Sphere sph(Vertex(8,-3,-3),1.0f,Surface(ColorDbl(204,102,102),Lambertian));
+	Sphere sph(Vertex(8, -3, -3), 1.0f, Surface(ColorDbl(0.8, 0.4, 0.4), Lambertian));
 	scen2.addsph(sph);
 	for (Triangle tri : scen2.gettrilist())
 	{
-		if(tri.getsurf().modelcheck(Perfect))
+		if (tri.getsurf().modelcheck(Perfect))
 		{
 			cout << "true " << endl;
 		}
 	}
-	Tetrahedron tetra(Vertex(10, 0, -5, 0), Vertex(11, 1, -5, 0), Vertex(12, 0, -5, 0), Vertex(11, 1.5, -2, 0), Surface(ColorDbl(20,200,0), Lambertian));
+	Tetrahedron tetra(Vertex(10, 0, -5, 0), Vertex(11, 1, -5, 0), Vertex(12, 0, -5, 0), Vertex(11, 1.5, -2, 0), Surface(ColorDbl(0.1, 0.81, 0), Lambertian));
 	scen2.addtetra(tetra);
 
 
@@ -186,7 +186,7 @@ int main()
 	{
 
 	}
-	
+
 
 	return 0;
 }

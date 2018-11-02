@@ -7,6 +7,8 @@ public:
 	
 	Vertex(float Inx = 0, float Iny = 0, float Inz = 0, float inw = 0)
 		:coords(Inx, Iny, Inz,inw) {};
+	Vertex(glm::vec3 v)
+		:coords(v.x, v.y, v.z, 0) {};
 	void Set(float Inx, float Iny, float Inz, float Inw) { coords.x = Inx;
 	coords.y = Iny;
 	coords.z = Inz;

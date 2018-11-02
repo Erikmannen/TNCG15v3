@@ -102,9 +102,9 @@ void Camera::createImageFile(const std::string name, const double &max)
 		std::cout << color << std::endl;
 
 			(void)fprintf(fp, "%d %d %d ",
-				(int)(color.Red*255/max),
-				(int)(color.Green * 255 / max),
-				(int)(color.Blue * 255 / max));
+				(int)(color.Red* 255),
+				(int)(color.Green * 255),
+				(int)(color.Blue * 255));
 			/*
 			(void)fprintf(fp, "%d %d %d ",
 				(int)(color.Red*255/max),
@@ -172,7 +172,7 @@ ColorDbl Camera::handler3(Surface surface, Direction normal, Vertex point, Ray m
 	ColorDbl returncolor(0);
 	if (surface.modelcheck(Lightsource))
 	{
-		returncolor =  surface.getemission();
+		returncolor =  surface.lamreflec() * surface.getemission() * surface.getsurfcolor();
 	}
 	else if (surface.modelcheck(Perfect)) // perfekt spegling
 	{
@@ -186,7 +186,7 @@ ColorDbl Camera::handler3(Surface surface, Direction normal, Vertex point, Ray m
 	else if (surface.modelcheck(Lambertian))
 	{
 
-		//returncolor = returncolor +  directlightning(myray, surface, point, myscene, normal, depth);
+		returncolor = returncolor +  directlightning(myray, surface, point, myscene, normal, depth);
 		ColorDbl temp = indirectlightning(myray, surface, point, myscene, normal, depth);
 		//std::cout << "tempcolor" << temp << "\n";
 		returncolor = returncolor + temp;
@@ -239,47 +239,91 @@ int Camera::closest(Ray ray , Scene myscene)
 
 ColorDbl Camera::indirectlightning(Ray myray,Surface s, Vertex point, Scene myscene, Direction normal, int depth)
 {
+
+
+	float distancetosphere = INFINITY;
+	float distancetotri = INFINITY;
+
 	ColorDbl retcolor(0);
-	if (depth < MAXDEPTH)
-	{
-		Ray out = myray.hemisphere( point, normal);
-		depth++;
-		retcolor = retcolor + Castray(out, myscene, depth)*0.3;
-	}
+
+
+			glm::vec3 n = normal.getDir();
+			glm::vec3 out = CalcRandomPDFRay(n);
+			Ray outRay(point, Vertex(out));
+			double angle = glm::angle(glm::normalize(out), normal.getDir());
+
+			ColorDbl emittance = (s.getsurfcolor() * 0.3 / M_PI) * cos(angle);
+			const ColorDbl &lightCont = myscene.lightcontribution(point, normal);
+
+			//retcolor = retcolor + emittance;
+			retcolor = retcolor * lightCont;
+
+			
+
+			double rrTop = glm::max(glm::max(emittance.Red, emittance.Green), emittance.Blue);
+
+			double r = rand();
+
+			if (s.modelcheck(2))
+			{
+				retcolor = s.getsurfcolor();
+			}
+
+
+			else if (depth < MAXDEPTH || r / RAND_MAX < rrTop)
+			{
+				int nextDepth = depth + 1;
+				retcolor = retcolor + Castray(outRay, myscene, nextDepth) * s.getcoeff();
+				
+
+			}
+			
+		
+		
+	
+
+	/*else {
+
+		for (sphereintersection &sphereintersection : sphereIntersections)
+		{
+			glm::vec3 n = normal.getDir();
+			glm::vec3 out = CalcRandomPDFRay(n);
+			Ray outRay(sphereintersection.point, Vertex(out));
+			double angle = glm::angle(glm::normalize(out), normal.getDir());
+
+			if (s.modelcheck(2))
+			{
+				retcolor = s.getsurfcolor();
+				break;
+			}
+			else if (s.modelcheck(1))
+				break;
+
+			ColorDbl emittance = (s.getsurfcolor() * 0.3 / M_PI);
+			const ColorDbl &lightCont = myscene.lightcontribution(sphereintersection.point, normal);
+
+			retcolor = retcolor + emittance;
+			retcolor = retcolor * lightCont;
+
+			double rrTop = glm::max(glm::max(emittance.Red, emittance.Green), emittance.Blue);
+			if (depth < MAXDEPTH || rand() / RAND_MAX < rrTop)
+			{
+				int nextDepth = depth + 1;
+				retcolor = retcolor + Castray(outRay, myscene, nextDepth) * s.getcoeff();
+
+			}
+
+			break;
+		}
+		
+	}*/
 	return retcolor;
 }
 
 ColorDbl Camera::directlightning(Ray myray, Surface surface, Vertex point, Scene myscene, Direction normal, int depth)
 {
 	ColorDbl returncolor(0);
-	/*glm::vec3 objNormal = normal.getDir();
-	std::random_device rd;  //Will be used to obtain a seed for the random number engine
-	std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
-	std::uniform_real_distribution<> dis(0.0, 1.0);
-	
-	//glm::distance(shadowray.getend().getcoords() - shadowray.getstart().getcoords());
 
-
-	std::uniform_real_distribution<> disAngle(0.0, M_PI);
-
-	double incOffset = glm::orientedAngle(glm::normalize(glm::vec2(objNormal.x, objNormal.z)),
-		glm::normalize(glm::vec2(0.0, 1.0)));
-	double asiOffset = glm::orientedAngle(glm::normalize(glm::vec2(objNormal.x, objNormal.y)),
-		glm::normalize(glm::vec2(0.0, 1.0)));
-	double randAsi = 2.0 * disAngle(rd);
-	double randInc = disAngle(rd);
-	glm::vec4 reflDir = glm::vec4((randAsi + asiOffset),
-		sin(randAsi + asiOffset),
-		cos(randInc + incOffset), 1.0);
-
-	glm::vec4 newend = glm::vec4(point.getcoords(), point.getw()) + reflDir;
-	Vertex endver(newend.x, newend.y, newend.z, newend.w);
-	Ray reflRay(point, endver);
-	//ColorDbl color(0.0);
-	if (dis(gen) > 0.5) {
-		returncolor = Castray(reflRay, myscene, depth);
-		returncolor = returncolor * 0.3;
-	}*/
 	Vertex lightpoint = myscene.getlights().getrandpointontri();
 	Ray shadowray(point, lightpoint);
 	float lightdistance = glm::distance(shadowray.getend().getcoords(), shadowray.getstart().getcoords());
@@ -525,7 +569,7 @@ ColorDbl Camera::direct(Vertex point, Scene myscene, Direction normal)
 	return clr * lightArea / (double)lightCount;
 
 }
-glm::vec3 Camera::CalcRandomPDFRay(glm::vec3 &normal) {
+glm::vec3 Camera::CalcRandomPDFRay(glm::vec3 normal) {
 	float u = (float)rand() / RAND_MAX;
 	float v = (float)rand() / RAND_MAX;
 

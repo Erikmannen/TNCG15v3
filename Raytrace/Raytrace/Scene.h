@@ -19,7 +19,7 @@ struct sphereintersection {
 
 };
 
-
+const int SHADOWRAYS = 2;
 
 
 
@@ -48,12 +48,11 @@ public:
 		}
 		};
 	std::list<Triangle> gettrilist() { return Trianglelist; };
-	Triangle getlights() { return light; };
+	Triangle getlights() { return lightList.front(); };
 private:
 	std::list<Triangle> Trianglelist;
 	
 	std::vector<Sphere> Spherelist;
-	Triangle light;
-	
+	std::list<Triangle> lightList;
 };
 
