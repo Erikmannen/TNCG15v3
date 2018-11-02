@@ -128,7 +128,12 @@ bool Triangle::rayIntersection(Ray arg, glm::vec4& intersect)
 	//behöver antagligen fixa med interaction
 	if (t > MINVALUE && t < MAXVALUE)
 	{
+		
 		glm::vec3 xyz = (arg.getstart().getcoords() + t * D);
+		if (glm::length(arg.getstart().getcoords() - xyz) < 0.0075) 
+		{
+			return false;
+		}
 		intersect = glm::vec4(xyz.x,xyz.y,xyz.z,1);
 		return true;
 	}
