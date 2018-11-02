@@ -174,8 +174,6 @@ ColorDbl Camera::handler3(Surface surface, Direction normal, Vertex point, Ray m
 	std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
 	std::uniform_real_distribution<> dis(0.0, 1.0);
 		*/				
-	glm::vec3 directIllumination(0.0);
-	glm::vec3 indirectIllumination(0.0);
 
 	ColorDbl returncolor(0);
 	if (surface.modelcheck(Lightsource))
@@ -192,39 +190,6 @@ ColorDbl Camera::handler3(Surface surface, Direction normal, Vertex point, Ray m
 		
 		//ppdir = glm::vec4(ppdir.x * 2.0f, ppdir.y * 2.0f, ppdir.z * 2.0f,ppdir.w);
 		Ray r(point, Vertex(ppdir.x, ppdir.y, ppdir.z, ppdir.w));
-	
-		//Ray r = myray.reflection(point, normal);
-	// r går från intersectionpoint , ut i världen relaterat till hur den speglats i normalen på objectet den träffa
-
-		// fuling men är ok om man utgår från att spegeln bara hämtar en stuts bort
-		/*if (closest(r, myscene) == 0) {
-			//std::cout << std::endl << "disttotri " << std::endl;
-			std::list<triangleintersection> list = myscene.rayIntersectionfortri(r);
-		
-			triangleintersection t = myscene.rayIntersectionfortri(r).front();
-			Vertex p = t.point;
-			//std::cout << " first intersection point" << p<<std::endl;
-			//std::cout << " the actual intersection point"<<point << std::endl;
-
-
-			Surface s = t.object.getsurf();
-			Direction norm = t.object.getnormal();
-			return returncolor + handler3(s, norm, p, r, myscene, depth);
-			
-		
-		} // fuling men är ok om man utgår från att spegeln bara hämtar en stuts bort
-		else if (closest(r, myscene) == 1) {
-
-			sphereintersection t = myscene.rayIntersectionforsph(r).front();
-			Vertex p = t.point;
-			Surface s = t.object.getsurf();
-			Direction norm = t.object.getnormal(p);
-			return returncolor + handler3(s, norm, p, r, myscene, depth);
-
-		}*/
-
-		//std::cout << std::endl << "intersections  " << myscene.rayIntersectionfortri(r).size()<<std::endl;
-		//std::cout << std::endl << "color   " << myscene.rayIntersectionfortri(r).front().object.getsurf().getsurfcolor()<<std::endl;
 
 		returncolor = Castray(r, myscene, depth);
 		// miss / base case
@@ -271,13 +236,10 @@ ColorDbl Camera::handler3(Surface surface, Direction normal, Vertex point, Ray m
 
 		if (closest(shadowray, myscene) == 0)
 		{
-		
 			if (myscene.rayIntersectionfortri(shadowray).front().object.islight)
 				shadowdistance = MAXVALUE;
 			else
 				shadowdistance = glm::distance(myscene.rayIntersectionfortri(shadowray).front().point.getcoords(), point.getcoords()); // todo sortera
-
-		
 		}
 		else if (closest(shadowray, myscene) == 1) {
 			//std::cout << "case 2 " << "\n";
@@ -312,7 +274,6 @@ ColorDbl Camera::handler3(Surface surface, Direction normal, Vertex point, Ray m
 		else
 			returncolor = returncolor;// surface.getsurfcolor();
 	}
-	
 	
 	return returncolor;
 }

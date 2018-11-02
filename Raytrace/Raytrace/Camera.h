@@ -57,7 +57,7 @@ private:
 	Direction dir;
 	//800 x 800 array av pixels 
 	Pixel Img[WIDTH][HEIGHT];
-	int Subpixels = 4; // no divided yet
+	int Subpixels = 3; // no divided yet
 	//fov for camera
 	float fov = ((float)M_PI) / 1.5f;
 	glm::vec4 pixelplane[4];

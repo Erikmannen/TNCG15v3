@@ -29,6 +29,7 @@ public:
 
 	void setend(Vertex v) { Endpoint = v; };
 	void setraycolor(ColorDbl incolor) { raycolor = incolor; };
+	ColorDbl getraycolor() { return raycolor; };
 
 
 	Ray hemisphere(Vertex& Position, Direction& normaldirr);

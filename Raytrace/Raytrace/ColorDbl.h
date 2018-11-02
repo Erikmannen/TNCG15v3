@@ -23,6 +23,7 @@ public:
 	ColorDbl operator*(const float b);
 	ColorDbl operator/(const float b);
 
+
 	// get functions
 	double getColor(std::string S);
 	glm::vec3 getColor() { return glm::vec3(Red, Green, Blue);
