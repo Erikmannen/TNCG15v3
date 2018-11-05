@@ -172,7 +172,7 @@ ColorDbl Camera::handler3(Surface surface, Direction normal, Vertex point, Ray m
 	ColorDbl returncolor(0);
 	if (surface.modelcheck(Lightsource))
 	{
-		returncolor =  surface.lamreflec() * surface.getemission() * surface.getsurfcolor();
+		returncolor =  surface.getemission() * surface.getsurfcolor();
 	}
 	else if (surface.modelcheck(Perfect)) // perfekt spegling
 	{
@@ -187,9 +187,14 @@ ColorDbl Camera::handler3(Surface surface, Direction normal, Vertex point, Ray m
 	{
 
 		returncolor = returncolor +  directlightning(myray, surface, point, myscene, normal, depth);
-		ColorDbl temp = indirectlightning(myray, surface, point, myscene, normal, depth);
+		ColorDbl intemp(0.0);
+		for (int i = 0; i < NROFSAMPLES; ++i)
+		{
+			ColorDbl temp = indirectlightning(myray, surface, point, myscene, normal, depth);
+			intemp = intemp + temp;
+		}
 		//std::cout << "tempcolor" << temp << "\n";
-		returncolor = returncolor + temp;
+		returncolor = returncolor + intemp/NROFSAMPLES;
 	}
 	return returncolor;
 }
@@ -237,86 +242,42 @@ int Camera::closest(Ray ray , Scene myscene)
 	
 }
 
-ColorDbl Camera::indirectlightning(Ray myray,Surface s, Vertex point, Scene myscene, Direction normal, int depth)
+ColorDbl Camera::indirectlightning(Ray myray, Surface s, Vertex point, Scene myscene, Direction normal, int depth)
 {
-
-
-	float distancetosphere = INFINITY;
-	float distancetotri = INFINITY;
-
 	ColorDbl retcolor(0);
 
+	ColorDbl loopClr(0.0);
+	glm::vec3 n = normal.getDir();
+	glm::vec3 out = CalcRandomPDFRay(n);
+	Ray outRay(point, Vertex(out));
+	double angle = glm::dot(glm::normalize(outRay.getdirection().getDir()), glm::normalize(normal.getDir()));
+	if (angle < 0)
+		angle *= -1;
 
-			glm::vec3 n = normal.getDir();
-			glm::vec3 out = CalcRandomPDFRay(n);
-			Ray outRay(point, Vertex(out));
-			double angle = glm::angle(glm::normalize(out), normal.getDir());
+	ColorDbl emittance = (s.getsurfcolor() * s.getcoeff() / M_PI);//  *cos(angle);
+	const ColorDbl &lightCont = myscene.lightcontribution(point, normal);
 
-			ColorDbl emittance = (s.getsurfcolor() * 0.3 / M_PI) * cos(angle);
-			const ColorDbl &lightCont = myscene.lightcontribution(point, normal);
-
-			//retcolor = retcolor + emittance;
-			retcolor = retcolor * lightCont;
-
-			
-
-			double rrTop = glm::max(glm::max(emittance.Red, emittance.Green), emittance.Blue);
-
-			double r = rand();
-
-			if (s.modelcheck(2))
-			{
-				retcolor = s.getsurfcolor();
-			}
+	loopClr = emittance;
+	retcolor = retcolor + loopClr * lightCont;
 
 
-			else if (depth < MAXDEPTH || r / RAND_MAX < rrTop)
-			{
-				int nextDepth = depth + 1;
-				retcolor = retcolor + Castray(outRay, myscene, nextDepth) * s.getcoeff();
-				
+	double rrTop = glm::max(glm::max(emittance.Red, emittance.Green), emittance.Blue);
 
-			}
-			
-		
-		
-	
+	double r = rand();
 
-	/*else {
 
-		for (sphereintersection &sphereintersection : sphereIntersections)
-		{
-			glm::vec3 n = normal.getDir();
-			glm::vec3 out = CalcRandomPDFRay(n);
-			Ray outRay(sphereintersection.point, Vertex(out));
-			double angle = glm::angle(glm::normalize(out), normal.getDir());
+	if (depth < MAXDEPTH || r / RAND_MAX < rrTop)
+	{
+		int nextDepth = depth + 1;
+		int close = closest(myray, myscene);
+		if (closest(myray, myscene) == 0)
+			retcolor = retcolor + Castray(outRay, myscene, nextDepth) * s.getcoeff() * cos(angle);
+		else
+			retcolor = retcolor + Castray(outRay, myscene, nextDepth) * s.getcoeff();
+	}
 
-			if (s.modelcheck(2))
-			{
-				retcolor = s.getsurfcolor();
-				break;
-			}
-			else if (s.modelcheck(1))
-				break;
 
-			ColorDbl emittance = (s.getsurfcolor() * 0.3 / M_PI);
-			const ColorDbl &lightCont = myscene.lightcontribution(sphereintersection.point, normal);
 
-			retcolor = retcolor + emittance;
-			retcolor = retcolor * lightCont;
-
-			double rrTop = glm::max(glm::max(emittance.Red, emittance.Green), emittance.Blue);
-			if (depth < MAXDEPTH || rand() / RAND_MAX < rrTop)
-			{
-				int nextDepth = depth + 1;
-				retcolor = retcolor + Castray(outRay, myscene, nextDepth) * s.getcoeff();
-
-			}
-
-			break;
-		}
-		
-	}*/
 	return retcolor;
 }
 

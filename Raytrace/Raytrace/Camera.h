@@ -14,7 +14,8 @@
 const int WIDTH = 200;
 const int HEIGHT = 200;
 #define MAXVALUE 1e5f
-const int  MAXDEPTH =  2; // will create artefacts  
+const int  MAXDEPTH =  3; // will create artefacts  
+const int NROFSAMPLES = 2;
 
 
 class Camera

@@ -43,7 +43,7 @@ void Scene::CreateWorld()
 
 	ColorDbl finc(1, 0, 0.8);
 	ColorDbl whitec(0.82, 0.82, 0.82);
-	ColorDbl white2(0.83, 0.83, 0.83);
+	ColorDbl white2(3.0, 3.0, 3.0);
 	ColorDbl bc(0, 0, 0.78);
 	ColorDbl rc(0.78, 0, 0);
 	ColorDbl gc(0, 0.78, 0);
@@ -61,8 +61,8 @@ void Scene::CreateWorld()
 	Surface c(cc,Perfect); // perfect
 	Surface y(yc);
 	Surface black(blackc);
-	Surface Mirror(ColorDbl(0.0f), Perfect);
-	Surface lights(ColorDbl(255, 255, 255), Lightsource, white2);
+	Surface Mirror(ColorDbl(0.0), Perfect);
+	Surface lights(ColorDbl(1.0, 1.0, 1.0), Lightsource, white2);
 
 
 	// Top
@@ -125,8 +125,8 @@ void Scene::CreateWorld()
 	Trianglelist.push_back(T20);
 
 	// Back right
-	Triangle T21(V2, V4, V8, N7, c);
-	Triangle T22(V4, V10, V8, N7, c);
+	Triangle T21(V2, V4, V8, N7, Mirror);
+	Triangle T22(V4, V10, V8, N7, Mirror);
 
 	Trianglelist.push_back(T21);
 	Trianglelist.push_back(T22);
@@ -188,8 +188,8 @@ ColorDbl Scene::lightcontribution(Vertex v, Direction norm)
 			if (sphereIntersections.size() > 0 || intersectionDistance < lightDistance)
 				continue;
 
-			double a = glm::dot(-norm.getDir(), lightRay.getdirection().getDir());
-			double d = glm::dot(light.getnormal().getDir(), -lightRay.getdirection().getDir());
+			double a = glm::dot(-glm::normalize(norm.getDir()), glm::normalize(lightRay.getdirection().getDir()));
+			double d = glm::dot(glm::normalize(light.getnormal().getDir()), -glm::normalize(lightRay.getdirection().getDir()));
 			double b = glm::clamp(d, 0.0, 1.0);
 
 			double geometric = a * b / pow(lightDistance, 2.0);
