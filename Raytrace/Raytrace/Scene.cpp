@@ -61,17 +61,17 @@ void Scene::CreateWorld()
 	Surface c(cc,Perfect); // perfect
 	Surface y(yc);
 	Surface black(blackc);
-	Surface Mirror(ColorDbl(0.0), Perfect);
+	Surface Mirror(ColorDbl(1.0), Perfect);
 	Surface lights(ColorDbl(1.0, 1.0, 1.0), Lightsource, white2);
 
 
 	// Top
-	Triangle T1(V1, V13, V3, N1, white2);
-	Triangle T2(V3, V13, V5, N1, white2);
-	Triangle T3(V1, V2, V5, N1, white2); // tought lightsource
-	Triangle T4(V2, V6, V5, N1, white2);// tought lightsource
-	Triangle T5(V2, V4, V14, N1, white2);
-	Triangle T6(V4, V6, V14, N1, white2);
+	Triangle T1(V1, V13, V3, N1, white);
+	Triangle T2(V3, V13, V5, N1, white);
+	Triangle T3(V1, V2, V5, N1, white); // tought lightsource
+	Triangle T4(V2, V6, V5, N1, white);// tought lightsource
+	Triangle T5(V2, V4, V14, N1, white);
+	Triangle T6(V4, V6, V14, N1, white);
 
 	Trianglelist.push_back(T1);
 	Trianglelist.push_back(T2);

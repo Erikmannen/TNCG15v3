@@ -14,8 +14,9 @@
 const int WIDTH = 200;
 const int HEIGHT = 200;
 #define MAXVALUE 1e5f
-const int  MAXDEPTH =  3; // will create artefacts  
-const int NROFSAMPLES = 2;
+const int  MINDEPTH =  5; // will create artefacts
+const int NROFSAMPLES = 10;
+const int Subpixels = 2;
 
 
 class Camera
@@ -60,7 +61,6 @@ private:
 	Direction dir;
 	//800 x 800 array av pixels 
 	Pixel Img[WIDTH][HEIGHT];
-	int Subpixels = 3; // no divided yet
 	//fov for camera
 	float fov = ((float)M_PI) / 1.5f;
 	glm::vec4 pixelplane[4];

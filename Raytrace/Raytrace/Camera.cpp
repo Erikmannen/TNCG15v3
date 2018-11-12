@@ -80,7 +80,7 @@ double Camera::rays(Scene& myscene) {
 			{
 				tempcolor = tempcolor + Castray(r, myscene);
 			}
-			tempcolor = tempcolor / Subpixels;
+			tempcolor = tempcolor;
 			Img[h][w].setPixelColor(tempcolor);
 			maximage = glm::max(maximage, glm::max(tempcolor.Red, glm::max(tempcolor.Green, tempcolor.Blue)));
 
@@ -168,11 +168,11 @@ ColorDbl Camera::Castray(Ray & myray, Scene myscene, int depth)
 
 ColorDbl Camera::handler3(Surface surface, Direction normal, Vertex point, Ray myray, Scene myscene, int depth)
 {
-	
+
 	ColorDbl returncolor(0);
 	if (surface.modelcheck(Lightsource))
 	{
-		returncolor =  surface.getemission() * surface.getsurfcolor();
+		returncolor = surface.getemission() * surface.getsurfcolor();
 	}
 	else if (surface.modelcheck(Perfect)) // perfekt spegling
 	{
@@ -185,17 +185,24 @@ ColorDbl Camera::handler3(Surface surface, Direction normal, Vertex point, Ray m
 	}
 	else if (surface.modelcheck(Lambertian))
 	{
-
-		returncolor = returncolor +  directlightning(myray, surface, point, myscene, normal, depth);
+		returncolor = returncolor + directlightning(myray, surface, point, myscene, normal, depth);
 		ColorDbl intemp(0.0);
-		for (int i = 0; i < NROFSAMPLES; ++i)
+		if (depth == 0)
 		{
-			ColorDbl temp = indirectlightning(myray, surface, point, myscene, normal, depth);
-			intemp = intemp + temp;
+			for (int i = 0; i < NROFSAMPLES; ++i)
+			{
+				ColorDbl temp = indirectlightning(myray, surface, point, myscene, normal, depth);
+				intemp = intemp + temp;
+			}
+			returncolor = returncolor + intemp / NROFSAMPLES;
 		}
-		//std::cout << "tempcolor" << temp << "\n";
-		returncolor = returncolor + intemp/NROFSAMPLES;
+		else
+		{
+			intemp = indirectlightning(myray, surface, point, myscene, normal, depth);
+			returncolor = returncolor + intemp;
+		}
 	}
+
 	return returncolor;
 }
 
@@ -245,8 +252,6 @@ int Camera::closest(Ray ray , Scene myscene)
 ColorDbl Camera::indirectlightning(Ray myray, Surface s, Vertex point, Scene myscene, Direction normal, int depth)
 {
 	ColorDbl retcolor(0);
-
-	ColorDbl loopClr(0.0);
 	glm::vec3 n = normal.getDir();
 	glm::vec3 out = CalcRandomPDFRay(n);
 	Ray outRay(point, Vertex(out));
@@ -254,29 +259,27 @@ ColorDbl Camera::indirectlightning(Ray myray, Surface s, Vertex point, Scene mys
 	if (angle < 0)
 		angle *= -1;
 
-	ColorDbl emittance = (s.getsurfcolor() * s.getcoeff() / M_PI);//  *cos(angle);
+	ColorDbl emittance = (s.getsurfcolor() * s.getcoeff() / M_PI);
 	const ColorDbl &lightCont = myscene.lightcontribution(point, normal);
 
-	loopClr = emittance;
-	retcolor = retcolor + loopClr * lightCont;
+	retcolor = emittance;
+	retcolor =  retcolor * lightCont;
 
 
 	double rrTop = glm::max(glm::max(emittance.Red, emittance.Green), emittance.Blue);
 
 	double r = rand();
 
-
-	if (depth < MAXDEPTH || r / RAND_MAX < rrTop)
+	 
+	if (depth < MINDEPTH || r / RAND_MAX < rrTop)
 	{
 		int nextDepth = depth + 1;
 		int close = closest(myray, myscene);
-		if (closest(myray, myscene) == 0)
+		if (close == 0)
 			retcolor = retcolor + Castray(outRay, myscene, nextDepth) * s.getcoeff() * cos(angle);
 		else
 			retcolor = retcolor + Castray(outRay, myscene, nextDepth) * s.getcoeff();
 	}
-
-
 
 	return retcolor;
 }
@@ -289,7 +292,8 @@ ColorDbl Camera::directlightning(Ray myray, Surface surface, Vertex point, Scene
 	Ray shadowray(point, lightpoint);
 	float lightdistance = glm::distance(shadowray.getend().getcoords(), shadowray.getstart().getcoords());
 	float shadowdistance = MAXVALUE;
-	if (closest(shadowray, myscene) == 0)
+	int close = closest(shadowray, myscene);
+	if (close == 0)
 	{
 
 		if (myscene.rayIntersectionfortri(shadowray).front().object.islight)
@@ -299,7 +303,7 @@ ColorDbl Camera::directlightning(Ray myray, Surface surface, Vertex point, Scene
 
 
 	}
-	else if (closest(shadowray, myscene) == 1) {
+	else if (close == 1) {
 		//std::cout << "case 2 " << "\n";
 		shadowdistance = glm::distance(myscene.rayIntersectionforsph(shadowray).front().point.getcoords(), point.getcoords()); // todo sortera
 	}
@@ -343,7 +347,7 @@ ColorDbl Camera::indirect(Surface s, Vertex point, Scene myscene, Direction norm
 	glm::vec3 intersectionnormal = normal.getDir();
 	float absorption = c.Red > c.Green && c.Red > c.Blue ? c.Red : c.Green > c.Blue ? c.Green : c.Blue;
 
-	if (depth < MAXDEPTH)
+	if (depth < MINDEPTH)
 	{
 
 		glm::vec3 dirr = CalcRandomPDFRay(intersectionnormal);
